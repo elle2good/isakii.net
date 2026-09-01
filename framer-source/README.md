@@ -4,7 +4,7 @@ This repository is a React/Next.js translation of the Framer project **Personal 
 
 ## Pages captured
 
-- `/`: Home currently contains the customized Header instance.
+- `/`: complete Home composition with the hero video, notification ticker, motion gallery, project catalogue, and navigation overlay.
 - `/about`: completed About composition, Navigation component, copy, and portrait.
 - `/work`: WorkSection code component filling the upper 802px of a 1600×1080 breakpoint.
 - `/resume`: InteractiveBook placeholder at 200×200 on a 1200×1080 breakpoint.
@@ -32,3 +32,5 @@ The fixed translucent/blurred behavior from `Header_Override.tsx` is applied in 
 - InteractiveBook module → `components/InteractiveBook.tsx`
 - Navigation canvas component and its responsive variants → `components/Navigation.tsx`
 - Smooth Scroll effect → `components/SmoothScroll.tsx` (Lenis intensity 10, homepage only)
+- `MotionGallery.tsx` behavior → draggable/wheel-controlled gallery in `components/HomeExperience.tsx`
+- `ScrollGalleryHandoff.tsx` overrides → gallery lift plus header/ticker handoff in `components/HomeExperience.tsx`

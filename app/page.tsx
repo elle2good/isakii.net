@@ -1,12 +1,5 @@
-import HomeHeader from "@/components/HomeHeader"
-import SmoothScroll from "@/components/SmoothScroll"
+import HomeExperience from "@/components/HomeExperience"
 
 export default function Home() {
-  return (
-    <main className="home-page">
-      <SmoothScroll intensity={10} />
-      <HomeHeader />
-      <div id="overlay" />
-    </main>
-  )
+  return <HomeExperience />
 }
