@@ -31,3 +31,4 @@ The fixed translucent/blurred behavior from `Header_Override.tsx` is applied in 
 - `Examples.tsx` / `NegativeTop` → `negativeTopStyle` in `components/withHeader.tsx`
 - InteractiveBook module → `components/InteractiveBook.tsx`
 - Navigation canvas component and its responsive variants → `components/Navigation.tsx`
+- Smooth Scroll effect → `components/SmoothScroll.tsx` (Lenis intensity 10, homepage only)
