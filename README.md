@@ -1,6 +1,6 @@
 # isakii.net
 
-Next.js translation of the Framer project **Personal Website**.
+Generalist portfolio and Next.js translation of the Framer project **Personal Website**.
 
 ## Run locally
 
