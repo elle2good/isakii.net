@@ -6,6 +6,7 @@ import { forwardRef } from "react"
 type HomeHeaderProps = {
   menuOpen: boolean
   onToggleMenu: () => void
+  onOpenSearch: () => void
 }
 
 function SearchIcon() {
@@ -29,7 +30,7 @@ function AccountAndBag() {
 }
 
 const HomeHeader = forwardRef<HTMLElement, HomeHeaderProps>(function HomeHeader(
-  { menuOpen, onToggleMenu },
+  { menuOpen, onToggleMenu, onOpenSearch },
   ref,
 ) {
   return (
@@ -46,7 +47,7 @@ const HomeHeader = forwardRef<HTMLElement, HomeHeaderProps>(function HomeHeader(
           <span />
           <span />
         </button>
-        <button className="home-icon-button" type="button" aria-label="Search">
+        <button className="home-icon-button" type="button" aria-label="Open search" onClick={onOpenSearch}>
           <SearchIcon />
         </button>
       </div>
