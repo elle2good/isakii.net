@@ -143,14 +143,16 @@ export default function HomeExperience() {
         {menuOpen && (
           <div className="home-menu-overlay is-open">
             <nav aria-label="Explore">
-              <p>EXPLORE</p>
-              <Link href="#projects" onClick={() => setMenuOpen(false)}>CATALOGUE</Link>
-              <Link href="/work" onClick={() => setMenuOpen(false)}>BLOG</Link>
-              <Link href="/about" onClick={() => setMenuOpen(false)}>ABOUT</Link>
-              <span>COMING SOON</span>
-              <p>CONTACT</p>
-              <a href="mailto:smkim@isakii.net">smkim@isakii.net</a>
+              <Link className="home-menu-link" href="/about" onClick={() => setMenuOpen(false)}>about</Link>
+              <Link className="home-menu-link" href="/work" onClick={() => setMenuOpen(false)}>blog</Link>
+              <Link className="home-menu-link" href="#projects" onClick={() => setMenuOpen(false)}>catalogue</Link>
+              <Link className="home-menu-link" href="/coming-soon" onClick={() => setMenuOpen(false)}>coming soon</Link>
             </nav>
+            <a className="home-menu-contact" href="mailto:smkim@isakii.net">
+              <span aria-hidden="true">&#9993;</span>
+              <span>smkim@isakii.net</span>
+              <span className="home-menu-contact-arrow" aria-hidden="true">&#8599;</span>
+            </a>
           </div>
         )}
       </div>
@@ -187,7 +189,6 @@ export default function HomeExperience() {
 
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />
-        <div className="home-hero-shade" />
       </section>
 
       <section className="home-gallery" aria-label="Motion gallery">
