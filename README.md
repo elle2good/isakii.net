@@ -19,3 +19,7 @@ Open [http://localhost:3000](http://localhost:3000).
 - `/resume` — interactive book placeholder
 
 The original Framer component/code mapping is documented in [`framer-source/README.md`](framer-source/README.md).
+
+## Gallery data
+
+Homepage gallery images and their display order are managed in [`data/gallery-images.json`](data/gallery-images.json). See [`data/README.md`](data/README.md) for the field definitions and instructions for local uploads or external image links.

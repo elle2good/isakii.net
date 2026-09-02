@@ -6,10 +6,7 @@ import { FocusEvent, useCallback, useEffect, useLayoutEffect, useRef, useState }
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import SmoothScroll from "./SmoothScroll"
-
-const galleryImages = Array.from({ length: 8 }, (_, index) =>
-  `/home/gallery/${String(index + 1).padStart(2, "0")}.jpg`,
-)
+import { galleryImages } from "@/lib/gallery"
 
 const projects = [
   { title: "Afterimage", date: "2026.01", image: "/home/projects/afterimage.jpg" },
@@ -308,17 +305,23 @@ export default function HomeExperience() {
           className="home-gallery-track"
           data-lenis-prevent
         >
-          {[...galleryImages, ...galleryImages, ...galleryImages].map((src, index) => (
-            <div className="home-gallery-image" key={`${src}-${index}`}>
-              <Image src={src} alt={`Gallery image ${(index % galleryImages.length) + 1}`} fill sizes="600px" priority={index < 3} />
+          {[...galleryImages, ...galleryImages, ...galleryImages].map((record, index) => (
+            <div className="home-gallery-image" key={`${record.id}-${index}`}>
+              {record.image.startsWith("/") ? (
+                <Image src={record.image} alt={record.alt} fill sizes="600px" priority={index < 3} />
+              ) : (
+                // External database links remain browser-fetched so the database can use any image host.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={record.image} alt={record.alt} loading={index < 3 ? "eager" : "lazy"} />
+              )}
             </div>
           ))}
         </div>
         <div className="home-gallery-progress" aria-label={`Gallery image ${activeGalleryIndex + 1} of ${galleryImages.length}`}>
-          {galleryImages.map((_, index) => (
+          {galleryImages.map((record, index) => (
             <span
               className={index === activeGalleryIndex ? "is-active" : ""}
-              key={index}
+              key={record.id}
               aria-hidden="true"
             />
           ))}
