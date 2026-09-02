@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { WheelEvent, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { FocusEvent, WheelEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import SmoothScroll from "./SmoothScroll"
@@ -19,15 +19,44 @@ const projects = [
   { title: "Blue Room", date: "2024.12", image: "/home/projects/blue-room.jpg" },
 ]
 
+const TOP_CHROME_PEEK_DURATION = 15_000
+
 export default function HomeExperience() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [topChromeVisible, setTopChromeVisible] = useState(true)
   const headerRef = useRef<HTMLElement>(null)
+  const topChromeRef = useRef<HTMLDivElement>(null)
+  const gallerySectionRef = useRef<HTMLElement>(null)
   const galleryTrackRef = useRef<HTMLDivElement>(null)
   const galleryInteractingUntilRef = useRef(0)
   const galleryTimerRef = useRef<number | null>(null)
   const galleryPositionRef = useRef(0)
+  const topChromeHideTimerRef = useRef<number | null>(null)
+  const topChromeHoveredRef = useRef(false)
+  const beyondGalleryRef = useRef(false)
+  const overlayOpenRef = useRef(false)
+
+  const clearTopChromeHideTimer = useCallback(() => {
+    if (topChromeHideTimerRef.current === null) return
+    window.clearTimeout(topChromeHideTimerRef.current)
+    topChromeHideTimerRef.current = null
+  }, [])
+
+  const scheduleTopChromeHide = useCallback(() => {
+    clearTopChromeHideTimer()
+    topChromeHideTimerRef.current = window.setTimeout(() => {
+      if (beyondGalleryRef.current && !topChromeHoveredRef.current && !overlayOpenRef.current) {
+        setTopChromeVisible(false)
+      }
+      topChromeHideTimerRef.current = null
+    }, TOP_CHROME_PEEK_DURATION)
+  }, [clearTopChromeHideTimer])
+
+  useEffect(() => {
+    overlayOpenRef.current = menuOpen || searchOpen
+  }, [menuOpen, searchOpen])
 
   useLayoutEffect(() => {
     document.documentElement.style.overflow = menuOpen || searchOpen ? "hidden" : ""
@@ -45,6 +74,46 @@ export default function HomeExperience() {
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
+
+  useEffect(() => {
+    let previousScrollY = window.scrollY
+    let initialized = false
+
+    const updateTopChrome = () => {
+      const gallery = gallerySectionRef.current
+      const topChrome = topChromeRef.current
+      if (!gallery || !topChrome) return
+
+      const beyondGallery = gallery.getBoundingClientRect().top <= topChrome.offsetHeight
+      const delta = window.scrollY - previousScrollY
+      beyondGalleryRef.current = beyondGallery
+
+      if (!beyondGallery || overlayOpenRef.current) {
+        clearTopChromeHideTimer()
+        setTopChromeVisible(true)
+      } else if (!initialized) {
+        setTopChromeVisible(false)
+      } else if (delta < -2) {
+        setTopChromeVisible(true)
+        scheduleTopChromeHide()
+      } else if (delta > 2 && !topChromeHoveredRef.current) {
+        clearTopChromeHideTimer()
+        setTopChromeVisible(false)
+      }
+
+      previousScrollY = window.scrollY
+      initialized = true
+    }
+
+    updateTopChrome()
+    window.addEventListener("scroll", updateTopChrome, { passive: true })
+    window.addEventListener("resize", updateTopChrome)
+    return () => {
+      window.removeEventListener("scroll", updateTopChrome)
+      window.removeEventListener("resize", updateTopChrome)
+      clearTopChromeHideTimer()
+    }
+  }, [clearTopChromeHideTimer, scheduleTopChromeHide])
 
   useEffect(() => {
     const track = galleryTrackRef.current
@@ -105,6 +174,29 @@ export default function HomeExperience() {
     track.scrollLeft = galleryPositionRef.current
   }
 
+  const handleTopChromePointerEnter = () => {
+    topChromeHoveredRef.current = true
+    clearTopChromeHideTimer()
+    setTopChromeVisible(true)
+  }
+
+  const handleTopChromePointerLeave = () => {
+    topChromeHoveredRef.current = false
+    if (beyondGalleryRef.current && !overlayOpenRef.current) scheduleTopChromeHide()
+  }
+
+  const handleTopChromeInteraction = () => {
+    setTopChromeVisible(true)
+    if (beyondGalleryRef.current && !topChromeHoveredRef.current) scheduleTopChromeHide()
+  }
+
+  const handleTopChromeBlur = (event: FocusEvent<HTMLDivElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget)) return
+    if (beyondGalleryRef.current && !topChromeHoveredRef.current && !overlayOpenRef.current) {
+      scheduleTopChromeHide()
+    }
+  }
+
   const filteredProjects = projects.filter((project) =>
     project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()),
   )
@@ -117,18 +209,40 @@ export default function HomeExperience() {
   return (
     <main className="home-page">
       <SmoothScroll intensity={10} />
-      <HomeHeader
-        ref={headerRef}
-        menuOpen={menuOpen}
-        onToggleMenu={() => {
-          setSearchOpen(false)
-          setMenuOpen((value) => !value)
-        }}
-        onOpenSearch={() => {
-          setMenuOpen(false)
-          setSearchOpen(true)
-        }}
-      />
+      <div
+        ref={topChromeRef}
+        className={`home-top-chrome ${topChromeVisible ? "is-visible" : "is-hidden"}`}
+        onPointerEnter={handleTopChromePointerEnter}
+        onPointerLeave={handleTopChromePointerLeave}
+        onPointerDownCapture={handleTopChromeInteraction}
+        onFocusCapture={handleTopChromeInteraction}
+        onBlurCapture={handleTopChromeBlur}
+      >
+        <HomeHeader
+          ref={headerRef}
+          menuOpen={menuOpen}
+          onToggleMenu={() => {
+            clearTopChromeHideTimer()
+            setTopChromeVisible(true)
+            setSearchOpen(false)
+            setMenuOpen((value) => !value)
+          }}
+          onOpenSearch={() => {
+            clearTopChromeHideTimer()
+            setTopChromeVisible(true)
+            setMenuOpen(false)
+            setSearchOpen(true)
+          }}
+        />
+
+        <div className="home-ticker" aria-label="Promotion">
+          <div className="home-ticker-track">
+            {Array.from({ length: 10 }, (_, index) => (
+              <span key={index}>USE CODE: youdabest <b aria-hidden="true">→</b></span>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <div id="overlay">
         {menuOpen && (
@@ -170,19 +284,11 @@ export default function HomeExperience() {
         </div>
       )}
 
-      <div className="home-ticker" aria-label="Promotion">
-        <div className="home-ticker-track">
-          {Array.from({ length: 10 }, (_, index) => (
-            <span key={index}>USE CODE: youdabest <b aria-hidden="true">→</b></span>
-          ))}
-        </div>
-      </div>
-
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />
       </section>
 
-      <section className="home-gallery" aria-label="Motion gallery">
+      <section ref={gallerySectionRef} className="home-gallery" aria-label="Motion gallery">
         <div
           ref={galleryTrackRef}
           id="motion-gallery-track"
