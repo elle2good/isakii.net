@@ -477,19 +477,30 @@ select {
   object-fit: cover;
 }
 
-.home-gallery-hint {
+.home-gallery-progress {
   position: absolute;
   left: 50%;
-  bottom: 14px;
-  padding: 8px 12px;
+  bottom: 18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   transform: translateX(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 999px;
-  background: rgba(5, 11, 24, 0.55);
-  color: #fff;
-  font-size: 9px;
-  letter-spacing: 0.16em;
   pointer-events: none;
+}
+
+.home-gallery-progress span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.16);
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.home-gallery-progress span.is-active {
+  background: #fff;
+  transform: scale(1.35);
 }
 
 .home-projects {
@@ -1004,6 +1015,7 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-top-chrome { transition: none; }
   .home-ticker-track { animation: none; }
   .home-gallery-track { scroll-behavior: auto; }
   .home-project-image img,

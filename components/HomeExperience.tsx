@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { FocusEvent, WheelEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { FocusEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import SmoothScroll from "./SmoothScroll"
@@ -26,6 +26,7 @@ export default function HomeExperience() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [topChromeVisible, setTopChromeVisible] = useState(true)
+  const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
   const headerRef = useRef<HTMLElement>(null)
   const topChromeRef = useRef<HTMLDivElement>(null)
   const gallerySectionRef = useRef<HTMLElement>(null)
@@ -33,6 +34,7 @@ export default function HomeExperience() {
   const galleryInteractingUntilRef = useRef(0)
   const galleryTimerRef = useRef<number | null>(null)
   const galleryPositionRef = useRef(0)
+  const activeGalleryIndexRef = useRef(0)
   const topChromeHideTimerRef = useRef<number | null>(null)
   const topChromeHoveredRef = useRef(false)
   const beyondGalleryRef = useRef(false)
@@ -84,7 +86,7 @@ export default function HomeExperience() {
       const topChrome = topChromeRef.current
       if (!gallery || !topChrome) return
 
-      const beyondGallery = gallery.getBoundingClientRect().top <= topChrome.offsetHeight
+      const beyondGallery = gallery.getBoundingClientRect().top <= window.innerHeight / 2
       const delta = window.scrollY - previousScrollY
       beyondGalleryRef.current = beyondGallery
 
@@ -121,16 +123,29 @@ export default function HomeExperience() {
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
     const getSetWidth = () => track.scrollWidth / 3
+    const updateProgress = () => {
+      const setWidth = getSetWidth()
+      const itemWidth = setWidth / galleryImages.length
+      if (!setWidth || !itemWidth) return
+      const normalizedPosition = ((galleryPositionRef.current % setWidth) + setWidth) % setWidth
+      const nextIndex = Math.floor((normalizedPosition + itemWidth / 2) / itemWidth) % galleryImages.length
+      if (nextIndex === activeGalleryIndexRef.current) return
+      activeGalleryIndexRef.current = nextIndex
+      setActiveGalleryIndex(nextIndex)
+    }
     const recenter = () => {
       const setWidth = getSetWidth()
       if (!setWidth) return
       if (galleryPositionRef.current < setWidth * 0.5) galleryPositionRef.current += setWidth
       if (galleryPositionRef.current > setWidth * 1.5) galleryPositionRef.current -= setWidth
       track.scrollLeft = galleryPositionRef.current
+      updateProgress()
     }
     const initialize = () => {
       galleryPositionRef.current = getSetWidth()
       track.scrollLeft = galleryPositionRef.current
+      activeGalleryIndexRef.current = 0
+      setActiveGalleryIndex(0)
     }
     const initializeFrame = requestAnimationFrame(initialize)
     let previousTime = performance.now()
@@ -151,28 +166,26 @@ export default function HomeExperience() {
       }
     }
 
+    const handleGalleryWheel = (event: globalThis.WheelEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
+      galleryInteractingUntilRef.current = performance.now() + 700
+      const wheelDistance = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
+      galleryPositionRef.current = track.scrollLeft + wheelDistance
+      recenter()
+    }
+
     if (galleryTimerRef.current !== null) window.clearInterval(galleryTimerRef.current)
     const timer = window.setInterval(advance, 16)
     galleryTimerRef.current = timer
+    track.addEventListener("wheel", handleGalleryWheel, { passive: false })
     return () => {
       cancelAnimationFrame(initializeFrame)
       window.clearInterval(timer)
+      track.removeEventListener("wheel", handleGalleryWheel)
       if (galleryTimerRef.current === timer) galleryTimerRef.current = null
     }
   }, [])
-
-  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
-    const track = galleryTrackRef.current
-    if (!track) return
-    event.preventDefault()
-    galleryInteractingUntilRef.current = performance.now() + 700
-    galleryPositionRef.current = track.scrollLeft + event.deltaX + event.deltaY
-
-    const setWidth = track.scrollWidth / 3
-    if (galleryPositionRef.current < setWidth * 0.5) galleryPositionRef.current += setWidth
-    if (galleryPositionRef.current > setWidth * 1.5) galleryPositionRef.current -= setWidth
-    track.scrollLeft = galleryPositionRef.current
-  }
 
   const handleTopChromePointerEnter = () => {
     topChromeHoveredRef.current = true
@@ -293,7 +306,7 @@ export default function HomeExperience() {
           ref={galleryTrackRef}
           id="motion-gallery-track"
           className="home-gallery-track"
-          onWheel={handleWheel}
+          data-lenis-prevent
         >
           {[...galleryImages, ...galleryImages, ...galleryImages].map((src, index) => (
             <div className="home-gallery-image" key={`${src}-${index}`}>
@@ -301,7 +314,15 @@ export default function HomeExperience() {
             </div>
           ))}
         </div>
-        <div className="home-gallery-hint" aria-hidden="true">SCROLL TO EXPLORE</div>
+        <div className="home-gallery-progress" aria-label={`Gallery image ${activeGalleryIndex + 1} of ${galleryImages.length}`}>
+          {galleryImages.map((_, index) => (
+            <span
+              className={index === activeGalleryIndex ? "is-active" : ""}
+              key={index}
+              aria-hidden="true"
+            />
+          ))}
+        </div>
       </section>
 
       <section id="project-section" className="home-projects">
