@@ -72,9 +72,9 @@ select {
   margin: 0 auto;
   padding: 22px 48px;
   overflow: clip;
-  background: rgba(12, 3, 25, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .home-header-actions {
@@ -327,10 +327,10 @@ select {
   --hero-shade-mark: calc(var(--hero-side-space) + var(--hero-tenth));
   --hero-shade-fade: calc(var(--hero-shade-mark) + min(5vw, 74px));
   position: fixed !important;
-  top: 117px;
+  top: 0;
   left: 50%;
   width: 100vw !important;
-  height: min(720px, calc(100svh - 117px)) !important;
+  height: min(837px, 100svh) !important;
   transform: translateX(-50%);
   overflow: hidden;
   background: #020204;
@@ -349,10 +349,10 @@ select {
 
 .hero-video-frame {
   position: absolute;
-  inset: 0 auto 0 50%;
+  inset: 117px auto 0 50%;
   z-index: 1;
   width: var(--hero-frame-width);
-  height: 100%;
+  height: auto;
   overflow: hidden;
   transform: translateX(-50%);
   background: #020204;
@@ -415,7 +415,7 @@ select {
   min-width: 200%;
   height: 100%;
   gap: 56px;
-  animation: home-marquee 24s linear infinite;
+  animation: home-marquee 48s linear infinite;
   will-change: transform;
 }
 
@@ -441,15 +441,13 @@ select {
   height: 450px;
   overflow-x: auto;
   overflow-y: hidden;
-  cursor: grab;
+  cursor: ew-resize;
   scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   overscroll-behavior: contain;
   touch-action: pan-y;
 }
 
-.home-gallery-track:active { cursor: grabbing; }
 .home-gallery-track::-webkit-scrollbar { display: none; }
 
 .home-gallery-image {
@@ -458,7 +456,6 @@ select {
   width: 600px;
   height: 450px;
   overflow: hidden;
-  scroll-snap-align: center;
 }
 
 .home-gallery-image img {
@@ -485,11 +482,11 @@ select {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  width: min(1468px, 100%);
+  width: 100%;
   min-height: 701px;
-  margin: 0 auto;
+  margin: 0;
   padding: 124px 48px 96px;
-  background: var(--midnight-navy);
+  background: #541227;
   color: #fff;
 }
 
@@ -942,12 +939,12 @@ select {
     --hero-tenth: 10vw;
     --hero-shade-mark: 10vw;
     --hero-shade-fade: 16vw;
-    top: 117px;
+    top: 0;
     width: 100% !important;
-    height: min(620px, calc(100svh - 117px)) !important;
+    height: min(737px, 100svh) !important;
   }
-  .hero-video-frame { width: var(--hero-frame-width); }
-  .home-ticker-track { gap: 42px; animation-duration: 20s; }
+  .hero-video-frame { inset: 117px auto 0 50%; width: var(--hero-frame-width); }
+  .home-ticker-track { gap: 42px; animation-duration: 40s; }
   .home-gallery { height: 300px; }
   .home-gallery-track { height: 360px; }
   .home-gallery-image { flex-basis: 100vw; width: 100vw; height: 360px; }

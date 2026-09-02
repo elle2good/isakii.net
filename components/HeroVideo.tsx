@@ -71,9 +71,12 @@ export default function HeroVideo({
       }
 
       const frameWidth = frameBounds.width * pixelRatio
+      const frameHeight = frameBounds.height * pixelRatio
       const frameLeft = (frameBounds.left - bounds.left) * pixelRatio
+      const frameTop = (frameBounds.top - bounds.top) * pixelRatio
+      if (!frameWidth || !frameHeight) return
       const sourceAspect = video.videoWidth / video.videoHeight
-      const frameAspect = frameWidth / height
+      const frameAspect = frameWidth / frameHeight
 
       let sourceX = 0
       let sourceY = 0
@@ -105,7 +108,17 @@ export default function HeroVideo({
         width - frameLeft - frameWidth + 2,
         height,
       )
-      context.drawImage(video, sourceX, sourceY, sourceWidth, 2, frameLeft, 0, frameWidth, 22 * pixelRatio)
+      context.drawImage(
+        video,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        2,
+        frameLeft,
+        0,
+        frameWidth,
+        frameTop + 22 * pixelRatio,
+      )
     }
 
     const queueFrame = () => {
