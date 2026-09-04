@@ -314,12 +314,13 @@ select {
 .home-menu-link,
 .home-menu-accordion-trigger {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   min-height: clamp(32px, 5.6vw, 62px);
   color: #fff;
   font-family: Georgia, serif;
-  font-size: clamp(22px, 3.6vw, 40px);
+  font-size: clamp(15.4px, 2.52vw, 28px);
   font-weight: 400;
   line-height: 1.35;
   text-transform: lowercase;
@@ -1145,7 +1146,11 @@ select {
     left: 9%;
     width: 82%;
   }
-  .home-menu-link { min-height: clamp(32px, 10vw, 62px); font-size: clamp(22px, 7vw, 40px); }
+  .home-menu-link,
+  .home-menu-accordion-trigger {
+    min-height: clamp(32px, 10vw, 62px);
+    font-size: clamp(15.4px, 4.9vw, 28px);
+  }
   .home-menu-contact { right: 5%; bottom: 11%; }
 
   .navigation {
@@ -1185,7 +1190,7 @@ select {
   .home-menu-link,
   .home-menu-accordion-trigger {
     min-height: 32px;
-    font-size: 22px;
+    font-size: 15.4px;
     line-height: 1.3;
   }
 
