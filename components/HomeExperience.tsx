@@ -20,6 +20,7 @@ const TOP_CHROME_PEEK_DURATION = 15_000
 
 export default function HomeExperience() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [blogExpanded, setBlogExpanded] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [topChromeVisible, setTopChromeVisible] = useState(true)
@@ -36,6 +37,7 @@ export default function HomeExperience() {
   const topChromeHoveredRef = useRef(false)
   const beyondGalleryRef = useRef(false)
   const overlayOpenRef = useRef(false)
+  const blogExpandedRef = useRef(false)
 
   const clearTopChromeHideTimer = useCallback(() => {
     if (topChromeHideTimerRef.current === null) return
@@ -57,18 +59,24 @@ export default function HomeExperience() {
     overlayOpenRef.current = menuOpen || searchOpen
   }, [menuOpen, searchOpen])
 
+  useEffect(() => {
+    blogExpandedRef.current = blogExpanded
+  }, [blogExpanded])
+
   useLayoutEffect(() => {
-    document.documentElement.style.overflow = menuOpen || searchOpen ? "hidden" : ""
+    document.documentElement.style.overflow = searchOpen ? "hidden" : ""
     return () => {
       document.documentElement.style.overflow = ""
     }
-  }, [menuOpen, searchOpen])
+  }, [searchOpen])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return
       setMenuOpen(false)
+      setBlogExpanded(false)
       setSearchOpen(false)
+      setTopChromeVisible(true)
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
@@ -87,7 +95,10 @@ export default function HomeExperience() {
       const delta = window.scrollY - previousScrollY
       beyondGalleryRef.current = beyondGallery
 
-      if (!beyondGallery || overlayOpenRef.current) {
+      if (blogExpandedRef.current) {
+        clearTopChromeHideTimer()
+        setTopChromeVisible(false)
+      } else if (!beyondGallery || overlayOpenRef.current) {
         clearTopChromeHideTimer()
         setTopChromeVisible(true)
       } else if (!initialized) {
@@ -213,7 +224,19 @@ export default function HomeExperience() {
 
   const closeOverlays = () => {
     setMenuOpen(false)
+    setBlogExpanded(false)
     setSearchOpen(false)
+    setTopChromeVisible(true)
+  }
+
+  const toggleBlogAccordion = () => {
+    clearTopChromeHideTimer()
+    setBlogExpanded((value) => {
+      const nextValue = !value
+      blogExpandedRef.current = nextValue
+      setTopChromeVisible(!nextValue)
+      return nextValue
+    })
   }
 
   return (
@@ -235,7 +258,10 @@ export default function HomeExperience() {
             clearTopChromeHideTimer()
             setTopChromeVisible(true)
             setSearchOpen(false)
-            setMenuOpen((value) => !value)
+            setMenuOpen((value) => {
+              if (value) setBlogExpanded(false)
+              return !value
+            })
           }}
           onOpenSearch={() => {
             clearTopChromeHideTimer()
@@ -256,20 +282,52 @@ export default function HomeExperience() {
 
       <div id="overlay">
         {menuOpen && (
-          <div className="home-menu-overlay is-open" role="dialog" aria-modal="true" aria-label="Site menu">
+          <>
+          <div className="home-menu-scrim" aria-hidden="true" onClick={closeOverlays} />
+          <div
+            className={`home-menu-overlay is-open ${blogExpanded ? "has-blog-expanded" : ""}`}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+          >
             <button
               type="button"
               className="home-menu-close"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeOverlays}
               aria-label="Close menu"
             >
               x
             </button>
             <nav aria-label="Explore">
-              <Link className="home-menu-link" href="/about" onClick={() => setMenuOpen(false)}>about</Link>
-              <Link className="home-menu-link" href="/work" onClick={() => setMenuOpen(false)}>blog</Link>
-              <Link className="home-menu-link" href="#projects" onClick={() => setMenuOpen(false)}>catalogue</Link>
-              <Link className="home-menu-link" href="/coming-soon" onClick={() => setMenuOpen(false)}>coming soon</Link>
+              <Link className="home-menu-link" href="/about" onClick={closeOverlays}>about</Link>
+              <div className={`home-menu-accordion ${blogExpanded ? "is-expanded" : ""}`}>
+                <button
+                  type="button"
+                  className="home-menu-accordion-trigger"
+                  aria-expanded={blogExpanded}
+                  aria-controls="home-blog-submenu"
+                  onClick={toggleBlogAccordion}
+                >
+                  <span>blog</span>
+                  <span className="home-menu-accordion-arrow" aria-hidden="true" />
+                </button>
+                <div id="home-blog-submenu" className="home-menu-submenu" aria-hidden={!blogExpanded}>
+                  <Link href="/work?language=en" tabIndex={blogExpanded ? 0 : -1} onClick={closeOverlays}>
+                    <span className="home-menu-submenu-label">English</span>
+                    <span className="home-menu-submenu-arrow" aria-hidden="true" />
+                  </Link>
+                  <Link href="/work?language=ko" tabIndex={blogExpanded ? 0 : -1} onClick={closeOverlays}>
+                    <span className="home-menu-submenu-label">Korean</span>
+                    <span className="home-menu-submenu-arrow" aria-hidden="true" />
+                  </Link>
+                  <Link href="/work#archive" tabIndex={blogExpanded ? 0 : -1} onClick={closeOverlays}>
+                    <span className="home-menu-submenu-label">Archive</span>
+                    <span className="home-menu-submenu-arrow" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+              <Link className="home-menu-link" href="#projects" onClick={closeOverlays}>catalogue</Link>
+              <Link className="home-menu-link" href="/coming-soon" onClick={closeOverlays}>coming soon</Link>
             </nav>
             <a className="home-menu-contact" href="mailto:smkim@isakii.net">
               <span aria-hidden="true">&#9993;</span>
@@ -277,6 +335,7 @@ export default function HomeExperience() {
               <span className="home-menu-contact-arrow" aria-hidden="true">&#8599;</span>
             </a>
           </div>
+          </>
         )}
       </div>
 
