@@ -37,7 +37,7 @@ const HomeHeader = forwardRef<HTMLElement, HomeHeaderProps>(function HomeHeader(
     <header ref={ref} className="home-header">
       <div className="home-header-actions">
         <button
-          className={`home-menu-button ${menuOpen ? "is-open" : ""}`}
+          className="home-menu-button"
           type="button"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}

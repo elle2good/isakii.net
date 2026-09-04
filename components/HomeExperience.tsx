@@ -256,7 +256,15 @@ export default function HomeExperience() {
 
       <div id="overlay">
         {menuOpen && (
-          <div className="home-menu-overlay is-open">
+          <div className="home-menu-overlay is-open" role="dialog" aria-modal="true" aria-label="Site menu">
+            <button
+              type="button"
+              className="home-menu-close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              x
+            </button>
             <nav aria-label="Explore">
               <Link className="home-menu-link" href="/about" onClick={() => setMenuOpen(false)}>about</Link>
               <Link className="home-menu-link" href="/work" onClick={() => setMenuOpen(false)}>blog</Link>
