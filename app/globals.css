@@ -836,7 +836,7 @@ select {
   --catalogue-burgundy: #541227;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 48%) minmax(0, 52%);
   width: min(1334px, calc(100vw - 48px));
   max-height: calc(100svh - 48px);
   overflow-x: hidden;
@@ -892,7 +892,7 @@ select {
 .catalogue-preview-content {
   align-self: center;
   width: 100%;
-  padding-left: 35px;
+  padding-left: 12px;
 }
 
 .catalogue-preview-eyebrow {
