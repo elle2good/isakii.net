@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { FocusEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { FocusEvent, useCallback, useEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import SmoothScroll from "./SmoothScroll"
@@ -21,8 +21,6 @@ const TOP_CHROME_PEEK_DURATION = 15_000
 export default function HomeExperience() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
   const [topChromeVisible, setTopChromeVisible] = useState(true)
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
   const headerRef = useRef<HTMLElement>(null)
@@ -56,26 +54,18 @@ export default function HomeExperience() {
   }, [clearTopChromeHideTimer])
 
   useEffect(() => {
-    overlayOpenRef.current = menuOpen || searchOpen
-  }, [menuOpen, searchOpen])
+    overlayOpenRef.current = menuOpen
+  }, [menuOpen])
 
   useEffect(() => {
     blogExpandedRef.current = blogExpanded
   }, [blogExpanded])
-
-  useLayoutEffect(() => {
-    document.documentElement.style.overflow = searchOpen ? "hidden" : ""
-    return () => {
-      document.documentElement.style.overflow = ""
-    }
-  }, [searchOpen])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return
       setMenuOpen(false)
       setBlogExpanded(false)
-      setSearchOpen(false)
       setTopChromeVisible(true)
     }
     window.addEventListener("keydown", handleKeyDown)
@@ -218,14 +208,9 @@ export default function HomeExperience() {
     }
   }
 
-  const filteredProjects = projects.filter((project) =>
-    project.title.toLowerCase().includes(searchQuery.trim().toLowerCase()),
-  )
-
   const closeOverlays = () => {
     setMenuOpen(false)
     setBlogExpanded(false)
-    setSearchOpen(false)
     setTopChromeVisible(true)
   }
 
@@ -257,17 +242,10 @@ export default function HomeExperience() {
           onToggleMenu={() => {
             clearTopChromeHideTimer()
             setTopChromeVisible(true)
-            setSearchOpen(false)
             setMenuOpen((value) => {
               if (value) setBlogExpanded(false)
               return !value
             })
-          }}
-          onOpenSearch={() => {
-            clearTopChromeHideTimer()
-            setTopChromeVisible(true)
-            setMenuOpen(false)
-            setSearchOpen(true)
           }}
         />
 
@@ -338,28 +316,6 @@ export default function HomeExperience() {
           </>
         )}
       </div>
-
-      {searchOpen && (
-        <div className="home-search-overlay" role="dialog" aria-modal="true" aria-label="Search projects">
-          <button type="button" className="home-search-close" onClick={closeOverlays} aria-label="Close search">×</button>
-          <label htmlFor="home-search">SEARCH</label>
-          <input
-            id="home-search"
-            autoFocus
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="TYPE A PROJECT NAME"
-          />
-          <div className="home-search-results">
-            {(searchQuery ? filteredProjects : projects).map((project) => (
-              <a href="#projects" key={project.title} onClick={closeOverlays}>
-                <span>{project.title}</span><small>{project.date}</small>
-              </a>
-            ))}
-            {searchQuery && filteredProjects.length === 0 && <p>NO PROJECTS FOUND</p>}
-          </div>
-        </div>
-      )}
 
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />

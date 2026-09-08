@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 type Props = {
   videoSrc?: string
@@ -18,10 +18,15 @@ export default function HeroVideo({
   const frameRef = useRef<HTMLDivElement>(null)
   const ambientCanvasRef = useRef<HTMLCanvasElement>(null)
   const hasLoopedRef = useRef(false)
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      setIsReady(true)
+    }
 
     const handleTimeUpdate = () => {
       if (hasLoopedRef.current && video.currentTime >= loopEnd) video.currentTime = loopStart
@@ -144,10 +149,18 @@ export default function HeroVideo({
   }, [])
 
   return (
-    <div ref={stageRef} className="hero-video-stage">
+    <div ref={stageRef} className={`hero-video-stage ${isReady ? "is-ready" : ""}`}>
       <canvas ref={ambientCanvasRef} className="hero-video-ambient" aria-hidden="true" />
       <div ref={frameRef} className="hero-video-frame">
-        <video ref={videoRef} src={videoSrc} crossOrigin="anonymous" autoPlay muted playsInline />
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          crossOrigin="anonymous"
+          autoPlay
+          muted
+          playsInline
+          onLoadedData={() => setIsReady(true)}
+        />
       </div>
       <div className="hero-video-gradation" aria-hidden="true" />
     </div>

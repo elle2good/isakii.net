@@ -95,8 +95,7 @@ select {
 .home-header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 108px;
+  width: 51px;
   height: 48px;
 }
 
@@ -517,7 +516,9 @@ select {
   width: calc(100% + 36px);
   height: calc(100% + 36px);
   filter: blur(18px) saturate(0.92);
+  opacity: 0;
   transform: scale(1.025);
+  transition: opacity 1600ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hero-video-frame {
@@ -527,8 +528,15 @@ select {
   width: var(--hero-frame-width);
   height: auto;
   overflow: hidden;
+  opacity: 0;
   transform: translateX(-50%);
   background: #020204;
+  transition: opacity 1600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-video-stage.is-ready .hero-video-ambient,
+.hero-video-stage.is-ready .hero-video-frame {
+  opacity: 1;
 }
 
 .hero-video-frame video {
