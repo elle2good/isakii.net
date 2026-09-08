@@ -6,24 +6,19 @@ import { FocusEvent, useCallback, useEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
+import CataloguePreview from "./CataloguePreview"
 import SmoothScroll from "./SmoothScroll"
 import { galleryImages } from "@/lib/gallery"
-
-const projects = [
-  { title: "Afterimage", date: "2026.01", image: "/home/projects/afterimage.jpg" },
-  { title: "Hourglass", date: "2025.11", image: "/home/projects/hourglass.jpg" },
-  { title: "Night Motel", date: "2025.08", image: "/home/projects/night-motel.jpg" },
-  { title: "Soft Static", date: "2025.04", image: "/home/projects/soft-static.jpg" },
-  { title: "Blue Room", date: "2024.12", image: "/home/projects/blue-room.jpg" },
-]
+import type { CatalogueItem } from "@/lib/catalogue"
 
 const TOP_CHROME_PEEK_DURATION = 15_000
 
-export default function HomeExperience() {
+export default function HomeExperience({ catalogueItems }: { catalogueItems: CatalogueItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
   const [topChromeVisible, setTopChromeVisible] = useState(true)
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
+  const [activeCatalogueItem, setActiveCatalogueItem] = useState<CatalogueItem | null>(null)
   const headerRef = useRef<HTMLElement>(null)
   const topChromeRef = useRef<HTMLDivElement>(null)
   const gallerySectionRef = useRef<HTMLElement>(null)
@@ -55,8 +50,8 @@ export default function HomeExperience() {
   }, [clearTopChromeHideTimer])
 
   useEffect(() => {
-    overlayOpenRef.current = menuOpen
-  }, [menuOpen])
+    overlayOpenRef.current = menuOpen || activeCatalogueItem !== null
+  }, [activeCatalogueItem, menuOpen])
 
   useEffect(() => {
     blogExpandedRef.current = blogExpanded
@@ -318,6 +313,13 @@ export default function HomeExperience() {
         )}
       </div>
 
+      <CataloguePreview
+        item={activeCatalogueItem}
+        items={catalogueItems}
+        onClose={() => setActiveCatalogueItem(null)}
+        onSelect={setActiveCatalogueItem}
+      />
+
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />
       </section>
@@ -355,15 +357,21 @@ export default function HomeExperience() {
       <section id="project-section" className="home-projects">
         <h2 id="projects">Project</h2>
         <div className="home-project-grid">
-          {projects.map((project) => (
-            <article className="home-project-card" key={project.title}>
-              <Link className="home-project-card-link" href="/work" aria-label={`View ${project.title}`}>
+          {catalogueItems.map((project) => (
+            <article className="home-project-card" key={project.id}>
+              <button
+                type="button"
+                className="home-project-card-link"
+                onClick={() => setActiveCatalogueItem(project)}
+                aria-label={`Preview ${project.title}`}
+              >
               <div className="home-project-image">
-                <Image src={project.image} alt="" fill sizes="(max-width: 700px) 80vw, 240px" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={project.coverImage || project.popupImage} alt={project.imageAlt} />
               </div>
               <h3>{project.title}</h3>
               <p>{project.date}</p>
-              </Link>
+              </button>
             </article>
           ))}
         </div>

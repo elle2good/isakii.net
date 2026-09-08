@@ -1,5 +1,7 @@
 import HomeExperience from "@/components/HomeExperience"
+import { getCatalogueItems } from "@/lib/catalogue"
 
-export default function Home() {
-  return <HomeExperience />
+export default async function Home() {
+  const catalogueItems = await getCatalogueItems()
+  return <HomeExperience catalogueItems={catalogueItems} />
 }
