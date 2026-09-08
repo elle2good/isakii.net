@@ -5,6 +5,7 @@ import Link from "next/link"
 import { FocusEvent, useCallback, useEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
+import HomeFooter from "./HomeFooter"
 import SmoothScroll from "./SmoothScroll"
 import { galleryImages } from "@/lib/gallery"
 
@@ -366,10 +367,26 @@ export default function HomeExperience() {
             </article>
           ))}
         </div>
-        <a className="home-catalogue-link" href="#projects">
+        <Link className="home-catalogue-link" href="/work">
           VIEW CATALOGUE <span aria-hidden="true">→</span>
-        </a>
+        </Link>
       </section>
+
+      <section className="home-video-feature" aria-labelledby="home-video-title">
+        <div className="home-video-feature-inner">
+          <h2 id="home-video-title" className="sr-only">Featured video</h2>
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/7DKR5bhmWPc?rel=0&modestbranding=1"
+            title="Featured isakii video"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      </section>
+
+      <HomeFooter />
     </main>
   )
 }
