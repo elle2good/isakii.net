@@ -1,4 +1,50 @@
-@import url("https://cdn.jsdelivr.net/gh/sunghyunzz/eulyoo1945/eulyoo1945.css");
+@font-face {
+  font-family: "Eulyoo1945";
+  src: url("/fonts/eulyoo1945-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Eulyoo1945";
+  src: url("/fonts/eulyoo1945-semibold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Abel";
+  src: url("/fonts/abel-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-semibold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/dm-sans-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 :root {
   --ink: #0c0319;
@@ -1726,7 +1772,7 @@ select {
 
 .abelian-hero-sequence {
   position: relative;
-  height: 180svh;
+  height: 200svh;
   background: var(--abelian-navy);
 }
 
@@ -1741,16 +1787,14 @@ select {
 
 .abelian-hero-image,
 .abelian-film-image,
-.abelian-chapter-image,
-.abelian-impact-story-image {
+.abelian-chapter-image {
   position: absolute;
   inset: 0;
 }
 
 .abelian-hero-image img,
 .abelian-film-image img,
-.abelian-chapter-image img,
-.abelian-impact-story-image img {
+.abelian-chapter-image img {
   object-fit: cover;
   object-position: center;
 }
@@ -1759,6 +1803,14 @@ select {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(10, 15, 26, 0.18), rgba(10, 15, 26, 0.5) 48%, rgba(10, 5, 20, 0.98));
+}
+
+.abelian-hero-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #05050a;
+  pointer-events: none;
 }
 
 .abelian-hero-copy {
@@ -1773,17 +1825,29 @@ select {
 
 .abelian-hero-copy-motion { will-change: transform, opacity; }
 
-.abelian-eyebrow,
-.abelian-section-label,
-.abelian-solutions > header > span,
-.abelian-impact-heading > span,
-.abelian-lessons > span {
+.abelian-eyebrow {
   color: var(--abelian-orange);
   font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.abelian-section-label,
+.abelian-solutions > header > span {
+  color: var(--abelian-orange);
+  font-family: Abel, Archivo, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.abelian-impact-heading > span {
+  color: var(--abelian-orange);
+  font-family: Abel, Archivo, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
 }
 
 .abelian-hero-copy h1 {
@@ -1840,10 +1904,41 @@ select {
 .abelian-impact-story-wash {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(9, 14, 28, 0.25), rgba(14, 19, 36, 0.76));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(24, 27, 35, 0.5), rgba(12, 14, 23, 0.82));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
+
+.abelian-section-one-copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  width: min(100%, 1468px);
+  height: 100%;
+  margin: 0 auto;
+  padding: clamp(130px, 18vh, 198px) clamp(48px, 8vw, 128px) clamp(78px, 10vh, 108px);
+  color: #fff;
+  font-family: Abel, Archivo, sans-serif;
+}
+
+.abelian-section-one-copy > p {
+  width: min(790px, 64vw);
+  margin: 0 auto;
+  font-size: clamp(30px, 2.35vw, 36px);
+  line-height: 1.2;
+}
+
+.abelian-section-one-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  text-align: center;
+}
+
+.abelian-section-one-stats div { display: grid; justify-items: center; }
+.abelian-section-one-stats strong { color: var(--abelian-orange); font-size: clamp(68px, 6.5vw, 96px); font-weight: 400; line-height: 1; }
+.abelian-section-one-stats span { margin-top: 56px; font-family: "DM Sans", Arial, sans-serif; font-size: clamp(22px, 1.9vw, 30px); line-height: 1.35; }
 
 .abelian-chapter-copy {
   position: absolute;
@@ -1925,9 +2020,38 @@ select {
   transform-origin: 0 50%;
 }
 
+.abelian-scroll-top {
+  position: fixed;
+  bottom: clamp(18px, 3vw, 36px);
+  right: clamp(14px, 2.2vw, 34px);
+  z-index: 79;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(23, 37, 84, 0.92);
+  box-shadow: 0 8px 24px rgba(5, 11, 24, 0.24);
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.abelian-scroll-top-triangle {
+  width: 0;
+  height: 0;
+  border-right: 7px solid transparent;
+  border-bottom: 11px solid #fff;
+  border-left: 7px solid transparent;
+}
+
+.abelian-scroll-top[style*="opacity: 0"] { pointer-events: none; }
+
 .abelian-editorial,
-.abelian-solutions,
-.abelian-lessons {
+.abelian-solutions {
   max-width: 1468px;
   margin: 0 auto;
   background: #fff;
@@ -1980,6 +2104,7 @@ select {
 .abelian-solutions {
   min-height: 1467px;
   padding: 170px clamp(48px, 8.7vw, 134px) 150px;
+  font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
 .abelian-solutions > header {
@@ -2010,8 +2135,16 @@ select {
 .abelian-solution-row h3 { margin: 0; font-size: 30px; font-weight: 400; line-height: 1.2; }
 .abelian-solution-row p { margin: 0; font-size: 17px; line-height: 1.58; }
 
-.abelian-impact {
+.abelian-impact-sequence {
   position: relative;
+  height: 200svh;
+  min-height: 1280px;
+  background: var(--abelian-navy);
+}
+
+.abelian-impact-sticky {
+  position: sticky;
+  top: 0;
   height: 100svh;
   min-height: 720px;
   overflow: hidden;
@@ -2020,6 +2153,7 @@ select {
 }
 
 .abelian-impact-parallax { position: absolute; inset: -48px 0; background: var(--abelian-navy); will-change: transform; }
+.abelian-impact-frame { position: absolute; inset: 0; z-index: 2; will-change: transform, opacity; }
 .abelian-impact-heading { position: absolute; top: 15%; left: clamp(48px, 8vw, 120px); z-index: 2; }
 
 .abelian-impact-stats {
@@ -2035,18 +2169,24 @@ select {
 .abelian-impact-stats div { display: grid; min-height: 320px; padding: 36px; border-left: 1px solid rgba(255, 255, 255, 0.6); }
 .abelian-impact-stats div:first-child { border-left: 0; }
 .abelian-impact-stats strong { color: var(--abelian-orange); font-family: Abel, Archivo, sans-serif; font-size: clamp(64px, 6.5vw, 96px); font-weight: 400; line-height: 1; }
-.abelian-impact-stats span { margin-top: 74px; font-size: clamp(23px, 2vw, 30px); line-height: 1.45; }
+.abelian-impact-stats span { margin-top: 74px; font-family: "DM Sans", Arial, sans-serif; font-size: clamp(23px, 2vw, 30px); line-height: 1.45; }
 
 .abelian-impact-story {
-  position: relative;
-  min-height: 100svh;
+  position: absolute;
+  inset: 0;
+  z-index: 4;
   overflow: hidden;
   color: #fff;
+  will-change: transform;
 }
 
-.abelian-impact-story-image { inset: -8%; }
-.abelian-impact-story-image img { object-position: center; transform: scale(1.08); }
-.abelian-impact-story-wash { background: rgba(38, 40, 48, 0.66); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.abelian-impact-story-wash {
+  background:
+    radial-gradient(circle at 56% 24%, rgba(205, 191, 227, 0.2), transparent 36%),
+    linear-gradient(180deg, rgba(56, 66, 102, 0.78), rgba(37, 40, 52, 0.94));
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
 
 .abelian-impact-story-copy {
   position: relative;
@@ -2060,20 +2200,6 @@ select {
 }
 
 .abelian-impact-story-copy p { margin: 0 0 34px; }
-
-.abelian-lessons {
-  min-height: 480px;
-  padding: 128px clamp(48px, 8.7vw, 134px);
-}
-
-.abelian-lessons h2 {
-  margin: 26px 0 20px;
-  font-family: "Eulyoo1945", Georgia, serif;
-  font-size: clamp(48px, 5vw, 72px);
-  font-weight: 400;
-}
-
-.abelian-lessons p { max-width: 580px; margin: 0; color: #68616d; font-size: 17px; line-height: 1.6; }
 
 @media (max-width: 1050px) {
   .abelian-hero-copy { width: calc(100% - 96px); }
@@ -2161,8 +2287,8 @@ select {
   }
   .home-menu-contact { right: 5%; bottom: 11%; }
 
-  .abelian-hero-sequence { height: 165svh; }
-  .abelian-hero-sticky { min-height: 620px; }
+  .abelian-hero-sequence { height: 230svh; }
+  .abelian-hero-sticky { min-height: 100svh; }
   .abelian-hero-copy { left: 24px; bottom: 188px; width: calc(100% - 48px); }
   .abelian-hero-copy h1 { margin-top: 18px; font-size: clamp(41px, 11.5vw, 58px); line-height: 1.04; }
   .abelian-hero-meta {
@@ -2174,6 +2300,12 @@ select {
     font-size: 9px;
   }
   .abelian-hero-meta div { grid-template-columns: 80px 1fr; }
+  .abelian-section-one-copy { padding: 62px 20px 24px; }
+  .abelian-section-one-copy > p { width: 100%; font-size: 17px; line-height: 1.2; }
+  .abelian-section-one-stats { grid-template-columns: 1fr; align-content: end; gap: 8px; }
+  .abelian-section-one-stats div { grid-template-columns: 0.7fr 1.3fr; align-items: center; text-align: left; }
+  .abelian-section-one-stats strong { font-size: 34px; }
+  .abelian-section-one-stats span { margin-top: 0; font-size: 12px; }
   .abelian-chapter-copy { padding: 28px; }
   .abelian-chapter-copy h2 { font-size: clamp(31px, 9vw, 44px); }
   .abelian-subnav { min-height: 66px; padding-inline: 20px; }
@@ -2192,13 +2324,15 @@ select {
   .abelian-solution-number { grid-row: 1 / span 2; font-size: 34px; }
   .abelian-solution-row h3 { font-size: 25px; }
   .abelian-solution-row p { grid-column: 2; }
-  .abelian-impact { min-height: 720px; }
-  .abelian-impact-stats { inset: 19% 24px auto; grid-template-columns: 1fr; }
-  .abelian-impact-stats div { grid-template-columns: 0.7fr 1.3fr; align-items: center; min-height: 160px; padding: 24px 0; border-top: 1px solid rgba(255, 255, 255, 0.35); border-left: 0; text-align: left; }
+  .abelian-impact-sequence { height: 230svh; min-height: 1000px; }
+  .abelian-impact-sticky { min-height: 100svh; }
+  .abelian-impact-stats { inset: 15% 24px auto; grid-template-columns: 1fr; }
+  .abelian-impact-stats div { grid-template-columns: 0.7fr 1.3fr; align-items: center; min-height: 112px; padding: 14px 0; border-top: 1px solid rgba(255, 255, 255, 0.35); border-left: 0; text-align: left; }
   .abelian-impact-stats div:first-child { border-top: 0; }
+  .abelian-impact-stats strong { font-size: 48px; }
   .abelian-impact-stats span { margin-top: 0; font-size: 19px; }
-  .abelian-impact-story-copy { width: calc(100% - 48px); font-size: 25px; }
-  .abelian-lessons { min-height: 420px; padding: 84px 24px; }
+  .abelian-impact-story-copy { width: calc(100% - 48px); padding-block: 48px 20px; font-size: 14px; line-height: 1.2; }
+  .abelian-impact-story-copy p { margin-bottom: 12px; }
 
   .navigation {
     flex-direction: column;

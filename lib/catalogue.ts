@@ -36,7 +36,7 @@ const READY_ITEM: CatalogueItem = {
   tldr:
     "The company needed to transform its niche, mining-focused community into broader awareness and adoption for its quantum-resistant blockchain ahead of its token launch. I developed accessible technical content, gamified engagement programs, streamlined community management, and led a multilingual ambassador network. This strategy grew seven community channels sixfold, converted approximately 25% of community members into users, supported a successful token launch and three product launches, and helped generate roughly 15,000 wallet addresses; contributing to Abelian’s transition from pre-revenue to revenue-generating.",
   ctaLabel: "Read the full case study",
-  caseStudyUrl: "/work/abelian-community",
+  caseStudyUrl: "/catalogue/Abelian-community",
   downloadUrl: "",
   popupImage:
     "https://res.cloudinary.com/dwto97ayq/image/upload/v1788861377/Abelian_Pop_up_image_np3crf.png",
@@ -85,6 +85,7 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
     .filter((row) => truthy(row.Active) && text(row.Content_Title))
     .map((row) => {
       const slug = text(row.Slug)
+      const itemType = selectValue(row.Type)
       const media = mediaByItem.get(row.id ?? -1) ?? []
       const byType = (type: string) =>
         media.find((record) => truthy(record.Active) && selectValue(record["Media Type"]).toLowerCase() === type)
@@ -103,14 +104,15 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
         subtitle: text(row.Subtitle),
         slug,
         date: text(row.Date),
-        type: selectValue(row.Type),
+        type: itemType,
         companyName: text(row.Company_Name),
         shortSummary: text(row.Short_Summary),
         tldr: text(row.TLDR),
         ctaLabel: text(row.CTA_Label) || "Read the full case study",
         caseStudyUrl:
-          text(row["Case Study URL"])
-          || (slug.toLowerCase() === "abelian-community" ? "/work/abelian-community" : ""),
+          itemType.toLowerCase() === "flagship" && slug
+            ? `/catalogue/${encodeURIComponent(slug)}`
+            : text(row["Case Study URL"]),
         downloadUrl: text(row["Download URL"]),
         popupImage,
         coverImage,

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react"
+import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
@@ -12,7 +12,6 @@ const navigation = [
   { id: "challenges", label: "Challenges" },
   { id: "solutions", label: "Solutions" },
   { id: "impact", label: "Key outcomes" },
-  { id: "lessons", label: "Lessons" },
 ]
 
 const solutions = [
@@ -62,6 +61,8 @@ export default function AbelianCaseStudy() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("context")
   const [subnavPinned, setSubnavPinned] = useState(false)
+  const [heroCopyDismissed, setHeroCopyDismissed] = useState(false)
+  const [impactCopyDismissed, setImpactCopyDismissed] = useState(false)
   const heroSequenceRef = useRef<HTMLElement>(null)
   const articleRef = useRef<HTMLElement>(null)
   const subnavRef = useRef<HTMLDivElement>(null)
@@ -70,7 +71,7 @@ export default function AbelianCaseStudy() {
 
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroSequenceRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   })
   const { scrollYProgress: articleProgress } = useScroll({
     target: articleRef,
@@ -78,15 +79,30 @@ export default function AbelianCaseStudy() {
   })
   const { scrollYProgress: impactProgress } = useScroll({
     target: impactRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   })
 
-  const heroCopyOpacity = useTransform(heroProgress, [0, 0.28, 0.48], [1, 1, 0])
-  const heroCopyY = useTransform(heroProgress, [0.2, 0.5], [0, -74])
-  const filmY = useTransform(heroProgress, [0.28, 0.8], ["100%", "0%"])
-  const filmBlur = useTransform(heroProgress, [0.28, 0.72], ["blur(0px)", "blur(14px)"])
-  const filmOpacity = useTransform(heroProgress, [0.28, 0.75], [0, 1])
+  const filmY = useTransform(heroProgress, [0.24, 0.78], ["100%", "0%"])
+  const filmBlur = useTransform(heroProgress, [0.2, 0.72], ["blur(0px)", "blur(18px)"])
+  const heroDarkOpacity = useTransform(heroProgress, [0.2, 0.72], [0, 0.68])
   const impactY = useTransform(impactProgress, [0, 1], [48, -48])
+  const impactStoryY = useTransform(impactProgress, [0.27, 0.82], ["100%", "0%"])
+
+  useMotionValueEvent(heroProgress, "change", (latest) => {
+    setHeroCopyDismissed((dismissed) => {
+      if (latest >= 0.28) return true
+      if (latest <= 0.04) return false
+      return dismissed
+    })
+  })
+
+  useMotionValueEvent(impactProgress, "change", (latest) => {
+    setImpactCopyDismissed((dismissed) => {
+      if (latest >= 0.25) return true
+      if (latest <= 0.04) return false
+      return dismissed
+    })
+  })
 
   useEffect(() => {
     const update = () => {
@@ -154,38 +170,50 @@ export default function AbelianCaseStudy() {
             <Image src="/case-studies/abelian/hero.jpg" alt="A quantum computing installation" fill priority sizes="100vw" />
           </motion.div>
           <div className="abelian-hero-gradient" />
+          <motion.div className="abelian-hero-dim" style={reduceMotion ? undefined : { opacity: heroDarkOpacity }} />
 
           <motion.div
             className="abelian-hero-copy"
             initial={reduceMotion ? false : { opacity: 0, y: -42 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 1.05, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -104 : 0 }}
+            transition={{ duration: reduceMotion ? 0 : heroCopyDismissed ? 0.48 : 1.05, delay: heroCopyDismissed ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.div
-              className="abelian-hero-copy-motion"
-              style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}
-            >
+            <div className="abelian-hero-copy-motion">
               <span className="abelian-eyebrow">Case study</span>
               <h1 id="abelian-title">Bootstrapping<br />a Global Community from a Very Niche Technology</h1>
-            </motion.div>
+            </div>
           </motion.div>
 
-          <dl className="abelian-hero-meta">
+          <motion.dl
+            className="abelian-hero-meta"
+            initial={false}
+            animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -104 : 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div><dt>Role</dt><dd>Social Media &amp; Community Manager</dd></div>
             <div><dt>Company</dt><dd>Abelian Foundation</dd></div>
             <div><dt>Project date</dt><dd>2023.09–2024.09</dd></div>
-          </dl>
+          </motion.dl>
 
-          <div className="abelian-scroll-cue" aria-hidden="true" />
+          <motion.div
+            className="abelian-scroll-cue"
+            aria-hidden="true"
+            initial={false}
+            animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -104 : 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}
+          />
 
-          <motion.div className="abelian-hero-film" style={reduceMotion ? undefined : { y: filmY, opacity: filmOpacity }}>
-            <div className="abelian-film-image">
-              <Image src="/case-studies/abelian/context.png" alt="Quantum-resistant blockchain technology" fill sizes="100vw" />
-            </div>
+          <motion.div className="abelian-hero-film" style={reduceMotion ? undefined : { y: filmY }}>
             <div className="abelian-film-wash" />
-            <div className="abelian-chapter-copy">
-              <span>Context</span>
-              <h2>Quantum-resistant blockchain technology with a niche mining community</h2>
+            <div className="abelian-section-one-copy">
+              <p>
+                Abelian needed to move beyond its mining-focused community to build awareness among early adopters and crypto audiences for their upcoming TGE (Token-Generation Event). It was imperative to sustain the technical credibility that gave Abelian its standing while also being accessible to a wider audience.
+              </p>
+              <div className="abelian-section-one-stats">
+                <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
+                <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
+                <div><strong>3</strong><span>products launched</span></div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -207,6 +235,31 @@ export default function AbelianCaseStudy() {
         </nav>
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
+
+      <motion.button
+        type="button"
+        className="abelian-scroll-top"
+        aria-label="Scroll back to the hero"
+        aria-hidden={!subnavPinned}
+        initial={false}
+        animate={{ opacity: subnavPinned ? 1 : 0, x: subnavPinned ? 0 : 18 }}
+        transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+        tabIndex={subnavPinned ? 0 : -1}
+        onClick={() => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })}
+      >
+        <span className="abelian-scroll-top-triangle" aria-hidden="true" />
+      </motion.button>
+
+      <section className="abelian-chapter abelian-context-chapter" aria-label="Context introduction">
+        <div className="abelian-chapter-image">
+          <Image src="/case-studies/abelian/context.png" alt="Quantum-resistant blockchain technology" fill sizes="100vw" />
+        </div>
+        <div className="abelian-chapter-overlay" />
+        <div className="abelian-chapter-copy">
+          <span>Context</span>
+          <h2>Quantum-resistant blockchain technology with a niche mining community</h2>
+        </div>
+      </section>
 
       <section id="context" className="abelian-editorial abelian-context">
         <div className="abelian-section-label">Context</div>
@@ -245,35 +298,39 @@ export default function AbelianCaseStudy() {
         </div>
       </section>
 
-      <section ref={impactRef} id="impact" className="abelian-impact">
-        <motion.div className="abelian-impact-parallax" style={reduceMotion ? undefined : { y: impactY }} />
-        <div className="abelian-impact-heading">
-          <span>Impact</span>
-          <h2 className="sr-only">Key outcomes</h2>
-        </div>
-        <div className="abelian-impact-stats">
-          <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
-          <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
-          <div><strong>3</strong><span>products launched</span></div>
-        </div>
-      </section>
+      <section ref={impactRef} id="impact" className="abelian-impact-sequence">
+        <div className="abelian-impact-sticky">
+          <motion.div className="abelian-impact-parallax" style={reduceMotion ? undefined : { y: impactY }} />
+          <motion.div
+            className="abelian-impact-frame"
+            initial={false}
+            animate={{ opacity: impactCopyDismissed ? 0 : 1, y: impactCopyDismissed ? -72 : 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="abelian-impact-heading">
+              <span>Impact</span>
+              <h2 className="sr-only">Key outcomes</h2>
+            </div>
+            <div className="abelian-impact-stats">
+              <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
+              <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
+              <div><strong>3</strong><span>products launched</span></div>
+            </div>
+          </motion.div>
 
-      <section className="abelian-impact-story" aria-label="Impact story">
-        <div className="abelian-impact-story-image">
-          <Image src="/case-studies/abelian/hero.jpg" alt="" fill sizes="100vw" />
+          <motion.div
+            className="abelian-impact-story"
+            aria-label="Impact story"
+            style={reduceMotion ? undefined : { y: impactStoryY }}
+          >
+            <div className="abelian-impact-story-wash" />
+            <div className="abelian-impact-story-copy">
+              <p>Following a successful TGE, the Abelian Foundation moved from a pre-revenue stage company to a revenue-generating one, sustaining upward price momentum post-listing.</p>
+              <p>Beyond the launch of its native token, $ABEL, heightened community engagement supported the same-year launch of two additional products: Abelian Pro, a D2C quantum-resistant mobile wallet, and MaxPool, an innovative mining pool built on a novel difficulty-smoothing algorithm.</p>
+              <p>Abelian’s native blockchain explorer recorded approximately 15,000 wallet addresses created between October 2023 and January 2024.</p>
+            </div>
+          </motion.div>
         </div>
-        <div className="abelian-impact-story-wash" />
-        <div className="abelian-impact-story-copy">
-          <p>Following a successful TGE, the Abelian Foundation moved from a pre-revenue stage company to a revenue-generating one, sustaining upward price momentum post-listing.</p>
-          <p>Beyond the launch of its native token, $ABEL, heightened community engagement supported the same-year launch of two additional products: Abelian Pro, a D2C quantum-resistant mobile wallet, and MaxPool, an innovative mining pool built on a novel difficulty-smoothing algorithm.</p>
-          <p>Abelian’s native blockchain explorer recorded approximately 15,000 wallet addresses created between October 2023 and January 2024.</p>
-        </div>
-      </section>
-
-      <section id="lessons" className="abelian-lessons">
-        <span>Lessons and next steps</span>
-        <h2>What comes next</h2>
-        <p>This section is intentionally reserved for future reflections and next steps.</p>
       </section>
 
       <HomeFooter />
