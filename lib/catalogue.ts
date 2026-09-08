@@ -36,7 +36,7 @@ const READY_ITEM: CatalogueItem = {
   tldr:
     "The company needed to transform its niche, mining-focused community into broader awareness and adoption for its quantum-resistant blockchain ahead of its token launch. I developed accessible technical content, gamified engagement programs, streamlined community management, and led a multilingual ambassador network. This strategy grew seven community channels sixfold, converted approximately 25% of community members into users, supported a successful token launch and three product launches, and helped generate roughly 15,000 wallet addresses; contributing to Abelian’s transition from pre-revenue to revenue-generating.",
   ctaLabel: "Read the full case study",
-  caseStudyUrl: "/work",
+  caseStudyUrl: "/work/abelian-community",
   downloadUrl: "",
   popupImage:
     "https://res.cloudinary.com/dwto97ayq/image/upload/v1788861377/Abelian_Pop_up_image_np3crf.png",
@@ -84,6 +84,7 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
   return itemRows
     .filter((row) => truthy(row.Active) && text(row.Content_Title))
     .map((row) => {
+      const slug = text(row.Slug)
       const media = mediaByItem.get(row.id ?? -1) ?? []
       const byType = (type: string) =>
         media.find((record) => truthy(record.Active) && selectValue(record["Media Type"]).toLowerCase() === type)
@@ -100,14 +101,16 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
         contentType: text(row.Content_Type),
         title: text(row.Content_Title),
         subtitle: text(row.Subtitle),
-        slug: text(row.Slug),
+        slug,
         date: text(row.Date),
         type: selectValue(row.Type),
         companyName: text(row.Company_Name),
         shortSummary: text(row.Short_Summary),
         tldr: text(row.TLDR),
         ctaLabel: text(row.CTA_Label) || "Read the full case study",
-        caseStudyUrl: text(row["Case Study URL"]),
+        caseStudyUrl:
+          text(row["Case Study URL"])
+          || (slug.toLowerCase() === "abelian-community" ? "/work/abelian-community" : ""),
         downloadUrl: text(row["Download URL"]),
         popupImage,
         coverImage,
