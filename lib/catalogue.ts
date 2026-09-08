@@ -15,7 +15,8 @@ export type CatalogueItem = {
   downloadUrl: string
   popupImage: string
   coverImage: string
-  imageAlt: string
+  popupImageAlt: string
+  coverImageAlt: string
 }
 
 type BaserowRow = Record<string, unknown> & { id?: number }
@@ -40,8 +41,9 @@ const READY_ITEM: CatalogueItem = {
   popupImage:
     "https://res.cloudinary.com/dwto97ayq/image/upload/v1788861377/Abelian_Pop_up_image_np3crf.png",
   coverImage:
-    "https://res.cloudinary.com/dwto97ayq/image/upload/v1788861377/Abelian_Pop_up_image_np3crf.png",
-  imageAlt: "Abelian Foundation case study preview",
+    "https://res.cloudinary.com/dwto97ayq/image/upload/v1788792753/exec-0b9c3f0e-fbc5-49d0-bdf1-345e573b404d_vyqedd.png",
+  popupImageAlt: "Abelian wallet interface case study preview",
+  coverImageAlt: "Printed Abelian Foundation case study cover",
 }
 
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "")
@@ -82,10 +84,13 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
   return itemRows
     .filter((row) => truthy(row.Active) && text(row.Content_Title))
     .map((row) => {
-      const media = (mediaByItem.get(row.id ?? -1) ?? []).filter((record) => truthy(record.Active))
-      const popup = media.find((record) => selectValue(record["Media Type"]).toLowerCase() === "pop up image")
-      const cover = media.find((record) => selectValue(record["Media Type"]).toLowerCase() === "cover")
-      const first = popup ?? cover ?? media[0]
+      const media = mediaByItem.get(row.id ?? -1) ?? []
+      const byType = (type: string) =>
+        media.find((record) => truthy(record.Active) && selectValue(record["Media Type"]).toLowerCase() === type)
+        ?? media.find((record) => selectValue(record["Media Type"]).toLowerCase() === type)
+      const popup = byType("pop up image")
+      const cover = byType("cover")
+      const first = popup ?? cover ?? media.find((record) => truthy(record.Active)) ?? media[0]
       const popupImage = text(popup?.["Asset URL"] ?? first?.["Asset URL"])
       const coverImage = text(cover?.["Asset URL"] ?? popupImage)
 
@@ -106,7 +111,8 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
         downloadUrl: text(row["Download URL"]),
         popupImage,
         coverImage,
-        imageAlt: text(first?.["Alt text"]) || `${text(row.Content_Title)} preview`,
+        popupImageAlt: text(popup?.["Alt text"]) || `${text(row.Content_Title)} preview`,
+        coverImageAlt: text(cover?.["Alt text"]) || `${text(row.Subtitle) || text(row.Content_Title)} cover`,
       }
     })
     .sort((a, b) => a.order - b.order)

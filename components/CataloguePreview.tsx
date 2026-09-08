@@ -97,7 +97,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
             <div className="catalogue-preview-media">
               {/* CMS image hosts vary, so the browser renders this validated HTTPS URL directly. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.popupImage || item.coverImage} alt={item.imageAlt} />
+              <img src={item.popupImage || item.coverImage} alt={item.popupImageAlt} />
             </div>
 
             <div className="catalogue-preview-content">

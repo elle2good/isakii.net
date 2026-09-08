@@ -31,6 +31,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
   const topChromeHoveredRef = useRef(false)
   const beyondGalleryRef = useRef(false)
   const overlayOpenRef = useRef(false)
+  const cataloguePreviewOpenRef = useRef(false)
   const blogExpandedRef = useRef(false)
 
   const clearTopChromeHideTimer = useCallback(() => {
@@ -51,6 +52,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
 
   useEffect(() => {
     overlayOpenRef.current = menuOpen || activeCatalogueItem !== null
+    cataloguePreviewOpenRef.current = activeCatalogueItem !== null
   }, [activeCatalogueItem, menuOpen])
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       const delta = window.scrollY - previousScrollY
       beyondGalleryRef.current = beyondGallery
 
-      if (blogExpandedRef.current) {
+      if (blogExpandedRef.current || cataloguePreviewOpenRef.current) {
         clearTopChromeHideTimer()
         setTopChromeVisible(false)
       } else if (!beyondGallery || overlayOpenRef.current) {
@@ -220,6 +222,19 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
     })
   }
 
+  const openCatalogueItem = (item: CatalogueItem) => {
+    clearTopChromeHideTimer()
+    cataloguePreviewOpenRef.current = true
+    setTopChromeVisible(false)
+    setActiveCatalogueItem(item)
+  }
+
+  const closeCatalogueItem = () => {
+    cataloguePreviewOpenRef.current = false
+    setActiveCatalogueItem(null)
+    setTopChromeVisible(true)
+  }
+
   return (
     <main className="home-page">
       <SmoothScroll intensity={10} />
@@ -316,7 +331,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       <CataloguePreview
         item={activeCatalogueItem}
         items={catalogueItems}
-        onClose={() => setActiveCatalogueItem(null)}
+        onClose={closeCatalogueItem}
         onSelect={setActiveCatalogueItem}
       />
 
@@ -362,14 +377,15 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
               <button
                 type="button"
                 className="home-project-card-link"
-                onClick={() => setActiveCatalogueItem(project)}
+                onClick={() => openCatalogueItem(project)}
                 aria-label={`Preview ${project.title}`}
               >
               <div className="home-project-image">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={project.coverImage || project.popupImage} alt={project.imageAlt} />
+                <img src={project.coverImage || project.popupImage} alt={project.coverImageAlt} />
               </div>
-              <h3>{project.title}</h3>
+              <p className="home-project-type">{project.contentType}</p>
+              <h3>{project.subtitle || project.title}</h3>
               <p>{project.date}</p>
               </button>
             </article>
