@@ -46,6 +46,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Salvetica";
+  src: url("/fonts/salvetica.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --ink: #0c0319;
   --paper: #f5f2ed;
@@ -1461,6 +1469,216 @@ select {
   background: var(--ink);
 }
 
+.about-page-new {
+  min-height: 100vh;
+  overflow-x: clip;
+  background: #02000d;
+  color: #fff;
+}
+
+.about-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 1224px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 11% 24%, rgba(105, 14, 139, 0.22), transparent 29%),
+    linear-gradient(115deg, #080014 0%, #02000d 42%, #02000d 100%);
+}
+
+.about-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.about-room-crop {
+  position: absolute;
+  top: 2px;
+  left: -12.18%;
+  width: 70.95%;
+  height: 979px;
+  overflow: hidden;
+  opacity: 0.52;
+}
+
+.about-room-art {
+  display: block;
+  width: 166.96%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+}
+
+.about-window-art {
+  position: absolute;
+  top: -11px;
+  left: -13.8%;
+  width: 27.2%;
+  height: 895px;
+  object-fit: fill;
+  opacity: 0.7;
+  transform: rotate(0.65deg);
+  filter: saturate(0.88) brightness(0.75);
+}
+
+.about-atmosphere-dim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(2, 0, 13, 0.15) 0%, rgba(2, 0, 13, 0.22) 62%, #02000d 100%),
+    radial-gradient(ellipse at 52% 44%, rgba(2, 0, 13, 0.12), rgba(2, 0, 13, 0.72) 83%);
+}
+
+.about-site-header {
+  position: absolute;
+  inset: 26px 0 auto;
+  z-index: 1000;
+}
+
+.about-menu-layer {
+  position: relative;
+  z-index: 1200;
+}
+
+.about-handwritten-title {
+  position: absolute;
+  top: 257px;
+  left: 12.3%;
+  z-index: 3;
+  width: 204px;
+  height: 115px;
+  margin: 0;
+}
+
+.about-handwriting-word {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 115px;
+  background: url("/about/hero-textured.svg") left top / 204px 115px no-repeat;
+  will-change: clip-path;
+}
+
+.about-handwriting-hi {
+  left: 0;
+  width: 75px;
+}
+
+.about-handwriting-there {
+  right: 0;
+  width: 129px;
+  background-position: -75px 0;
+}
+
+.about-portrait-new {
+  position: absolute;
+  top: 264px;
+  left: 73.33%;
+  z-index: 2;
+  width: 172px;
+  aspect-ratio: 172 / 215;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.about-portrait-new img,
+.about-neon-card img {
+  object-fit: contain;
+}
+
+.about-neon-card {
+  position: absolute;
+  top: 441px;
+  right: 5.78%;
+  z-index: 2;
+  width: 114px;
+  aspect-ratio: 114 / 171;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.about-desk-art {
+  position: absolute;
+  top: 747px;
+  left: 77.42%;
+  z-index: 2;
+  width: 331px;
+  height: 405px;
+}
+
+.about-desk-art img {
+  object-fit: contain;
+}
+
+.about-editorial {
+  position: absolute;
+  top: 457px;
+  left: 16.87%;
+  z-index: 3;
+  width: min(60.07%, 883px);
+  color: #fff;
+  font-family: "Eulyoo1945", Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.24;
+}
+
+.about-intro p {
+  margin: 0;
+}
+
+.about-body-new {
+  margin-top: 45px;
+}
+
+.about-body-new p {
+  margin: 0 0 22px;
+}
+
+.about-signatures {
+  position: absolute;
+  top: 905px;
+  left: 54.9%;
+  z-index: 4;
+  display: flex;
+  width: 161px;
+  height: 55px;
+}
+
+.about-signature-piece {
+  position: relative;
+  display: block;
+  height: 55px;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+.about-signature-piece img {
+  position: absolute;
+  top: 0;
+  max-width: none;
+}
+
+.about-signature-western {
+  width: 89px;
+}
+
+.about-signature-western img {
+  left: 0;
+}
+
+.about-signature-korean {
+  width: 72px;
+}
+
+.about-signature-korean img {
+  left: -89px;
+}
+
 .coming-soon-page {
   min-height: 100vh;
   background: var(--ink);
@@ -2202,6 +2420,14 @@ select {
 .abelian-impact-story-copy p { margin: 0 0 34px; }
 
 @media (max-width: 1050px) {
+  .about-stage { min-height: 1160px; }
+  .about-room-crop { left: -20%; width: 85%; }
+  .about-handwritten-title { left: 8%; }
+  .about-portrait-new { left: auto; right: 11%; }
+  .about-neon-card { right: 4%; }
+  .about-desk-art { right: -2%; left: auto; width: 265px; height: 324px; }
+  .about-editorial { left: 13%; width: 68%; font-size: 18px; }
+  .about-signatures { left: auto; right: 23%; }
   .abelian-hero-copy { width: calc(100% - 96px); }
   .abelian-hero-meta { right: 42px; bottom: 38px; grid-template-columns: repeat(3, 1fr); gap: 24px; width: calc(100% - 84px); }
   .abelian-scroll-cue { display: none; }
@@ -2214,6 +2440,68 @@ select {
 }
 
 @media (max-width: 700px) {
+  .about-stage {
+    min-height: auto;
+    padding: 0 24px 64px;
+  }
+  .about-site-header { top: 8px; }
+  .about-room-crop {
+    top: 90px;
+    left: -58%;
+    width: 145%;
+    height: 710px;
+    opacity: 0.38;
+  }
+  .about-window-art {
+    top: 80px;
+    left: -43%;
+    width: 72%;
+    height: 710px;
+    opacity: 0.56;
+  }
+  .about-handwritten-title {
+    top: 154px;
+    left: 24px;
+    transform: scale(0.82);
+    transform-origin: left top;
+  }
+  .about-portrait-new {
+    top: 296px;
+    right: 24px;
+    width: 138px;
+  }
+  .about-neon-card {
+    top: 520px;
+    right: 24px;
+    left: auto;
+    width: 91px;
+  }
+  .about-desk-art {
+    top: 690px;
+    right: -18px;
+    left: auto;
+    width: 235px;
+    height: 288px;
+  }
+  .about-editorial {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    padding-top: 1000px;
+    font-size: 17px;
+    line-height: 1.35;
+  }
+  .about-body-new { margin-top: 34px; }
+  .about-body-new p { margin-bottom: 19px; }
+  .about-signatures {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    margin: 30px 0 0 auto;
+  }
   .home-header { padding-inline: 20px; }
   .home-wordmark { font-size: 42px; }
   .home-header-actions { width: 76px; gap: 2px; }
