@@ -46,6 +46,32 @@ const READY_ITEM: CatalogueItem = {
   coverImageAlt: "Printed Abelian Foundation case study cover",
 }
 
+const READY_RAYDIUM_ITEM: CatalogueItem = {
+  id: "21bc99d4-bde5-4ad3-8d9d-3dcaf17e464b",
+  order: 1,
+  contentType: "Case Study Report",
+  title: "One Event, Half the Cost, Triple the Reach",
+  subtitle: "Event Activation",
+  slug: "Raydium-event",
+  date: "2025",
+  type: "Flagship",
+  companyName: "Raydium",
+  shortSummary:
+    "I turned a one-month brief into a community-led Café Rave that gave Raydium a credible offline presence during Korea Blockchain Week.",
+  tldr:
+    "I designed and delivered a community-led Café Rave for Raydium in one month, creating a credible offline activation that cost 40% less, contributed 35% of campaign reach, and generated four new partnerships.",
+  ctaLabel: "Read the full case study",
+  caseStudyUrl: "/catalogue/Raydium-event",
+  downloadUrl: "",
+  popupImage:
+    "https://res.cloudinary.com/dwto97ayq/image/upload/v1788922358/Frame_6_no9gqh.png",
+  coverImage: "/case-studies/raydium/hero-fallback.png",
+  popupImageAlt: "Raydium Event Activation case study preview",
+  coverImageAlt: "Raydium Event Activation cover",
+}
+
+const READY_ITEMS = [READY_ITEM, READY_RAYDIUM_ITEM]
+
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "")
 const number = (value: unknown) => {
   const parsed = typeof value === "number" ? value : Number.parseFloat(text(value))
@@ -142,7 +168,7 @@ export async function getCatalogueItems(): Promise<CatalogueItem[]> {
   const itemsTable = process.env.BASEROW_CATALOGUE_ITEMS_TABLE_ID ?? "1172105"
   const mediaTable = process.env.BASEROW_CATALOGUE_MEDIA_TABLE_ID ?? "1183573"
 
-  if (!token) return [READY_ITEM]
+  if (!token) return READY_ITEMS
 
   try {
     const [itemRows, mediaRows] = await Promise.all([
@@ -150,9 +176,9 @@ export async function getCatalogueItems(): Promise<CatalogueItem[]> {
       fetchTable(mediaTable, token),
     ])
     const items = mapCatalogueRows(itemRows, mediaRows)
-    return items.length ? items : [READY_ITEM]
+    return items.length ? items : READY_ITEMS
   } catch (error) {
     console.error("Unable to load the Baserow catalogue; using the checked-in preview.", error)
-    return [READY_ITEM]
+    return READY_ITEMS
   }
 }

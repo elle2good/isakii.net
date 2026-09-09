@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import AbelianCaseStudy from "@/components/AbelianCaseStudy"
+import RaydiumCaseStudy from "@/components/RaydiumCaseStudy"
 import { getCatalogueItems } from "@/lib/catalogue"
 
 type CataloguePageProps = {
@@ -32,6 +33,10 @@ export default async function CatalogueCaseStudyPage({ params }: CataloguePagePr
 
   if (item.slug.toLowerCase() === "abelian-community") {
     return <AbelianCaseStudy />
+  }
+
+  if (["raydium-event-activation", "raydium-event"].includes(item.slug.toLowerCase())) {
+    return <RaydiumCaseStudy />
   }
 
   notFound()
