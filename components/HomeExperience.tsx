@@ -13,6 +13,88 @@ import type { CatalogueItem } from "@/lib/catalogue"
 
 const TOP_CHROME_PEEK_DURATION = 15_000
 
+function cloudinaryVideoSource(source: string) {
+  if (!source.includes("/video/upload/")) return source
+  const transformed = source.includes("/video/upload/f_webm")
+    ? source
+    : source.replace("/video/upload/", "/video/upload/f_webm,vc_vp9,q_auto/")
+  return transformed.replace(/\.(?:mov|mp4|m4v)(?=$|[?#])/i, ".webm")
+}
+
+function ProjectCover({ project, active }: { project: CatalogueItem; active: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const source = project.coverImage || project.popupImage
+  const isVideo = project.coverMediaKind === "video"
+  const videoSource =
+    project.slug.toLowerCase() === "raydium-event"
+      ? "/media/raydium-cover-alpha.webm"
+      : cloudinaryVideoSource(source)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (active) {
+      void video.play().catch(() => undefined)
+      return
+    }
+
+    video.pause()
+    video.currentTime = 0
+  }, [active, videoSource])
+
+  if (isVideo) {
+    return (
+      <video
+        ref={videoRef}
+        src={videoSource}
+        aria-label={project.coverImageAlt}
+        muted
+        playsInline
+        loop
+        preload="auto"
+        onLoadedData={(event) => {
+          if (!active) {
+            event.currentTarget.pause()
+            event.currentTarget.currentTime = 0
+          }
+        }}
+      />
+    )
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={source} alt={project.coverImageAlt} />
+  )
+}
+
+function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (item: CatalogueItem) => void }) {
+  const [active, setActive] = useState(false)
+
+  return (
+    <article className="home-project-card">
+      <button
+        type="button"
+        className="home-project-card-link"
+        onClick={() => onOpen(project)}
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => setActive(false)}
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
+        aria-label={`Preview ${project.title}`}
+      >
+        <div className="home-project-image">
+          <ProjectCover project={project} active={active} />
+        </div>
+        <p className="home-project-type">{project.contentType}</p>
+        <h3>{project.subtitle || project.title}</h3>
+        <p>{project.date}</p>
+      </button>
+    </article>
+  )
+}
+
 export default function HomeExperience({ catalogueItems }: { catalogueItems: CatalogueItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
@@ -373,22 +455,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
         <h2 id="projects">Project</h2>
         <div className="home-project-grid">
           {catalogueItems.map((project) => (
-            <article className="home-project-card" key={project.id}>
-              <button
-                type="button"
-                className="home-project-card-link"
-                onClick={() => openCatalogueItem(project)}
-                aria-label={`Preview ${project.title}`}
-              >
-              <div className="home-project-image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={project.coverImage || project.popupImage} alt={project.coverImageAlt} />
-              </div>
-              <p className="home-project-type">{project.contentType}</p>
-              <h3>{project.subtitle || project.title}</h3>
-              <p>{project.date}</p>
-              </button>
-            </article>
+            <ProjectCard project={project} onOpen={openCatalogueItem} key={project.id} />
           ))}
         </div>
         <Link className="home-catalogue-link" href="/work">

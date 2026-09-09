@@ -94,6 +94,29 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
               ×
             </button>
 
+            <div className="catalogue-preview-pagination" aria-label="Browse catalogue items">
+              {previous && (
+                <button
+                  type="button"
+                  className="catalogue-preview-arrow is-previous"
+                  aria-label={`Previous project: ${previous.title}`}
+                  onClick={() => selectItem(previous)}
+                >
+                  <span aria-hidden="true">←</span>
+                </button>
+              )}
+              {next && (
+                <button
+                  type="button"
+                  className="catalogue-preview-arrow is-next"
+                  aria-label={`Next project: ${next.title}`}
+                  onClick={() => selectItem(next)}
+                >
+                  <span aria-hidden="true">→</span>
+                </button>
+              )}
+            </div>
+
             <div className="catalogue-preview-media">
               {/* CMS image hosts vary, so the browser renders this validated HTTPS URL directly. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -150,18 +173,6 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                   </span>
                 )}
 
-                <div className="catalogue-preview-pagination" aria-label="Browse catalogue items">
-                  {previous && (
-                    <button type="button" onClick={() => selectItem(previous)}>
-                      <span aria-hidden="true">←</span><span>Previous</span>
-                    </button>
-                  )}
-                  {(next || item.order === 0) && (
-                    <button type="button" disabled={!next} onClick={() => next && selectItem(next)}>
-                      <span>{item.order === 0 ? "Next Project" : "Next"}</span><span aria-hidden="true">→</span>
-                    </button>
-                  )}
-                </div>
               </div>
             </div>
           </motion.section>
