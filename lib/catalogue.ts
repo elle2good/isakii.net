@@ -8,6 +8,7 @@ export type CatalogueItem = {
   date: string
   type: string
   companyName: string
+  tags: string[]
   shortSummary: string
   tldr: string
   ctaLabel: string
@@ -28,11 +29,12 @@ const READY_ITEM: CatalogueItem = {
   order: 0,
   contentType: "Case Study Report",
   title: "Bootstrapping a Global Community from a Very Niche Technology",
-  subtitle: "Social Media & Community Bootstrapping",
+  subtitle: "From Pre-Revenue to Revenue",
   slug: "Abelian-community",
   date: "2023–2024",
   type: "Flagship",
   companyName: "Abelian Foundation",
+  tags: ["Social Media", "Community", "Content Strategy"],
   shortSummary:
     "By bootstrapping a quantum-resistant blockchain community, this company turned early promise into real revenue.\n\nRead the full case study to see how.",
   tldr:
@@ -55,15 +57,16 @@ const READY_RAYDIUM_ITEM: CatalogueItem = {
   order: 1,
   contentType: "Case Study Report",
   title: "One Event, Half the Cost, Triple the Reach",
-  subtitle: "Event Activation",
+  subtitle: "Trendy Event Activation",
   slug: "Raydium-event",
   date: "2025",
   type: "Flagship",
   companyName: "Raydium",
+  tags: ["Event Planning", "Event Management"],
   shortSummary:
     "An anonymous DeFi protocol hosted its first offline event in Asia targeting 3 different guest groups.\n\nRead the full case study to find out how.",
   tldr:
-    "The design and delivery of Raydium’s first offline activation in Asia combined brand research, multifunctional venue design, partnerships, and grassroots outreach. The event served three core guest groups: retail users, developers and Solana ecosystem stakeholders. Outcomes included strong post-event engagement at 40% below the industry-standard cost per attendee.",
+    "The design and delivery of Raydium’s first offline activation in Asia, combining brand research, multifunctional venue design, partnerships, and grassroots outreach. The event served three core guest groups: retail users, developers and Solana ecosystem stakeholders. Outcomes included strong post-event resonance at 40% below the industry-standard cost per attendee.",
   ctaLabel: "Read the full case study",
   caseStudyUrl: "/catalogue/Raydium-event",
   downloadUrl: "",
@@ -77,10 +80,39 @@ const READY_RAYDIUM_ITEM: CatalogueItem = {
   coverImageAlt: "Raydium Event Activation cover",
 }
 
-const READY_ITEMS = [READY_ITEM, READY_RAYDIUM_ITEM]
+const READY_GLAMAI_ITEM: CatalogueItem = {
+  id: "b08d5bc9-282a-4cf3-ac31-dd685aba4065",
+  order: 2,
+  contentType: "Press Release",
+  title: "The AI Before AI",
+  subtitle: "LVMH Innovation Award Finalist",
+  slug: "beauty-ai-search-engine",
+  date: "2019–2022",
+  type: "Basic",
+  companyName: "Keytalk AI (Mycelebs)",
+  tags: ["Product Ops", "Data Ops"],
+  shortSummary:
+    "The idea for Mycelebs emerged during a meeting in which CJ Corporation’s then–Chief Digital Officer watched executives debate which celebrity would be the best fit to promote a new product. Struck by how heavily the decision relied on personal judgment, he envisioned using social media data and AI to bring a more objective, score-based approach to subjective questions. He founded Mycelebs to bring that vision to life.\n\nGlamai became one of the direct-to-consumer apps built on Mycelebs’ AI search technology.",
+  tldr:
+    "Glamai is an AI-powered beauty discovery app that helps influencers find products tailored to different needs and preferences. The South Korean startup technology processes information from brands, retailers, and social media into over 19,000 searchable “keytalks”, context-based keywords, to support more personalized, inclusive beauty recommendations.",
+  ctaLabel: "Read the press release",
+  caseStudyUrl:
+    "https://www.prweb.com/releases/a-new-beauty-discovery-app-helps-influencers-match-their-cosmetics-and-skin-care-needs-with-the-latest-trends-824812240.html",
+  downloadUrl: "",
+  popupImage:
+    "https://res.cloudinary.com/dwto97ayq/video/upload/v1789019316/right_glamai-floating-phone-right-alpha_y9a6jz.mov",
+  coverImage:
+    "https://res.cloudinary.com/dwto97ayq/video/upload/v1789019123/glamai-floating-phone-alpha_bwlo55.mov",
+  popupMediaKind: "video",
+  coverMediaKind: "video",
+  popupImageAlt: "Floating Glamai phone preview",
+  coverImageAlt: "Floating Glamai phone cover",
+}
+
+const READY_ITEMS = [READY_ITEM, READY_RAYDIUM_ITEM, READY_GLAMAI_ITEM]
 
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "")
-const contentText = (value: unknown) => text(value).replace(/\s*\/n\s*/gi, "\n")
+const contentText = (value: unknown) => text(value).replace(/\s*(?:\/n|\\n)\s*/gi, "\n")
 const shortSummaryText = (value: unknown) =>
   contentText(value)
     .split(/\n+/)
@@ -92,6 +124,14 @@ const number = (value: unknown) => {
   return Number.isFinite(parsed) ? parsed : 0
 }
 const truthy = (value: unknown) => value === true || value === 1 || text(value).toLowerCase() === "true"
+
+const tagsValue = (value: unknown) => {
+  const values = Array.isArray(value)
+    ? value.map((entry) => selectValue(entry))
+    : text(value).split(",")
+
+  return values.map((tag) => tag.trim()).filter(Boolean)
+}
 
 const mediaKind = (url: string): "image" | "video" =>
   /\/video\/upload\//i.test(url) || /\.(?:mp4|mov|m4v|webm|ogv)(?:$|[?#])/i.test(url) ? "video" : "image"
@@ -149,6 +189,7 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
         date: text(row.Date),
         type: itemType,
         companyName: text(row.Company_Name),
+        tags: tagsValue(row.Tags),
         shortSummary: shortSummaryText(row.Short_Summary),
         tldr: contentText(row.TLDR),
         ctaLabel: text(row.CTA_Label) || "Read the full case study",

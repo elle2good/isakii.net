@@ -31,7 +31,9 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
   const videoSource =
     project.slug.toLowerCase() === "raydium-event"
       ? "/media/raydium-cover-alpha.webm"
-      : cloudinaryVideoSource(source)
+      : project.slug.toLowerCase() === "beauty-ai-search-engine"
+        ? "/media/glamai-cover-alpha.webm"
+        : cloudinaryVideoSource(source)
 
   useEffect(() => {
     const video = videoRef.current
@@ -50,6 +52,7 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
     return (
       <video
         ref={videoRef}
+        className={project.slug.toLowerCase() === "beauty-ai-search-engine" ? "home-project-cover--compact" : undefined}
         src={videoSource}
         aria-label={project.coverImageAlt}
         muted

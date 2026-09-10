@@ -21,6 +21,90 @@ const contentMotion: MotionProps = {
   },
 }
 
+function cloudinaryVideoSource(source: string) {
+  if (!source.includes("/video/upload/")) return source
+  const transformed = source.includes("/video/upload/f_webm")
+    ? source
+    : source.replace("/video/upload/", "/video/upload/f_webm,vc_vp9,q_auto/")
+  return transformed.replace(/\.(?:mov|mp4|m4v)(?=$|[?#])/i, ".webm")
+}
+
+function PreviewMedia({ item }: { item: CatalogueItem }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [ended, setEnded] = useState(false)
+  const source =
+    item.slug.toLowerCase() === "beauty-ai-search-engine"
+      ? "/media/glamai-popup-alpha.webm"
+      : item.popupImage || item.coverImage
+
+  useEffect(() => {
+    if (item.popupMediaKind !== "video") return
+    const video = videoRef.current
+    if (!video) return
+
+    setEnded(false)
+    video.currentTime = 0
+    void video.play().catch(() => undefined)
+  }, [item.id, item.popupMediaKind])
+
+  const replay = () => {
+    const video = videoRef.current
+    if (!video) return
+    setEnded(false)
+    video.pause()
+    video.currentTime = 0
+    video.load()
+
+    const playFromStart = () => {
+      video.removeEventListener("canplay", playFromStart)
+      void video.play().catch(() => undefined)
+    }
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      playFromStart()
+    } else {
+      video.addEventListener("canplay", playFromStart, { once: true })
+    }
+  }
+
+  if (item.popupMediaKind === "video") {
+    return (
+      <div className="catalogue-preview-video-wrap">
+        <video
+          ref={videoRef}
+          src={cloudinaryVideoSource(source)}
+          aria-label={item.popupImageAlt}
+          muted
+          playsInline
+          autoPlay
+          preload="auto"
+          onEnded={() => setEnded(true)}
+        />
+        <AnimatePresence>
+          {ended && (
+            <motion.div
+              className="catalogue-preview-replay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+            >
+              <button type="button" onClick={replay} aria-label={`Play ${item.title} preview again`}>
+                <span aria-hidden="true">▶</span>
+                <span>Play again</span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    )
+  }
+
+  // CMS image hosts vary, so the browser renders this validated HTTPS URL directly.
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={source} alt={item.popupImageAlt} />
+}
+
 export default function CataloguePreview({ item, items, onClose, onSelect }: CataloguePreviewProps) {
   const [expanded, setExpanded] = useState(false)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -118,19 +202,21 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
             </div>
 
             <div className="catalogue-preview-media">
-              {/* CMS image hosts vary, so the browser renders this validated HTTPS URL directly. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.popupImage || item.coverImage} alt={item.popupImageAlt} />
+              <PreviewMedia key={item.id} item={item} />
             </div>
 
             <div className="catalogue-preview-content">
               <div className="catalogue-preview-copy" key={item.id}>
                 <p className="catalogue-preview-eyebrow">{item.contentType}</p>
+                <motion.p className="catalogue-preview-year" {...animatedProps}>{item.date}</motion.p>
                 <motion.h2 id="catalogue-preview-title" {...animatedProps}>{item.title}</motion.h2>
                 <motion.div className="catalogue-preview-meta" {...animatedProps}>
-                  <span>{item.date}</span>
-                  <span aria-hidden="true" />
-                  <span>{item.companyName}</span>
+                  <span className="catalogue-preview-company">{item.companyName}</span>
+                  {item.tags.length > 0 && (
+                    <div className="catalogue-preview-tags" aria-label="Project tags">
+                      {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                    </div>
+                  )}
                 </motion.div>
                 <motion.p className="catalogue-preview-summary" {...animatedProps}>{item.shortSummary}</motion.p>
               </div>
