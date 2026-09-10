@@ -32,6 +32,7 @@ function cloudinaryVideoSource(source: string) {
 function PreviewMedia({ item }: { item: CatalogueItem }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [ended, setEnded] = useState(false)
+  const isKeytalkVideo = item.slug.toLowerCase() === "keytalk-movie-deep-search"
   const source =
     item.slug.toLowerCase() === "beauty-ai-search-engine"
       ? "/media/glamai-popup-alpha.webm"
@@ -77,8 +78,11 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
           muted
           playsInline
           autoPlay
+          loop={isKeytalkVideo}
           preload="auto"
-          onEnded={() => setEnded(true)}
+          onEnded={() => {
+            if (!isKeytalkVideo) setEnded(true)
+          }}
         />
         <AnimatePresence>
           {ended && (
