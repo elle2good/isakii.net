@@ -1,26 +1,38 @@
 [
   {
-    "id": "solana-camp",
-    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1788484025/Solana_Camp_xfhmyy.jpg",
+    "id": "graduation-show",
+    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1789006790/IMG_6767_wwypti.png",
+    "order": 0,
+    "alt": "Graduation Show"
+  },
+  {
+    "id": "eth-vietnam",
+    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1789006788/IMG_8879_2_pifszd.png",
     "order": 1,
-    "alt": "Solana Camp"
+    "alt": "Eth Vietnam"
+  },
+  {
+    "id": "shillers-club",
+    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1789006789/shillers_club-2_dbwnbo.png",
+    "order": 2,
+    "alt": "Shillers Club"
   },
   {
     "id": "nightopia",
-    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1788484026/Nightopia_o8ydf6.jpg",
-    "order": 2,
+    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1789006790/Nightopia-2_tgiurf.png",
+    "order": 3,
     "alt": "Nightopia"
   },
   {
     "id": "algorand-brain-training",
-    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1788484024/EU2A7377_2_v5ejav.jpg",
-    "order": 3,
+    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1789006790/EU2A7377_2-2_tzowjm.png",
+    "order": 4,
     "alt": "Algorand Brain Training"
   },
   {
-    "id": "shillers-club",
-    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1788484025/shillers_club_eqp3v9.jpg",
-    "order": 4,
-    "alt": "Shillers Club"
+    "id": "solana-camp",
+    "image": "https://res.cloudinary.com/dwto97ayq/image/upload/v1789006793/Solana_Camp-2_fo0ubw.png",
+    "order": 5,
+    "alt": "Solana Camp"
   }
 ]

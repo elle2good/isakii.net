@@ -706,7 +706,7 @@ select {
   position: relative;
   z-index: 3;
   width: 100%;
-  height: 367px;
+  height: 450px;
   overflow: hidden;
   background: var(--midnight-navy);
 }
@@ -714,7 +714,7 @@ select {
 .home-gallery-track {
   display: flex;
   width: 100%;
-  height: 450px;
+  height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   cursor: ew-resize;
@@ -730,14 +730,15 @@ select {
   position: relative;
   flex: 0 0 600px;
   width: 600px;
-  height: 450px;
+  height: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 }
 
 .home-gallery-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .home-gallery-progress {
@@ -2575,9 +2576,14 @@ select {
   }
   .hero-video-frame { inset: 117px auto 0 50%; width: var(--hero-frame-width); }
   .home-ticker-track { gap: 42px; animation-duration: 40s; }
-  .home-gallery { height: 300px; }
-  .home-gallery-track { height: 360px; }
-  .home-gallery-image { flex-basis: 100vw; width: 100vw; height: 360px; }
+  .home-gallery { height: 75vw; }
+  .home-gallery-track { height: 100%; }
+  .home-gallery-image {
+    flex-basis: 100vw;
+    width: 100vw;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+  }
   .home-projects { min-height: auto; padding: 112px 24px 72px; }
   .home-project-grid { grid-template-columns: 1fr; gap: 38px; }
   .home-project-card-link { margin-inline: auto; }

@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import type Lenis from "lenis"
 import { FocusEvent, useCallback, useEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
@@ -106,7 +107,10 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
   const headerRef = useRef<HTMLElement>(null)
   const topChromeRef = useRef<HTMLDivElement>(null)
   const gallerySectionRef = useRef<HTMLElement>(null)
+  const projectSectionRef = useRef<HTMLElement>(null)
+  const videoSectionRef = useRef<HTMLElement>(null)
   const galleryTrackRef = useRef<HTMLDivElement>(null)
+  const smoothScrollRef = useRef<Lenis | null>(null)
   const galleryInteractingUntilRef = useRef(0)
   const galleryTimerRef = useRef<number | null>(null)
   const galleryPositionRef = useRef(0)
@@ -164,10 +168,16 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       if (!gallery || !topChrome) return
 
       const beyondGallery = gallery.getBoundingClientRect().top <= window.innerHeight / 2
+      const galleryRect = gallery.getBoundingClientRect()
+      const chromeHeight = topChrome.getBoundingClientRect().height
+      const galleryCollidesWithChrome = galleryRect.top < chromeHeight && galleryRect.bottom > 0
       const delta = window.scrollY - previousScrollY
       beyondGalleryRef.current = beyondGallery
 
       if (blogExpandedRef.current || cataloguePreviewOpenRef.current) {
+        clearTopChromeHideTimer()
+        setTopChromeVisible(false)
+      } else if (galleryCollidesWithChrome) {
         clearTopChromeHideTimer()
         setTopChromeVisible(false)
       } else if (!beyondGallery || overlayOpenRef.current) {
@@ -196,6 +206,101 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       clearTopChromeHideTimer()
     }
   }, [clearTopChromeHideTimer, scheduleTopChromeHide])
+
+  useEffect(() => {
+    let previousScrollY = window.scrollY
+    let upwardScroll = false
+    let snapTimer: number | null = null
+    let snapReleaseTimer: number | null = null
+    let snapping = false
+
+    const clearSnapTimer = () => {
+      if (snapTimer === null) return
+      window.clearTimeout(snapTimer)
+      snapTimer = null
+    }
+
+    const clearSnapReleaseTimer = () => {
+      if (snapReleaseTimer === null) return
+      window.clearTimeout(snapReleaseTimer)
+      snapReleaseTimer = null
+    }
+
+    const getDocumentTop = (element: HTMLElement) =>
+      window.scrollY + element.getBoundingClientRect().top
+
+    const snapToNearestSection = () => {
+      snapTimer = null
+      if (!upwardScroll || snapping || overlayOpenRef.current) return
+
+      const gallery = gallerySectionRef.current
+      const projects = projectSectionRef.current
+      const video = videoSectionRef.current
+      const topChrome = topChromeRef.current
+      const lenis = smoothScrollRef.current
+      if (!gallery || !projects || !video || !topChrome || !lenis) return
+
+      const galleryTop = getDocumentTop(gallery)
+      const chromeHeight = topChrome.getBoundingClientRect().height
+      const snapPoints = [
+        { position: Math.max(0, galleryTop - chromeHeight), showTopChrome: true },
+        { position: galleryTop, showTopChrome: false },
+        { position: getDocumentTop(projects), showTopChrome: false },
+        { position: getDocumentTop(video), showTopChrome: false },
+      ]
+      const currentScrollY = window.scrollY
+      const nearestPoint = snapPoints.reduce((nearest, candidate) =>
+        Math.abs(candidate.position - currentScrollY) < Math.abs(nearest.position - currentScrollY)
+          ? candidate
+          : nearest,
+      )
+      const nearestTarget = nearestPoint.position
+      const snapRange = Math.min(window.innerHeight * 0.42, 380)
+      const distanceToTarget = Math.abs(nearestTarget - currentScrollY)
+      if (distanceToTarget < 3) {
+        setTopChromeVisible(nearestPoint.showTopChrome)
+        return
+      }
+      if (distanceToTarget > snapRange) return
+
+      snapping = true
+      clearSnapReleaseTimer()
+      setTopChromeVisible(nearestPoint.showTopChrome)
+      lenis.scrollTo(nearestTarget, {
+        duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 0.72,
+        force: true,
+        lock: true,
+        onComplete: () => {
+          snapping = false
+          previousScrollY = window.scrollY
+          setTopChromeVisible(nearestPoint.showTopChrome)
+        },
+      })
+      snapReleaseTimer = window.setTimeout(() => {
+        snapping = false
+        snapReleaseTimer = null
+      }, 900)
+    }
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const delta = currentScrollY - previousScrollY
+      if (!snapping && Math.abs(delta) > 1) upwardScroll = delta < 0
+      previousScrollY = currentScrollY
+
+      clearSnapTimer()
+      if (!snapping && upwardScroll) {
+        snapTimer = window.setTimeout(snapToNearestSection, 150)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      clearSnapTimer()
+      clearSnapReleaseTimer()
+    }
+  }, [])
 
   useEffect(() => {
     const track = galleryTrackRef.current
@@ -319,9 +424,13 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
     setTopChromeVisible(true)
   }
 
+  const handleSmoothScrollReady = useCallback((lenis: Lenis | null) => {
+    smoothScrollRef.current = lenis
+  }, [])
+
   return (
     <main className="home-page">
-      <SmoothScroll intensity={10} />
+      <SmoothScroll intensity={10} onReady={handleSmoothScrollReady} />
       <div
         ref={topChromeRef}
         className={`home-top-chrome ${topChromeVisible ? "is-visible" : "is-hidden"}`}
@@ -449,7 +558,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
         </div>
       </section>
 
-      <section id="project-section" className="home-projects">
+      <section ref={projectSectionRef} id="project-section" className="home-projects">
         <h2 id="projects">Project</h2>
         <div className="home-project-grid">
           {catalogueItems.map((project) => (
@@ -461,7 +570,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
         </Link>
       </section>
 
-      <section className="home-video-feature" aria-labelledby="home-video-title">
+      <section ref={videoSectionRef} id="featured-video" className="home-video-feature" aria-labelledby="home-video-title">
         <div className="home-video-feature-inner">
           <h2 id="home-video-title" className="sr-only">Featured video</h2>
           <iframe

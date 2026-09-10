@@ -17,8 +17,8 @@ const validateGalleryImages = (records: GalleryImage[]) => {
   for (const record of records) {
     if (!record.id.trim()) throw new Error("Gallery image records require a non-empty id.")
     if (ids.has(record.id)) throw new Error(`Duplicate gallery image id: ${record.id}`)
-    if (!Number.isInteger(record.order) || record.order < 1) {
-      throw new Error(`Gallery image ${record.id} requires a positive whole-number order.`)
+    if (!Number.isInteger(record.order) || record.order < 0) {
+      throw new Error(`Gallery image ${record.id} requires a non-negative whole-number order.`)
     }
     if (orders.has(record.order)) throw new Error(`Duplicate gallery image order: ${record.order}`)
     if (!isSupportedImageSource(record.image)) {

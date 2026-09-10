@@ -5,14 +5,16 @@ import { useEffect, useRef } from "react"
 
 type SmoothScrollProps = {
   intensity?: number
+  onReady?: (lenis: Lenis | null) => void
 }
 
-export default function SmoothScroll({ intensity = 10 }: SmoothScrollProps) {
+export default function SmoothScroll({ intensity = 10, onReady }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
     const lenis = new Lenis({ duration: intensity / 10 })
     lenisRef.current = lenis
+    onReady?.(lenis)
     lenis.scrollTo(0, { immediate: true })
 
     let animationFrame = 0
@@ -48,8 +50,9 @@ export default function SmoothScroll({ intensity = 10 }: SmoothScrollProps) {
       cancelAnimationFrame(animationFrame)
       lenis.destroy()
       lenisRef.current = null
+      onReady?.(null)
     }
-  }, [intensity])
+  }, [intensity, onReady])
 
   return (
     <style>{`
