@@ -511,8 +511,8 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
                   </ExternalBlogLink>
                 </div>
               </div>
-              <Link className="home-menu-link" href="#projects" onClick={closeOverlays}>catalogue</Link>
-              <Link className="home-menu-link" href="/coming-soon" onClick={closeOverlays}>coming soon</Link>
+              <Link className="home-menu-link" href="/#projects" onClick={closeOverlays}>catalogue</Link>
+              <Link className="home-menu-link" href="/" onClick={closeOverlays}>home</Link>
             </nav>
             <MenuContactActions />
           </div>
@@ -568,9 +568,18 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
             <ProjectCard project={project} onOpen={openCatalogueItem} key={project.id} />
           ))}
         </div>
-        <Link className="home-catalogue-link" href="/work">
-          VIEW CATALOGUE <span aria-hidden="true">→</span>
-        </Link>
+        <button
+          type="button"
+          className="home-catalogue-link"
+          aria-disabled="true"
+          aria-label="Catalogue coming soon"
+        >
+          <span className="home-catalogue-labels" aria-hidden="true">
+            <span className="home-catalogue-label-default">VIEW CATALOGUE</span>
+            <span className="home-catalogue-label-coming">MORE COMING SOON</span>
+          </span>
+          <span className="home-catalogue-arrow" aria-hidden="true">→</span>
+        </button>
       </section>
 
       <section ref={videoSectionRef} id="featured-video" className="home-video-feature" aria-labelledby="home-video-title">

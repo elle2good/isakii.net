@@ -8,8 +8,8 @@ type SubmissionState = "idle" | "submitting" | "success" | "error"
 const footerLinks = [
   { label: "about", href: "/about" },
   { label: "blog", href: "/work?language=en" },
-  { label: "catalogue", href: "/work" },
-  { label: "coming soon", href: "/coming-soon" },
+  { label: "catalogue", href: "/#projects" },
+  { label: "home", href: "/" },
 ]
 
 export default function HomeFooter() {

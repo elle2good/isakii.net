@@ -906,6 +906,7 @@ select {
   margin-top: 72px;
   padding: 0 19px;
   border: 1px solid #fff;
+  background: transparent;
   color: #fff;
   font-size: 11px;
   font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
@@ -913,9 +914,27 @@ select {
   letter-spacing: 0.7px;
   white-space: nowrap;
   transition: border-color 180ms ease, color 180ms ease;
+  cursor: default;
 }
 
-.home-catalogue-link span {
+.home-catalogue-labels {
+  position: relative;
+  display: grid;
+  min-width: 122px;
+  text-align: left;
+}
+
+.home-catalogue-label-default,
+.home-catalogue-label-coming {
+  grid-area: 1 / 1;
+  transition: opacity 180ms ease;
+}
+
+.home-catalogue-label-coming {
+  opacity: 0;
+}
+
+.home-catalogue-arrow {
   font-size: 18px;
   font-weight: 400;
   line-height: 0;
@@ -927,6 +946,18 @@ select {
   border-color: var(--menu-hover);
   color: var(--menu-hover);
   outline: 0;
+}
+
+.home-catalogue-link:hover .home-catalogue-label-default,
+.home-catalogue-link:active .home-catalogue-label-default,
+.home-catalogue-link:focus-visible .home-catalogue-label-default {
+  opacity: 0;
+}
+
+.home-catalogue-link:hover .home-catalogue-label-coming,
+.home-catalogue-link:active .home-catalogue-label-coming,
+.home-catalogue-link:focus-visible .home-catalogue-label-coming {
+  opacity: 1;
 }
 
 .catalogue-preview-scrim {

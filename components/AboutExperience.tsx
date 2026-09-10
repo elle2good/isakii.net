@@ -88,8 +88,8 @@ export default function AboutExperience() {
                     <ExternalBlogLink href="https://medium.com/@iskaii" tabIndex={blogExpanded ? 0 : -1} onOpen={closeMenu}><span className="home-menu-submenu-label">Archive</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></ExternalBlogLink>
                   </div>
                 </div>
-                <Link className="home-menu-link" href="/work" onClick={closeMenu}>catalogue</Link>
-                <Link className="home-menu-link" href="/coming-soon" onClick={closeMenu}>coming soon</Link>
+                <Link className="home-menu-link" href="/#projects" onClick={closeMenu}>catalogue</Link>
+                <Link className="home-menu-link" href="/" onClick={closeMenu}>home</Link>
               </nav>
               <MenuContactActions />
             </div>

@@ -396,8 +396,8 @@ export default function RaydiumCaseStudy() {
             <nav aria-label="Explore">
               <Link className="home-menu-link" href="/about" onClick={closeMenu}>about</Link>
               <Link className="home-menu-link" href="/work?language=en" onClick={closeMenu}>blog</Link>
-              <Link className="home-menu-link" href="/work" onClick={closeMenu}>catalogue</Link>
-              <Link className="home-menu-link" href="/coming-soon" onClick={closeMenu}>coming soon</Link>
+              <Link className="home-menu-link" href="/#projects" onClick={closeMenu}>catalogue</Link>
+              <Link className="home-menu-link" href="/" onClick={closeMenu}>home</Link>
             </nav>
             <MenuContactActions />
           </div>
