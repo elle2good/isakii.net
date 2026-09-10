@@ -6,6 +6,7 @@ import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, us
 import { useEffect, useRef, useState } from "react"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
+import MenuContactActions from "./MenuContactActions"
 
 const navigation = [
   { id: "context", label: "Context" },
@@ -155,11 +156,7 @@ export default function AbelianCaseStudy() {
               <Link className="home-menu-link" href="/work" onClick={closeMenu}>catalogue</Link>
               <Link className="home-menu-link" href="/coming-soon" onClick={closeMenu}>coming soon</Link>
             </nav>
-            <a className="home-menu-contact" href="mailto:smkim@isakii.net">
-              <span aria-hidden="true">&#9993;</span>
-              <span>smkim@isakii.net</span>
-              <span className="home-menu-contact-arrow" aria-hidden="true">&#8599;</span>
-            </a>
+            <MenuContactActions />
           </div>
         </div>
       )}

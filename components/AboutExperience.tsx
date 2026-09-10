@@ -6,6 +6,8 @@ import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useState, type ReactNode } from "react"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
+import MenuContactActions from "./MenuContactActions"
+import ExternalBlogLink from "./ExternalBlogLink"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -81,15 +83,15 @@ export default function AboutExperience() {
                     <span className="home-menu-accordion-arrow" aria-hidden="true" />
                   </button>
                   <div id="about-blog-submenu" className="home-menu-submenu" aria-hidden={!blogExpanded}>
-                    <Link href="/work?language=en" tabIndex={blogExpanded ? 0 : -1} onClick={closeMenu}><span className="home-menu-submenu-label">English</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></Link>
-                    <Link href="/work?language=ko" tabIndex={blogExpanded ? 0 : -1} onClick={closeMenu}><span className="home-menu-submenu-label">Korean</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></Link>
-                    <Link href="/work#archive" tabIndex={blogExpanded ? 0 : -1} onClick={closeMenu}><span className="home-menu-submenu-label">Archive</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></Link>
+                    <ExternalBlogLink href="https://isegye.substack.com" tabIndex={blogExpanded ? 0 : -1} onOpen={closeMenu}><span className="home-menu-submenu-label">English</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></ExternalBlogLink>
+                    <ExternalBlogLink href="https://brunch.co.kr/@isakii" tabIndex={blogExpanded ? 0 : -1} onOpen={closeMenu}><span className="home-menu-submenu-label">Korean</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></ExternalBlogLink>
+                    <ExternalBlogLink href="https://medium.com/@iskaii" tabIndex={blogExpanded ? 0 : -1} onOpen={closeMenu}><span className="home-menu-submenu-label">Archive</span><span className="home-menu-submenu-arrow" aria-hidden="true" /></ExternalBlogLink>
                   </div>
                 </div>
                 <Link className="home-menu-link" href="/work" onClick={closeMenu}>catalogue</Link>
                 <Link className="home-menu-link" href="/coming-soon" onClick={closeMenu}>coming soon</Link>
               </nav>
-              <a className="home-menu-contact" href="mailto:smkim@isakii.net"><span aria-hidden="true">&#9993;</span><span>smkim@isakii.net</span><span className="home-menu-contact-arrow" aria-hidden="true">&#8599;</span></a>
+              <MenuContactActions />
             </div>
           </div>
         )}

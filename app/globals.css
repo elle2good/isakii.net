@@ -63,7 +63,7 @@
   --nav: #111827;
   --midnight-navy: #050b18;
   --menu-hover: #fff0d2;
-  --menu-contact: #fe46a0;
+  --menu-contact: #ff5a00;
 }
 
 * {
@@ -212,12 +212,13 @@ select {
 .home-menu-overlay {
   --menu-focal-x: 50%;
   --menu-focal-y: 50%;
+  --menu-footer-height: 30.2%;
   position: fixed;
   top: var(--menu-focal-y);
   left: var(--menu-focal-x);
   z-index: 1100;
   width: min(50vw, 557px);
-  height: min(512px, calc(100svh - 32px));
+  height: min(47.9vw, 534px, calc(100svh - 20px));
   overflow: hidden;
   padding: 0;
   background-color: #1d2f61;
@@ -241,7 +242,7 @@ select {
 }
 
 .home-menu-overlay.has-blog-expanded {
-  height: min(626px, calc(100svh - 32px));
+  --menu-footer-height: 30.2%;
 }
 
 .home-menu-overlay::after {
@@ -249,10 +250,27 @@ select {
   position: absolute;
   inset: auto 0 0;
   z-index: 0;
-  height: 142px;
+  height: var(--menu-footer-height);
   border-radius: 20px 20px 0 0;
   background: #1d2f61;
   box-shadow: 0 -4px 7.5px rgba(0, 0, 0, 0.25);
+  opacity: 1;
+  transform: translateY(0);
+  transform-origin: bottom;
+  transition:
+    opacity 300ms ease,
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0ms linear;
+}
+
+.home-menu-overlay.has-blog-expanded::after {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(105%);
+  transition:
+    opacity 220ms ease,
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0ms linear 600ms;
 }
 
 .home-menu-overlay.is-open {
@@ -273,7 +291,7 @@ select {
   padding: 0;
   border: 0;
   background: transparent;
-  color: rgba(254, 70, 160, 0.8);
+  color: var(--menu-contact);
   font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 20px;
   font-weight: 800;
@@ -355,15 +373,23 @@ select {
 
 .home-menu-overlay nav {
   position: absolute;
-  top: min(71px, 13.9%);
+  top: 18.15%;
   left: 9%;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0;
+  gap: clamp(8px, 1.5vw, 17px);
   width: 82%;
   color: #fff;
+  transition:
+    top 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    gap 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-menu-overlay.has-blog-expanded nav {
+  top: 12%;
+  gap: clamp(6px, 1vw, 11px);
 }
 
 .home-menu-link,
@@ -372,7 +398,7 @@ select {
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: clamp(32px, 5.6vw, 62px);
+  min-height: clamp(32px, 4.7vw, 52px);
   color: #fff;
   font-family: "Eulyoo1945", Georgia, serif;
   font-size: clamp(15.4px, 2.52vw, 28px);
@@ -508,35 +534,48 @@ select {
   color: var(--menu-contact);
 }
 
-.home-menu-contact {
+.home-menu-contact-actions {
   position: absolute;
-  right: 5%;
-  bottom: 11%;
+  right: calc(5.2% + 40px);
+  bottom: calc((var(--menu-footer-height) - 48px) / 2);
   z-index: 1;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 9px;
-  color: #fff;
-  font-family: Georgia, serif;
-  font-size: clamp(12px, 1.4vw, 20px);
-  line-height: 1.2;
-  transition: color 160ms ease, font-weight 160ms ease;
+  gap: 26px;
+  transition:
+    right 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    bottom 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.home-menu-contact > span:nth-child(2) { border-bottom: 1px solid currentColor; }
-.home-menu-contact > span:first-child { color: var(--menu-contact); }
-.home-menu-contact-arrow { opacity: 0; transition: opacity 160ms ease; }
+.home-menu-overlay.has-blog-expanded .home-menu-contact-actions {
+  right: 5.2%;
+  bottom: 5.2%;
+}
 
-.home-menu-contact:hover,
-.home-menu-contact:active,
-.home-menu-contact:focus-visible {
+.home-menu-contact-actions a {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid currentColor;
   color: var(--menu-contact);
-  font-weight: 600;
+  transition: color 180ms ease;
 }
 
-.home-menu-contact:hover .home-menu-contact-arrow,
-.home-menu-contact:active .home-menu-contact-arrow,
-.home-menu-contact:focus-visible .home-menu-contact-arrow { opacity: 1; }
+.home-menu-contact-actions svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.home-menu-contact-actions a:hover,
+.home-menu-contact-actions a:active,
+.home-menu-contact-actions a:focus-visible { color: var(--menu-hover); }
 
 .home-hero {
   position: relative;
@@ -2577,18 +2616,36 @@ select {
   .home-footer-bottom { align-items: flex-start; flex-direction: column; }
   .home-footer-legal { flex-wrap: wrap; }
   .home-search-overlay { padding-top: 110px; }
-  .home-menu-overlay { width: calc(100vw - 32px); }
+  .home-menu-overlay {
+    width: calc(100vw - 32px);
+    height: min(calc((100vw - 32px) * 0.958), calc(100svh - 20px));
+  }
+  .home-menu-overlay.has-blog-expanded {
+    height: min(calc((100vw - 32px) * 0.958 + 72px), calc(100svh - 20px));
+  }
   .home-menu-overlay nav {
-    top: 13.9%;
+    top: 18.15%;
     left: 9%;
     width: 82%;
   }
+  .home-menu-overlay.has-blog-expanded nav {
+    top: 9%;
+    gap: 4px;
+  }
+  .home-menu-overlay.has-blog-expanded .home-menu-submenu {
+    max-height: 84px;
+  }
+  .home-menu-overlay.has-blog-expanded .home-menu-submenu a {
+    min-height: 28px;
+    font-size: 15px;
+    line-height: 28px;
+  }
   .home-menu-link,
   .home-menu-accordion-trigger {
-    min-height: clamp(32px, 10vw, 62px);
+    min-height: clamp(32px, 8.8vw, 52px);
     font-size: clamp(15.4px, 4.9vw, 28px);
   }
-  .home-menu-contact { right: 5%; bottom: 11%; }
+  .home-menu-contact-actions { right: calc(5.2% + 40px); }
 
   .abelian-hero-sequence { height: 230svh; }
   .abelian-hero-sticky { min-height: 100svh; }
@@ -2664,8 +2721,6 @@ select {
 }
 
 @media (max-width: 700px) and (max-height: 520px) {
-  .home-menu-overlay::after { height: 72px; }
-
   .home-menu-overlay nav {
     top: 28px;
     width: 82%;
@@ -2686,7 +2741,7 @@ select {
     height: 24px;
   }
 
-  .home-menu-accordion.is-expanded .home-menu-submenu { max-height: 78px; }
+  .home-menu-accordion.is-expanded .home-menu-submenu { max-height: 84px; }
 
   .home-menu-submenu a {
     min-height: 26px;
@@ -2694,10 +2749,8 @@ select {
     line-height: 26px;
   }
 
-  .home-menu-contact {
-    right: 5%;
-    bottom: 13px;
-    font-size: 12px;
+  .home-menu-contact-actions {
+    right: calc(5.2% + 40px);
   }
 }
 

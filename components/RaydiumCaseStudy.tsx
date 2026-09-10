@@ -6,6 +6,7 @@ import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, us
 import { useCallback, useEffect, useRef, useState } from "react"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
+import MenuContactActions from "./MenuContactActions"
 
 const navigation = [
   { id: "opportunity", label: "Opportunity" },
@@ -398,9 +399,7 @@ export default function RaydiumCaseStudy() {
               <Link className="home-menu-link" href="/work" onClick={closeMenu}>catalogue</Link>
               <Link className="home-menu-link" href="/coming-soon" onClick={closeMenu}>coming soon</Link>
             </nav>
-            <a className="home-menu-contact" href="mailto:smkim@isakii.net">
-              <span aria-hidden="true">✉</span><span>smkim@isakii.net</span><span className="home-menu-contact-arrow" aria-hidden="true">↗</span>
-            </a>
+            <MenuContactActions />
           </div>
         </div>
       )}

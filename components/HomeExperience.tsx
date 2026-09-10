@@ -7,6 +7,8 @@ import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
 import CataloguePreview from "./CataloguePreview"
+import MenuContactActions from "./MenuContactActions"
+import ExternalBlogLink from "./ExternalBlogLink"
 import SmoothScroll from "./SmoothScroll"
 import { galleryImages } from "@/lib/gallery"
 import type { CatalogueItem } from "@/lib/catalogue"
@@ -383,28 +385,24 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
                   <span className="home-menu-accordion-arrow" aria-hidden="true" />
                 </button>
                 <div id="home-blog-submenu" className="home-menu-submenu" aria-hidden={!blogExpanded}>
-                  <Link href="/work?language=en" tabIndex={blogExpanded ? 0 : -1} onClick={closeOverlays}>
+                  <ExternalBlogLink href="https://isegye.substack.com" tabIndex={blogExpanded ? 0 : -1} onOpen={closeOverlays}>
                     <span className="home-menu-submenu-label">English</span>
                     <span className="home-menu-submenu-arrow" aria-hidden="true" />
-                  </Link>
-                  <Link href="/work?language=ko" tabIndex={blogExpanded ? 0 : -1} onClick={closeOverlays}>
+                  </ExternalBlogLink>
+                  <ExternalBlogLink href="https://brunch.co.kr/@isakii" tabIndex={blogExpanded ? 0 : -1} onOpen={closeOverlays}>
                     <span className="home-menu-submenu-label">Korean</span>
                     <span className="home-menu-submenu-arrow" aria-hidden="true" />
-                  </Link>
-                  <Link href="/work#archive" tabIndex={blogExpanded ? 0 : -1} onClick={closeOverlays}>
+                  </ExternalBlogLink>
+                  <ExternalBlogLink href="https://medium.com/@iskaii" tabIndex={blogExpanded ? 0 : -1} onOpen={closeOverlays}>
                     <span className="home-menu-submenu-label">Archive</span>
                     <span className="home-menu-submenu-arrow" aria-hidden="true" />
-                  </Link>
+                  </ExternalBlogLink>
                 </div>
               </div>
               <Link className="home-menu-link" href="#projects" onClick={closeOverlays}>catalogue</Link>
               <Link className="home-menu-link" href="/coming-soon" onClick={closeOverlays}>coming soon</Link>
             </nav>
-            <a className="home-menu-contact" href="mailto:smkim@isakii.net">
-              <span aria-hidden="true">&#9993;</span>
-              <span>smkim@isakii.net</span>
-              <span className="home-menu-contact-arrow" aria-hidden="true">&#8599;</span>
-            </a>
+            <MenuContactActions />
           </div>
           </>
         )}
