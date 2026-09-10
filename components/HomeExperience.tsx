@@ -28,12 +28,21 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
   const videoRef = useRef<HTMLVideoElement>(null)
   const source = project.coverImage || project.popupImage
   const isVideo = project.coverMediaKind === "video"
+  const slug = project.slug.toLowerCase()
   const videoSource =
-    project.slug.toLowerCase() === "raydium-event"
+    slug === "raydium-event"
       ? "/media/raydium-cover-alpha.webm"
-      : project.slug.toLowerCase() === "beauty-ai-search-engine"
+      : slug === "beauty-ai-search-engine"
         ? "/media/glamai-cover-alpha.webm"
+        : slug === "keytalk-movie-deep-search"
+          ? "/media/deepsearch-cover-alpha.webm"
         : cloudinaryVideoSource(source)
+  const className =
+    slug === "beauty-ai-search-engine"
+      ? "home-project-cover--compact"
+      : slug === "keytalk-movie-deep-search"
+        ? "home-project-cover--keytalk"
+        : undefined
 
   useEffect(() => {
     const video = videoRef.current
@@ -48,11 +57,19 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
     video.currentTime = 0
   }, [active, videoSource])
 
+  if (!source) {
+    return (
+      <div className="home-project-placeholder" role="img" aria-label={project.coverImageAlt}>
+        <span>Coming soon</span>
+      </div>
+    )
+  }
+
   if (isVideo) {
     return (
       <video
         ref={videoRef}
-        className={project.slug.toLowerCase() === "beauty-ai-search-engine" ? "home-project-cover--compact" : undefined}
+        className={className}
         src={videoSource}
         aria-label={project.coverImageAlt}
         muted

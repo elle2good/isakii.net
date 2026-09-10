@@ -32,10 +32,13 @@ function cloudinaryVideoSource(source: string) {
 function PreviewMedia({ item }: { item: CatalogueItem }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [ended, setEnded] = useState(false)
-  const isKeytalkVideo = item.slug.toLowerCase() === "keytalk-movie-deep-search"
+  const slug = item.slug.toLowerCase()
+  const isKeytalkVideo = slug === "keytalk-movie-deep-search"
   const source =
-    item.slug.toLowerCase() === "beauty-ai-search-engine"
+    slug === "beauty-ai-search-engine"
       ? "/media/glamai-popup-alpha.webm"
+      : slug === "keytalk-movie-deep-search"
+        ? "/media/deepsearch-popup-alpha.webm"
       : item.popupImage || item.coverImage
 
   useEffect(() => {
@@ -68,11 +71,20 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
     }
   }
 
+  if (!source) {
+    return (
+      <div className="catalogue-preview-placeholder" role="img" aria-label={item.popupImageAlt}>
+        <span>Coming soon</span>
+      </div>
+    )
+  }
+
   if (item.popupMediaKind === "video") {
     return (
       <div className="catalogue-preview-video-wrap">
         <video
           ref={videoRef}
+          className={slug === "keytalk-movie-deep-search" ? "catalogue-preview-video--keytalk" : undefined}
           src={cloudinaryVideoSource(source)}
           aria-label={item.popupImageAlt}
           muted
@@ -222,10 +234,13 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                     </div>
                   )}
                 </motion.div>
-                <motion.p className="catalogue-preview-summary" {...animatedProps}>{item.shortSummary}</motion.p>
+                {item.shortSummary && (
+                  <motion.p className="catalogue-preview-summary" {...animatedProps}>{item.shortSummary}</motion.p>
+                )}
               </div>
 
-              <motion.div className={`catalogue-preview-accordion ${expanded ? "is-expanded" : ""}`} layout={!reduceMotion}>
+              {item.tldr && (
+                <motion.div className={`catalogue-preview-accordion ${expanded ? "is-expanded" : ""}`} layout={!reduceMotion}>
                 <button
                   type="button"
                   className="catalogue-preview-accordion-trigger"
@@ -250,7 +265,8 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+                </motion.div>
+              )}
 
               <div className="catalogue-preview-actions">
                 {item.caseStudyUrl ? (
@@ -259,7 +275,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                   </a>
                 ) : (
                   <span className="catalogue-preview-cta is-disabled" aria-disabled="true">
-                    <span>{item.ctaLabel}</span><span aria-hidden="true">↗</span>
+                    <span>{item.ctaLabel}</span>
                   </span>
                 )}
 

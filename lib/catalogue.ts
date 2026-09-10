@@ -26,7 +26,7 @@ type BaserowRow = Record<string, unknown> & { id?: number }
 
 const READY_ITEM: CatalogueItem = {
   id: "9cd62da9-5ef0-4357-a610-6983c766160e",
-  order: 0,
+  order: 3,
   contentType: "Case Study Report",
   title: "Bootstrapping a Global Community from a Very Niche Technology",
   subtitle: "From Pre-Revenue to Revenue",
@@ -82,7 +82,7 @@ const READY_RAYDIUM_ITEM: CatalogueItem = {
 
 const READY_GLAMAI_ITEM: CatalogueItem = {
   id: "b08d5bc9-282a-4cf3-ac31-dd685aba4065",
-  order: 2,
+  order: 5,
   contentType: "Press Release",
   title: "The AI Before AI",
   subtitle: "LVMH Innovation Award Finalist",
@@ -109,7 +109,65 @@ const READY_GLAMAI_ITEM: CatalogueItem = {
   coverImageAlt: "Floating Glamai phone cover",
 }
 
-const READY_ITEMS = [READY_ITEM, READY_RAYDIUM_ITEM, READY_GLAMAI_ITEM]
+const READY_MOVIE_DEEP_SEARCH_ITEM: CatalogueItem = {
+  id: "36aae65c-01b3-491b-a535-89cfaa62d93e",
+  order: 4,
+  contentType: "Press Release (Korean)",
+  title: "User Acquisition Made Easy",
+  subtitle: "Best-Rated Product of the Month on Product Hunt",
+  slug: "keytalk-movie-deep-search",
+  date: "2023",
+  type: "Basic",
+  companyName: "Keytalk AI (Mycelebs)",
+  tags: ["Marketing", "Community", "User Acquisition"],
+  shortSummary:
+    "Struggling to reach U.S. audiences through paid marketing for years, Mycelebs turned to Product Hunt’s early adopter community, making online friends to introduce its AI-powered Movie Deep Search. The best part was the results.\n\nRead the full press release for details.",
+  tldr:
+    "Mycelebs’ AI Keytalk Movie Deep Search ranked No. 1 among 1,746 products for Product Hunt’s “Best Rated Product of February,” earning an upvote from founder Ryan Hoover. The tool recommends movies based on natural-language descriptions of preferences and context, without requiring a title. Its customizable recommendation technology also helps streamline research across film production, distribution, and streaming.",
+  ctaLabel: "Read the press release (Korean)",
+  caseStudyUrl: "https://www.aitimes.kr/news/articleView.html?idxno=27439",
+  downloadUrl: "",
+  popupImage:
+    "https://res.cloudinary.com/dwto97ayq/video/upload/v1789044009/Comp_1_meua2i.mov",
+  coverImage:
+    "https://res.cloudinary.com/dwto97ayq/video/upload/v1789043869/Deepsearch_Interface_eggy1o.mov",
+  popupMediaKind: "video",
+  coverMediaKind: "video",
+  popupImageAlt: "Movie Deep Search laptop preview",
+  coverImageAlt: "Movie Deep Search laptop cover",
+}
+
+const READY_ALGORAND_ITEM: CatalogueItem = {
+  id: "b6a7f66e-bea3-41b3-b053-115ebfe9abbd",
+  order: 2,
+  contentType: "Insights Report",
+  title: "What Is Community Marketing?",
+  subtitle: "Lessons from a GTM Campaign",
+  slug: "Algorand-staking-korea-campaign",
+  date: "2025",
+  type: "Flagship",
+  companyName: "Algorand Foundation",
+  tags: ["Localization", "Community", "User Acquisition"],
+  shortSummary: "",
+  tldr: "",
+  ctaLabel: "Coming Soon",
+  caseStudyUrl: "",
+  downloadUrl: "",
+  popupImage: "",
+  coverImage: "",
+  popupMediaKind: "image",
+  coverMediaKind: "image",
+  popupImageAlt: "Algorand community marketing report preview coming soon",
+  coverImageAlt: "Algorand community marketing report cover coming soon",
+}
+
+const READY_ITEMS = [
+  READY_RAYDIUM_ITEM,
+  READY_ALGORAND_ITEM,
+  READY_ITEM,
+  READY_MOVIE_DEEP_SEARCH_ITEM,
+  READY_GLAMAI_ITEM,
+]
 
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "")
 const contentText = (value: unknown) => text(value).replace(/\s*(?:\/n|\\n)\s*/gi, "\n")
@@ -169,6 +227,8 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
     .map((row) => {
       const slug = text(row.Slug)
       const itemType = selectValue(row.Type)
+      const ctaLabel = text(row.CTA_Label) || "Read the full case study"
+      const isComingSoon = ctaLabel.toLowerCase().includes("coming soon")
       const media = mediaByItem.get(row.id ?? -1) ?? []
       const byType = (type: string) =>
         media.find((record) => truthy(record.Active) && selectValue(record["Media Type"]).toLowerCase() === type)
@@ -192,9 +252,11 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
         tags: tagsValue(row.Tags),
         shortSummary: shortSummaryText(row.Short_Summary),
         tldr: contentText(row.TLDR),
-        ctaLabel: text(row.CTA_Label) || "Read the full case study",
+        ctaLabel,
         caseStudyUrl:
-          itemType.toLowerCase() === "flagship" && slug
+          isComingSoon
+            ? ""
+            : itemType.toLowerCase() === "flagship" && slug
             ? `/catalogue/${encodeURIComponent(slug)}`
             : text(row["Case Study URL"]),
         downloadUrl: text(row["Download URL"]),
