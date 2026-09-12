@@ -11,6 +11,7 @@ import CataloguePreview from "./CataloguePreview"
 import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
 import SmoothScroll from "./SmoothScroll"
+import NotificationTicker from "./NotificationTicker"
 import { galleryImages } from "@/lib/gallery"
 import type { CatalogueItem } from "@/lib/catalogue"
 
@@ -473,13 +474,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
           }}
         />
 
-        <div className="home-ticker" aria-label="Promotion">
-          <div className="home-ticker-track">
-            {Array.from({ length: 10 }, (_, index) => (
-              <span key={index}>USE CODE: youdabest <b aria-hidden="true">→</b></span>
-            ))}
-          </div>
-        </div>
+        <NotificationTicker />
       </div>
 
       <div id="overlay">

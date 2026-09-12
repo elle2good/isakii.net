@@ -8,6 +8,7 @@ import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
+import NotificationTicker from "./NotificationTicker"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -31,6 +32,52 @@ export default function AboutExperience() {
   const reduceMotion = useReducedMotion()
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
+  const [topChromeVisible, setTopChromeVisible] = useState(true)
+
+  useEffect(() => {
+    let previousScrollY = window.scrollY
+    let previousTouchY: number | null = null
+
+    const showForDirection = (delta: number) => {
+      if (menuOpen) {
+        setTopChromeVisible(true)
+      } else if (delta > 0) {
+        setTopChromeVisible(false)
+      } else if (delta < 0) {
+        setTopChromeVisible(true)
+      }
+    }
+
+    const updateTopChrome = () => {
+      const currentScrollY = window.scrollY
+      const delta = currentScrollY - previousScrollY
+      if (currentScrollY <= 2) setTopChromeVisible(true)
+      else showForDirection(delta)
+      previousScrollY = currentScrollY
+    }
+
+    const updateFromWheel = (event: WheelEvent) => showForDirection(event.deltaY)
+    const rememberTouch = (event: TouchEvent) => {
+      previousTouchY = event.touches[0]?.clientY ?? null
+    }
+    const updateFromTouch = (event: TouchEvent) => {
+      const currentTouchY = event.touches[0]?.clientY
+      if (currentTouchY === undefined || previousTouchY === null) return
+      showForDirection(previousTouchY - currentTouchY)
+      previousTouchY = currentTouchY
+    }
+
+    window.addEventListener("scroll", updateTopChrome, { passive: true })
+    window.addEventListener("wheel", updateFromWheel, { passive: true })
+    window.addEventListener("touchstart", rememberTouch, { passive: true })
+    window.addEventListener("touchmove", updateFromTouch, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", updateTopChrome)
+      window.removeEventListener("wheel", updateFromWheel)
+      window.removeEventListener("touchstart", rememberTouch)
+      window.removeEventListener("touchmove", updateFromTouch)
+    }
+  }, [menuOpen])
 
   useEffect(() => {
     if (!menuOpen) return
@@ -49,8 +96,14 @@ export default function AboutExperience() {
     setBlogExpanded(false)
   }
 
+  const handlePageWheel = (deltaY: number) => {
+    if (menuOpen) setTopChromeVisible(true)
+    else if (deltaY > 0) setTopChromeVisible(false)
+    else if (deltaY < 0) setTopChromeVisible(true)
+  }
+
   return (
-    <main className="about-page-new">
+    <main className="about-page-new" onWheelCapture={(event) => handlePageWheel(event.deltaY)}>
       <section className="about-stage" aria-labelledby="about-title">
         <div className="about-atmosphere" aria-hidden="true">
           <div className="about-room-crop">
@@ -60,7 +113,7 @@ export default function AboutExperience() {
           <div className="about-atmosphere-dim" />
         </div>
 
-        <div className="about-site-header">
+        <div className={`about-site-header ${topChromeVisible ? "is-visible" : "is-hidden"}`}>
           <HomeHeader
             menuOpen={menuOpen}
             onToggleMenu={() => {
@@ -68,6 +121,7 @@ export default function AboutExperience() {
               if (menuOpen) setBlogExpanded(false)
             }}
           />
+          <NotificationTicker />
         </div>
 
         {menuOpen && (

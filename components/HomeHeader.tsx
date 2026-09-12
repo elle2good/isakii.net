@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { forwardRef } from "react"
 
 type HomeHeaderProps = {
@@ -28,7 +29,16 @@ const HomeHeader = forwardRef<HTMLElement, HomeHeaderProps>(function HomeHeader(
         </button>
       </div>
 
-      <Link href="/" className="home-wordmark">isakii</Link>
+      <Link href="/" className="home-wordmark" aria-label="isakii home">
+        <Image
+          className="home-wordmark-image"
+          src="/isakii-logo.png"
+          alt=""
+          width={148}
+          height={72}
+          priority
+        />
+      </Link>
     </header>
   )
 })

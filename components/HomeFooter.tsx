@@ -106,9 +106,8 @@ export default function HomeFooter() {
           </a>
         </div>
         <div className="home-footer-legal" aria-label="Legal information">
-          <span>Privacy</span>
-          <span>Terms</span>
-          <span>Accessibility</span>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms &amp; Conditions</Link>
           <span>© 2026 Lisa Kim</span>
         </div>
       </div>
