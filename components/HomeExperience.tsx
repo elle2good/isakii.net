@@ -38,6 +38,14 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
         : slug === "keytalk-movie-deep-search"
           ? "/media/deepsearch-cover-alpha.webm"
         : cloudinaryVideoSource(source)
+  const posterSource =
+    slug === "raydium-event"
+      ? "/media/raydium-cover-poster.png"
+      : slug === "beauty-ai-search-engine"
+        ? "/media/glamai-cover-poster.png"
+        : slug === "keytalk-movie-deep-search"
+          ? "/media/deepsearch-cover-poster.png"
+          : undefined
   const className =
     slug === "beauty-ai-search-engine"
       ? "home-project-cover--compact"
@@ -68,22 +76,34 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
 
   if (isVideo) {
     return (
-      <video
-        ref={videoRef}
-        className={className}
-        src={videoSource}
-        aria-label={project.coverImageAlt}
-        muted
-        playsInline
-        loop
-        preload="auto"
-        onLoadedData={(event) => {
-          if (!active) {
-            event.currentTarget.pause()
-            event.currentTarget.currentTime = 0
-          }
-        }}
-      />
+      <>
+        <video
+          ref={videoRef}
+          className={`home-project-cover-video ${className ?? ""} ${active ? "is-active" : ""}`}
+          src={videoSource}
+          poster={posterSource}
+          aria-label={project.coverImageAlt}
+          muted
+          playsInline
+          loop
+          preload="auto"
+          onLoadedData={(event) => {
+            if (!active) {
+              event.currentTarget.pause()
+              event.currentTarget.currentTime = 0
+            }
+          }}
+        />
+        {posterSource && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className={`home-project-video-poster ${className ?? ""} ${active ? "is-hidden" : ""}`}
+            src={posterSource}
+            alt=""
+            aria-hidden="true"
+          />
+        )}
+      </>
     )
   }
 

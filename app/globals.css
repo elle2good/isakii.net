@@ -844,6 +844,34 @@ select {
   background: transparent;
 }
 
+.home-project-image .home-project-video-poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 1;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease,
+    transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.45s ease;
+}
+
+.home-project-image .home-project-cover-video {
+  opacity: 0;
+  transition:
+    opacity 160ms ease,
+    transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.45s ease;
+}
+
+.home-project-image .home-project-cover-video.is-active {
+  opacity: 1;
+}
+
+.home-project-image .home-project-video-poster.is-hidden {
+  opacity: 0;
+}
+
 .home-project-placeholder,
 .catalogue-preview-placeholder {
   display: grid;
