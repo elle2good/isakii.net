@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { FormEvent, useState } from "react"
 
@@ -98,6 +99,16 @@ export default function HomeFooter() {
           </a>
           <a href="https://x.com/isakii" target="_blank" rel="noreferrer" aria-label="X">
             <span className="home-footer-x" aria-hidden="true">𝕏</span>
+          </a>
+          <a href="https://github.com/elle2good" target="_blank" rel="noreferrer" aria-label="GitHub">
+            <Image
+              className="home-footer-github"
+              src="/home/icons/github.webp"
+              alt=""
+              width={28}
+              height={29}
+              aria-hidden="true"
+            />
           </a>
           <a href="https://calendar.app.google/ynneGAWzZeX47R9w7" target="_blank" rel="noreferrer" aria-label="Schedule a call">
             <svg className="home-footer-call" viewBox="0 0 24 24" aria-hidden="true">

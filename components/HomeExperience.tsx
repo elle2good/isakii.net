@@ -115,6 +115,8 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
 
 function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (item: CatalogueItem) => void }) {
   const [active, setActive] = useState(false)
+  const isComingSoon = project.ctaLabel.toLowerCase().includes("coming soon") || !project.caseStudyUrl
+  const coverSource = project.coverImage || project.popupImage
 
   return (
     <article className="home-project-card">
@@ -130,6 +132,12 @@ function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (ite
       >
         <div className="home-project-image">
           <ProjectCover project={project} active={active} />
+          {isComingSoon && coverSource && project.coverMediaKind === "image" && (
+            // The duplicate preserves the source alpha as a silhouette-only hover mask.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img className="home-project-object-shade" src={coverSource} alt="" aria-hidden="true" />
+          )}
+          {isComingSoon && coverSource && <span className="home-project-coming-soon">Coming soon</span>}
         </div>
         <p className="home-project-type">{project.contentType}</p>
         <h3>{project.subtitle || project.title}</h3>

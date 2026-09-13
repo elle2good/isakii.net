@@ -153,12 +153,14 @@ const READY_ALGORAND_ITEM: CatalogueItem = {
   ctaLabel: "Coming Soon",
   caseStudyUrl: "",
   downloadUrl: "",
-  popupImage: "",
-  coverImage: "",
+  popupImage:
+    "https://res.cloudinary.com/dwto97ayq/image/upload/v1789197395/Codex_Image_Sep_12_2026_04_16_47_PM_lcilba.png",
+  coverImage:
+    "https://res.cloudinary.com/dwto97ayq/image/upload/v1789196787/Codex_Image_Sep_12_2026_04_06_35_PM_d7eatz.png",
   popupMediaKind: "image",
   coverMediaKind: "image",
-  popupImageAlt: "Algorand community marketing report preview coming soon",
-  coverImageAlt: "Algorand community marketing report cover coming soon",
+  popupImageAlt: "Algorand 3500 ALGO airdrop campaign preview",
+  coverImageAlt: "Algorand staking campaign report cover",
 }
 
 const READY_ITEMS = [

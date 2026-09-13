@@ -872,6 +872,26 @@ select {
   opacity: 0;
 }
 
+.home-project-coming-soon {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  color: #fff0d2;
+  font: 500 12px/1 "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.home-project-card-link:hover .home-project-coming-soon,
+.home-project-card-link:focus-visible .home-project-coming-soon {
+  opacity: 1;
+}
+
 .home-project-placeholder,
 .catalogue-preview-placeholder {
   display: grid;
@@ -929,6 +949,24 @@ select {
 .home-project-card-link:hover .home-project-image .home-project-cover--compact,
 .home-project-card-link:focus-visible .home-project-image .home-project-cover--compact {
   transform: scale(0.828);
+}
+
+.home-project-image img.home-project-object-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  filter: brightness(0);
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.home-project-card-link:hover .home-project-image img.home-project-object-shade,
+.home-project-card-link:focus-visible .home-project-image img.home-project-object-shade {
+  opacity: 0.6;
+  filter: brightness(0);
 }
 
 .home-project-card-link h3 { transition: color 0.2s ease; }
@@ -1625,6 +1663,11 @@ select {
 
 .home-footer-linkedin { font-size: 16px; font-weight: 700; }
 .home-footer-x { font-size: 18px; }
+.home-footer-github {
+  width: 28px;
+  height: 29px;
+  object-fit: cover;
+}
 .home-footer-call { width: 17px; height: 17px; fill: currentColor; }
 
 .home-footer-legal {
