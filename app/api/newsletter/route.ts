@@ -1,4 +1,7 @@
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const FLODESK_SUBSCRIBERS_URL = "https://api.flodesk.com/v1/subscribers"
+
+export const runtime = "nodejs"
 
 export async function POST(request: Request) {
   let email = ""
@@ -14,8 +17,10 @@ export async function POST(request: Request) {
     return Response.json({ registered: false, error: "Please enter a valid email address." }, { status: 400 })
   }
 
-  const webhookUrl = process.env.NEWSLETTER_WEBHOOK_URL
-  if (!webhookUrl) {
+  const apiKey = process.env.FLODESK_API_KEY
+  const segmentId = process.env.FLODESK_SEGMENT_ID
+
+  if (!apiKey || !segmentId) {
     return Response.json(
       { registered: false, error: "Newsletter registration is not connected yet." },
       { status: 503 },
@@ -23,27 +28,34 @@ export async function POST(request: Request) {
   }
 
   try {
-    const headers: Record<string, string> = { "Content-Type": "application/json" }
-    if (process.env.NEWSLETTER_WEBHOOK_SECRET) {
-      headers.Authorization = `Bearer ${process.env.NEWSLETTER_WEBHOOK_SECRET}`
-    }
-
-    const response = await fetch(webhookUrl, {
+    const response = await fetch(FLODESK_SUBSCRIBERS_URL, {
       method: "POST",
-      headers,
-      body: JSON.stringify({ email, source: "isakii.net", subscribedAt: new Date().toISOString() }),
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${apiKey}:`).toString("base64")}`,
+        "Content-Type": "application/json",
+        "User-Agent": "isakii.net (https://isakii.net)",
+      },
+      body: JSON.stringify({
+        email,
+        segment_ids: [segmentId],
+        ...(process.env.FLODESK_DOUBLE_OPT_IN === "true" ? { double_optin: true } : {}),
+      }),
       cache: "no-store",
     })
 
     if (!response.ok) {
+      console.error("Flodesk newsletter registration failed", { status: response.status })
       return Response.json(
         { registered: false, error: "Newsletter registration could not be completed." },
         { status: 502 },
       )
     }
 
-    return Response.json({ registered: true })
-  } catch {
+    return Response.json({ registered: true, message: "You're subscribed." })
+  } catch (error) {
+    console.error("Flodesk newsletter request failed", {
+      message: error instanceof Error ? error.message : "Unknown error",
+    })
     return Response.json(
       { registered: false, error: "Newsletter registration could not be completed." },
       { status: 502 },

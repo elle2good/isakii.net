@@ -130,7 +130,7 @@ function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (ite
         onBlur={() => setActive(false)}
         aria-label={`Preview ${project.title}`}
       >
-        <div className="home-project-image">
+        <div className={`home-project-image ${project.id === "b6a7f66e-bea3-41b3-b053-115ebfe9abbd" ? "home-project-image--algorand" : ""}`}>
           <ProjectCover project={project} active={active} />
           {isComingSoon && coverSource && project.coverMediaKind === "image" && (
             // The duplicate preserves the source alpha as a silhouette-only hover mask.

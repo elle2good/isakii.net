@@ -156,7 +156,7 @@ const READY_ALGORAND_ITEM: CatalogueItem = {
   popupImage:
     "https://res.cloudinary.com/dwto97ayq/image/upload/v1789197395/Codex_Image_Sep_12_2026_04_16_47_PM_lcilba.png",
   coverImage:
-    "https://res.cloudinary.com/dwto97ayq/image/upload/v1789196787/Codex_Image_Sep_12_2026_04_06_35_PM_d7eatz.png",
+    "https://res.cloudinary.com/dwto97ayq/image/upload/v1789280512/Frame_10_1_rtexry.png",
   popupMediaKind: "image",
   coverMediaKind: "image",
   popupImageAlt: "Algorand 3500 ALGO airdrop campaign preview",

@@ -76,9 +76,9 @@ const partnerCards = [
     artwork: "/case-studies/raydium/cards/unborn-sounds.png",
   },
   {
-    front: "While not a formal partnership, the local originators of Seoul's morning café rave scene were consulted ahead of the event on operational logistics and legal considerations.",
-    back: "The event was advised on and approved by SMCC personnel.",
-    artwork: "",
+    front: "Korea Blockchain Week.",
+    back: "Conference tickets provided by Korea Blockchain Week for cross-promotional use.",
+    artwork: "/case-studies/raydium/cards/kbw-logo.png",
   },
 ]
 

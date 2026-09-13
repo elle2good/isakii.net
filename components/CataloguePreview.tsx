@@ -2,7 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import type { MotionProps } from "motion/react"
+import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import type { FormEvent } from "react"
 import type { CatalogueItem } from "@/lib/catalogue"
 
 type CataloguePreviewProps = {
@@ -121,14 +123,101 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
   return <img src={source} alt={item.popupImageAlt} />
 }
 
+function NewsletterInterstitial() {
+  const [email, setEmail] = useState("")
+  const [submissionState, setSubmissionState] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [statusMessage, setStatusMessage] = useState("")
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const trimmedEmail = email.trim()
+
+    if (!trimmedEmail) {
+      setSubmissionState("error")
+      setStatusMessage("Enter your email address.")
+      return
+    }
+
+    setSubmissionState("loading")
+    setStatusMessage("")
+
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmedEmail }),
+      })
+      const result = (await response.json()) as { error?: string; message?: string }
+
+      if (!response.ok) throw new Error(result.error || "Unable to subscribe.")
+
+      setSubmissionState("success")
+      setStatusMessage(result.message || "You're subscribed.")
+      setEmail("")
+    } catch (error) {
+      setSubmissionState("error")
+      setStatusMessage(error instanceof Error ? error.message : "Unable to subscribe.")
+    }
+  }
+
+  return (
+    <div className="catalogue-newsletter">
+      <div className="catalogue-newsletter-image">
+        <Image
+          src="/home/newsletter-preview-portrait.jpg"
+          alt="Portrait of Lisa Kim"
+          fill
+          sizes="(max-width: 760px) calc(100vw - 68px), 470px"
+        />
+      </div>
+      <div className="catalogue-newsletter-content">
+        <p className="catalogue-newsletter-eyebrow">Newsletter Sign-Up</p>
+        <div className="catalogue-newsletter-copy">
+          <h2 id="catalogue-newsletter-title">Was this helpful?</h2>
+          <p>Get new case studies and insight reports as soon as they&apos;re published.</p>
+        </div>
+        <form className="catalogue-newsletter-form" onSubmit={handleSubmit}>
+          <label className="sr-only" htmlFor="catalogue-newsletter-email">Email address</label>
+          <input
+            id="catalogue-newsletter-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="Email Address"
+            disabled={submissionState === "loading"}
+            required
+          />
+          <button type="submit" disabled={submissionState === "loading"}>
+            {submissionState === "loading" ? "Subscribing…" : "Subscribe"}
+          </button>
+        </form>
+        {statusMessage && (
+          <p className={`catalogue-newsletter-status is-${submissionState}`} role="status" aria-live="polite">
+            {statusMessage}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function CataloguePreview({ item, items, onClose, onSelect }: CataloguePreviewProps) {
   const [expanded, setExpanded] = useState(false)
+  const [showingNewsletter, setShowingNewsletter] = useState(false)
+  const navigationClickCountRef = useRef(0)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const previewRef = useRef<HTMLElement>(null)
   const reduceMotion = useReducedMotion()
 
-  const index = item ? items.findIndex((candidate) => candidate.id === item.id) : -1
-  const previous = index > 0 ? items[index - 1] : null
-  const next = index >= 0 && index < items.length - 1 ? items[index + 1] : null
+  const itemIndex = item ? items.findIndex((candidate) => candidate.id === item.id) : -1
+  const previous = itemIndex > 0 ? items[itemIndex - 1] : null
+  const next = itemIndex >= 0 && itemIndex < items.length - 1 ? items[itemIndex + 1] : null
+
+  useEffect(() => {
+    previewRef.current?.scrollTo({ top: 0 })
+  }, [item?.id, showingNewsletter])
 
   useEffect(() => {
     if (!item) return
@@ -145,6 +234,8 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setExpanded(false)
+        setShowingNewsletter(false)
+        navigationClickCountRef.current = 0
         onClose()
       }
     }
@@ -158,11 +249,21 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
 
   const closePreview = () => {
     setExpanded(false)
+    setShowingNewsletter(false)
+    navigationClickCountRef.current = 0
     onClose()
   }
 
   const selectItem = (nextItem: CatalogueItem) => {
+    navigationClickCountRef.current += 1
     setExpanded(false)
+
+    if (navigationClickCountRef.current % 4 === 0) {
+      setShowingNewsletter(true)
+      return
+    }
+
+    setShowingNewsletter(false)
     onSelect(nextItem)
   }
 
@@ -180,10 +281,11 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
           }}
         >
           <motion.section
-            className={`catalogue-preview ${expanded ? "is-expanded" : ""}`}
+            ref={previewRef}
+            className={`catalogue-preview ${expanded ? "is-expanded" : ""} ${showingNewsletter ? "is-newsletter" : ""}`}
             role="dialog"
             aria-modal="true"
-            aria-labelledby="catalogue-preview-title"
+            aria-labelledby={showingNewsletter ? "catalogue-newsletter-title" : "catalogue-preview-title"}
             layout={!reduceMotion}
             initial={reduceMotion ? false : { opacity: 0, scale: 0.985, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -217,11 +319,15 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
               )}
             </div>
 
-            <div className="catalogue-preview-media">
-              <PreviewMedia key={item.id} item={item} />
-            </div>
+            {showingNewsletter ? (
+              <NewsletterInterstitial />
+            ) : (
+              <>
+                <div className="catalogue-preview-media">
+                  <PreviewMedia key={item.id} item={item} />
+                </div>
 
-            <div className="catalogue-preview-content">
+                <div className="catalogue-preview-content">
               <div className="catalogue-preview-copy" key={item.id}>
                 <p className="catalogue-preview-eyebrow">{item.contentType}</p>
                 <motion.p className="catalogue-preview-year" {...animatedProps}>{item.date}</motion.p>
@@ -279,8 +385,10 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                   </span>
                 )}
 
-              </div>
-            </div>
+                  </div>
+                </div>
+              </>
+            )}
           </motion.section>
         </motion.div>
       )}

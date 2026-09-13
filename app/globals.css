@@ -951,6 +951,15 @@ select {
   transform: scale(0.828);
 }
 
+.home-project-image--algorand img {
+  transform: scale(0.915);
+}
+
+.home-project-card-link:hover .home-project-image--algorand img,
+.home-project-card-link:focus-visible .home-project-image--algorand img {
+  transform: scale(0.947025);
+}
+
 .home-project-image img.home-project-object-shade {
   position: absolute;
   inset: 0;
@@ -1199,6 +1208,131 @@ select {
   align-self: center;
   width: 100%;
   padding-left: 12px;
+}
+
+.catalogue-newsletter {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 470px) minmax(0, 1fr);
+  column-gap: clamp(72px, 10vw, 133px);
+  min-height: 518px;
+}
+
+.catalogue-newsletter-image {
+  position: relative;
+  width: 100%;
+  height: 518px;
+  overflow: hidden;
+}
+
+.catalogue-newsletter-image img {
+  object-fit: cover;
+  object-position: center;
+  transform: scaleX(-1);
+}
+
+.catalogue-newsletter-content {
+  display: flex;
+  min-width: 0;
+  padding-top: 67px;
+  flex-direction: column;
+}
+
+.catalogue-newsletter-eyebrow {
+  margin: 0;
+  color: var(--catalogue-orange);
+  font-family: "Abel", "Arial Narrow", Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.catalogue-newsletter-copy {
+  max-width: 452px;
+  margin-top: 44px;
+}
+
+.catalogue-newsletter-copy h2,
+.catalogue-newsletter-copy p {
+  margin: 0;
+  font-family: "Eulyoo1945", Georgia, serif;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 38px;
+  letter-spacing: -1.3px;
+}
+
+.catalogue-newsletter-copy h2 {
+  margin-bottom: 38px;
+}
+
+.catalogue-newsletter-form {
+  display: grid;
+  grid-template-columns: minmax(0, 431px) 160px;
+  width: 100%;
+  max-width: 591px;
+  height: 52px;
+  margin-top: 48px;
+}
+
+.catalogue-newsletter-form input,
+.catalogue-newsletter-form button {
+  min-width: 0;
+  height: 52px;
+  font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+}
+
+.catalogue-newsletter-form input {
+  padding: 0 16px;
+  border: 1px solid var(--catalogue-ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--catalogue-ink);
+  outline: 0;
+}
+
+.catalogue-newsletter-form input::placeholder {
+  color: rgba(17, 17, 17, 0.72);
+}
+
+.catalogue-newsletter-form input:focus {
+  border-color: var(--catalogue-orange);
+}
+
+.catalogue-newsletter-form button {
+  padding: 0 18px;
+  border: 1px solid var(--catalogue-burgundy);
+  background: var(--catalogue-burgundy);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.catalogue-newsletter-form button:hover,
+.catalogue-newsletter-form button:focus-visible {
+  border-color: var(--catalogue-orange);
+  background: var(--catalogue-orange);
+  outline: 0;
+}
+
+.catalogue-newsletter-form input:disabled,
+.catalogue-newsletter-form button:disabled {
+  cursor: wait;
+  opacity: 0.64;
+}
+
+.catalogue-newsletter-status {
+  min-height: 18px;
+  margin: 8px 0 -26px;
+  color: var(--catalogue-burgundy);
+  font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.catalogue-newsletter-status.is-error {
+  color: #b02a19;
 }
 
 .catalogue-preview-eyebrow {
@@ -3013,6 +3147,33 @@ select {
     aspect-ratio: 4 / 3;
   }
   .catalogue-preview-content { padding: 30px 0 0; }
+  .catalogue-newsletter {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+    min-height: 0;
+  }
+  .catalogue-newsletter-image {
+    width: 100%;
+    height: min(518px, calc((100vw - 68px) * 1.10213));
+    aspect-ratio: 470 / 518;
+  }
+  .catalogue-newsletter-content { padding: 0; }
+  .catalogue-newsletter-eyebrow { font-size: 18px; }
+  .catalogue-newsletter-copy {
+    margin-top: 34px;
+  }
+  .catalogue-newsletter-copy h2,
+  .catalogue-newsletter-copy p {
+    font-size: 27px;
+    line-height: 1.16;
+    letter-spacing: -0.8px;
+  }
+  .catalogue-newsletter-copy h2 { margin-bottom: 24px; }
+  .catalogue-newsletter-form {
+    grid-template-columns: minmax(0, 1fr) 118px;
+    margin-top: 42px;
+  }
+  .catalogue-newsletter-status { margin-bottom: 0; }
   .catalogue-preview-copy h2 { font-size: 28px; }
   .catalogue-preview-actions { align-items: stretch; flex-direction: column; }
   .catalogue-preview-cta { width: 100%; }
@@ -3747,6 +3908,14 @@ select {
   right: -16px;
   bottom: -30px;
   width: 64%;
+  height: auto;
+  opacity: 0.5;
+}
+
+.raydium-card-artwork.artwork-3 {
+  right: -10px;
+  bottom: -14px;
+  width: 78%;
   height: auto;
   opacity: 0.5;
 }
