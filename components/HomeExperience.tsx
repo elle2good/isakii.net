@@ -569,6 +569,9 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
 
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />
+        <p className="home-mobile-notice">
+          A better mobile experience for isakii.net is on its way. For now, explore on desktop
+        </p>
       </section>
 
       <section ref={gallerySectionRef} className="home-gallery" aria-label="Motion gallery">

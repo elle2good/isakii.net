@@ -206,6 +206,7 @@ function NewsletterInterstitial() {
 export default function CataloguePreview({ item, items, onClose, onSelect }: CataloguePreviewProps) {
   const [expanded, setExpanded] = useState(false)
   const [showingNewsletter, setShowingNewsletter] = useState(false)
+  const [mobileNoticeItemId, setMobileNoticeItemId] = useState<string | null>(null)
   const navigationClickCountRef = useRef(0)
   const closeRef = useRef<HTMLButtonElement>(null)
   const previewRef = useRef<HTMLElement>(null)
@@ -248,6 +249,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
     : contentMotion
 
   const closePreview = () => {
+    setMobileNoticeItemId(null)
     setExpanded(false)
     setShowingNewsletter(false)
     navigationClickCountRef.current = 0
@@ -255,6 +257,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
   }
 
   const selectItem = (nextItem: CatalogueItem) => {
+    setMobileNoticeItemId(null)
     navigationClickCountRef.current += 1
     setExpanded(false)
 
@@ -282,7 +285,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
         >
           <motion.section
             ref={previewRef}
-            className={`catalogue-preview ${expanded ? "is-expanded" : ""} ${showingNewsletter ? "is-newsletter" : ""}`}
+            className={`catalogue-preview ${expanded ? "is-expanded" : ""} ${showingNewsletter ? "is-newsletter" : ""} ${mobileNoticeItemId === item.id ? "has-mobile-notice" : ""}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby={showingNewsletter ? "catalogue-newsletter-title" : "catalogue-preview-title"}
@@ -376,7 +379,21 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
 
               <div className="catalogue-preview-actions">
                 {item.caseStudyUrl ? (
-                  <a className="catalogue-preview-cta" href={item.caseStudyUrl}>
+                  <a
+                    className="catalogue-preview-cta"
+                    href={item.caseStudyUrl}
+                    onClick={(event) => {
+                      if (
+                        window.matchMedia("(max-width: 700px)").matches &&
+                        item.type.toLowerCase() === "flagship" &&
+                        !item.ctaLabel.toLowerCase().includes("coming soon")
+                      ) {
+                        event.preventDefault()
+                        previewRef.current?.scrollTo({ top: 0, behavior: "instant" })
+                        setMobileNoticeItemId(item.id)
+                      }
+                    }}
+                  >
                     <span>{item.ctaLabel}</span><span aria-hidden="true">↗</span>
                   </a>
                 ) : (
@@ -388,6 +405,12 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                   </div>
                 </div>
               </>
+            )}
+            {mobileNoticeItemId === item.id && (
+              <div className="catalogue-mobile-notice">
+                <button type="button" className="catalogue-mobile-notice-close" onClick={() => setMobileNoticeItemId(null)} aria-label="Dismiss mobile notice">×</button>
+                <p role="status">A better mobile experience for isakii.net is on its way. For now, explore case study report on desktop</p>
+              </div>
             )}
           </motion.section>
         </motion.div>
