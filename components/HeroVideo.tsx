@@ -60,13 +60,19 @@ export default function HeroVideo({
     let animationFrame = 0
     let videoFrame = 0
     let disposed = false
+    let bounds = stage.getBoundingClientRect()
+    let frameBounds = frame.getBoundingClientRect()
+    let pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
+
+    const measureLayout = () => {
+      bounds = stage.getBoundingClientRect()
+      frameBounds = frame.getBoundingClientRect()
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
+    }
 
     const drawAmbientFrame = () => {
       if (disposed || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return
 
-      const bounds = stage.getBoundingClientRect()
-      const frameBounds = frame.getBoundingClientRect()
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
       const width = Math.max(1, Math.round(bounds.width * pixelRatio))
       const height = Math.max(1, Math.round(bounds.height * pixelRatio))
 
@@ -135,14 +141,20 @@ export default function HeroVideo({
       }
     }
 
-    const observer = new ResizeObserver(drawAmbientFrame)
+    const updateLayout = () => {
+      measureLayout()
+      drawAmbientFrame()
+    }
+    const observer = new ResizeObserver(updateLayout)
     observer.observe(stage)
     observer.observe(frame)
+    window.addEventListener("resize", updateLayout)
     queueFrame()
 
     return () => {
       disposed = true
       observer.disconnect()
+      window.removeEventListener("resize", updateLayout)
       if (animationFrame) window.cancelAnimationFrame(animationFrame)
       if (videoFrame && "cancelVideoFrameCallback" in video) video.cancelVideoFrameCallback(videoFrame)
     }

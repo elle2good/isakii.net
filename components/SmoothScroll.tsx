@@ -15,7 +15,16 @@ export default function SmoothScroll({ intensity = 10, onReady }: SmoothScrollPr
     const lenis = new Lenis({ duration: intensity / 10 })
     lenisRef.current = lenis
     onReady?.(lenis)
-    lenis.scrollTo(0, { immediate: true })
+    // Preserve deep links when arriving from another page or reloading.
+    const scrollToHash = () => {
+      const target = document.getElementById(window.location.hash.slice(1))
+      if (target) {
+        lenis.resize()
+        lenis.scrollTo(target, { immediate: true, force: true })
+      }
+    }
+    const initialScrollFrame = requestAnimationFrame(scrollToHash)
+    window.addEventListener("hashchange", scrollToHash)
 
     let animationFrame = 0
     const raf = (time: number) => {
@@ -47,6 +56,8 @@ export default function SmoothScroll({ intensity = 10, onReady }: SmoothScrollPr
 
     return () => {
       observer?.disconnect()
+      cancelAnimationFrame(initialScrollFrame)
+      window.removeEventListener("hashchange", scrollToHash)
       cancelAnimationFrame(animationFrame)
       lenis.destroy()
       lenisRef.current = null

@@ -76,7 +76,7 @@ const partnerCards = [
     artwork: "/case-studies/raydium/cards/unborn-sounds.png",
   },
   {
-    front: "Korea Blockchain Week.",
+    front: "Korea Blockchain Week",
     back: "Conference tickets provided by Korea Blockchain Week for cross-promotional use.",
     artwork: "/case-studies/raydium/cards/kbw-logo.png",
   },

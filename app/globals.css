@@ -3945,7 +3945,6 @@ select {
   line-height: 1.32;
 }
 
-.raydium-partnership-cards button:last-child .raydium-card-front .raydium-card-copy { font-size: clamp(12px, 1.05vw, 15px); text-align: left; }
 .raydium-card-back .raydium-card-copy { font-size: clamp(12px, 1.05vw, 15px); text-align: left; }
 
 .raydium-card-artwork {

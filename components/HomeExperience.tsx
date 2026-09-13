@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import type Lenis from "lenis"
-import { FocusEvent, useCallback, useEffect, useRef, useState } from "react"
+import { FocusEvent, memo, useCallback, useEffect, useRef, useState } from "react"
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
@@ -113,7 +113,7 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
   )
 }
 
-function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (item: CatalogueItem) => void }) {
+const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (item: CatalogueItem) => void }) {
   const [active, setActive] = useState(false)
   const isComingSoon = project.ctaLabel.toLowerCase().includes("coming soon") || !project.caseStudyUrl
   const coverSource = project.coverImage || project.popupImage
@@ -145,7 +145,7 @@ function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (ite
       </button>
     </article>
   )
-}
+})
 
 export default function HomeExperience({ catalogueItems }: { catalogueItems: CatalogueItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -216,8 +216,8 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       const topChrome = topChromeRef.current
       if (!gallery || !topChrome) return
 
-      const beyondGallery = gallery.getBoundingClientRect().top <= window.innerHeight / 2
       const galleryRect = gallery.getBoundingClientRect()
+      const beyondGallery = galleryRect.top <= window.innerHeight / 2
       const chromeHeight = topChrome.getBoundingClientRect().height
       const galleryCollidesWithChrome = galleryRect.top < chromeHeight && galleryRect.bottom > 0
       const delta = window.scrollY - previousScrollY
@@ -356,7 +356,22 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
     if (!track) return
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
-    const getSetWidth = () => track.scrollWidth / 3
+    const ticker = document.querySelector<HTMLElement>(".home-ticker-track")
+    let setWidth = 0
+    let pixelsPerSecond = 0
+    let galleryVisible = false
+    const measureGallery = () => {
+      galleryVisible = track.getClientRects().length > 0
+      setWidth = galleryVisible ? track.scrollWidth / 3 : 0
+      const duration = ticker ? Number.parseFloat(getComputedStyle(ticker).animationDuration) || 48 : 48
+      pixelsPerSecond = ticker ? ticker.scrollWidth / 2 / duration : 0
+    }
+    measureGallery()
+    const sizeObserver = new ResizeObserver(measureGallery)
+    sizeObserver.observe(track)
+    if (ticker) sizeObserver.observe(ticker)
+    window.addEventListener("resize", measureGallery)
+    const getSetWidth = () => setWidth
     const updateProgress = () => {
       const setWidth = getSetWidth()
       const itemWidth = setWidth / galleryImages.length
@@ -389,11 +404,8 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       const elapsed = Math.min(time - previousTime, 64)
       previousTime = time
 
-      if (!reducedMotion.matches && time >= galleryInteractingUntilRef.current) {
-        const ticker = document.querySelector<HTMLElement>(".home-ticker-track")
-        if (ticker) {
-          const duration = Number.parseFloat(getComputedStyle(ticker).animationDuration) || 48
-          const pixelsPerSecond = (ticker.scrollWidth / 2) / duration
+      if (!document.hidden && galleryVisible && !reducedMotion.matches && time >= galleryInteractingUntilRef.current) {
+        if (pixelsPerSecond) {
           galleryPositionRef.current += pixelsPerSecond * (elapsed / 1000)
           recenter()
         }
@@ -415,6 +427,8 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
     track.addEventListener("wheel", handleGalleryWheel, { passive: false })
     return () => {
       cancelAnimationFrame(initializeFrame)
+      sizeObserver.disconnect()
+      window.removeEventListener("resize", measureGallery)
       window.clearInterval(timer)
       track.removeEventListener("wheel", handleGalleryWheel)
       if (galleryTimerRef.current === timer) galleryTimerRef.current = null
@@ -460,12 +474,12 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
     })
   }
 
-  const openCatalogueItem = (item: CatalogueItem) => {
+  const openCatalogueItem = useCallback((item: CatalogueItem) => {
     clearTopChromeHideTimer()
     cataloguePreviewOpenRef.current = true
     setTopChromeVisible(false)
     setActiveCatalogueItem(item)
-  }
+  }, [clearTopChromeHideTimer])
 
   const closeCatalogueItem = () => {
     cataloguePreviewOpenRef.current = false
@@ -551,7 +565,25 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
                   </ExternalBlogLink>
                 </div>
               </div>
-              <Link className="home-menu-link" href="/#projects" onClick={closeOverlays}>catalogue</Link>
+              <Link className="home-menu-link" href="/#projects" onNavigate={(event) => {
+                event.preventDefault()
+                closeOverlays()
+                if (window.location.hash !== "#projects") window.history.pushState(null, "", "/#projects")
+                requestAnimationFrame(() => {
+                  const section = projectSectionRef.current
+                  if (!section) return
+                  const lenis = smoothScrollRef.current
+                  if (lenis) {
+                    lenis.start()
+                    lenis.resize()
+                    lenis.scrollTo(section, { immediate: true, force: true })
+                  } else {
+                    section.scrollIntoView({ block: "start", behavior: "instant" })
+                  }
+                  clearTopChromeHideTimer()
+                  setTopChromeVisible(false)
+                })
+              }}>catalogue</Link>
               <Link className="home-menu-link" href="/" onClick={closeOverlays}>home</Link>
             </nav>
             <MenuContactActions />
@@ -604,8 +636,8 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
         </div>
       </section>
 
-      <section ref={projectSectionRef} id="project-section" className="home-projects">
-        <h2 id="projects">Project</h2>
+      <section ref={projectSectionRef} id="projects" className="home-projects">
+        <h2>Project</h2>
         <div className="home-project-grid">
           {catalogueItems.map((project) => (
             <ProjectCard project={project} onOpen={openCatalogueItem} key={project.id} />
