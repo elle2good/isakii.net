@@ -217,6 +217,32 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
   const next = itemIndex >= 0 && itemIndex < items.length - 1 ? items[itemIndex + 1] : null
 
   useEffect(() => {
+    // This marker belongs to the originating history entry, not the whole tab.
+    // It works for both a fresh page load and Chrome's back/forward cache.
+    const restoreNewsletter = () => {
+      const state = window.history.state
+      const returnItemId = state?.catalogueNewsletterReturn
+      if (!returnItemId) return
+      const { catalogueNewsletterReturn: consumed, ...rest } = state
+      void consumed
+      window.history.replaceState(rest, "")
+      const returnItem = items.find(candidate => candidate.id === returnItemId)
+      if (!returnItem) return
+      setExpanded(false)
+      setMobileNoticeItemId(null)
+      setShowingNewsletter(true)
+      onSelect(returnItem)
+    }
+    restoreNewsletter()
+    window.addEventListener("pageshow", restoreNewsletter)
+    window.addEventListener("popstate", restoreNewsletter)
+    return () => {
+      window.removeEventListener("pageshow", restoreNewsletter)
+      window.removeEventListener("popstate", restoreNewsletter)
+    }
+  }, [items, onSelect])
+
+  useEffect(() => {
     previewRef.current?.scrollTo({ top: 0 })
   }, [item?.id, showingNewsletter])
 
@@ -386,12 +412,20 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                       if (
                         window.matchMedia("(max-width: 700px)").matches &&
                         item.type.toLowerCase() === "flagship" &&
-                        item.slug.toLowerCase() !== "abelian-community" &&
+                        !["abelian-community", "raydium-event"].includes(item.slug.toLowerCase()) &&
                         !item.ctaLabel.toLowerCase().includes("coming soon")
                       ) {
                         event.preventDefault()
                         previewRef.current?.scrollTo({ top: 0, behavior: "instant" })
                         setMobileNoticeItemId(item.id)
+                        return
+                      }
+                      const destination = new URL(item.caseStudyUrl!, window.location.href)
+                      if (
+                        !event.defaultPrevented && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey &&
+                        destination.origin === window.location.origin && destination.pathname.startsWith("/catalogue/")
+                      ) {
+                        window.history.replaceState({ ...window.history.state, catalogueNewsletterReturn: item.id }, "")
                       }
                     }}
                   >

@@ -3864,6 +3864,8 @@ select {
 }
 
 .raydium-strategy-list { min-width: 0; }
+.raydium-strategy-final-slide { display: contents; }
+.raydium-strategy-outreach { margin-top: 110px; }
 
 .raydium-strategy-row {
   display: grid;
@@ -4245,6 +4247,57 @@ select {
   .raydium-gallery-dots button { transition-duration: 1ms; }
 }
 
+.mobile-swipe { display: contents; }
+.mobile-swipe-controls { display: none; }
+
+@media (max-width: 700px) {
+  .raydium-hero-copy { top: 34.6%; bottom: auto; }
+  .raydium-hero-meta { top: 59.6%; bottom: auto; }
+  .raydium-subnav { grid-template-columns: minmax(0, 1fr); padding-inline: 12px; }
+  .raydium-subnav nav { justify-content: space-between; gap: 8px; }
+  .raydium-subnav-actions { display: none; }
+  .mobile-swipe { display: block; min-width: 0; position: relative; }
+  .mobile-swipe-track {
+    display: flex; align-items: flex-start; gap: 0;
+    width: 100%; min-width: 0; height: var(--slide-height, auto);
+    overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain; scrollbar-width: none;
+  }
+  .mobile-swipe-track::-webkit-scrollbar { display: none; }
+  .mobile-swipe-slide { flex: 0 0 100%; min-width: 0; box-sizing: border-box; scroll-snap-align: start; scroll-snap-stop: always; }
+  .mobile-swipe-controls { display: flex; justify-content: center; align-items: center; gap: 12px; height: 48px; }
+  .mobile-swipe-controls > button { position: absolute; top: calc(50% - 46px); left: -24px; width: 24px; height: 44px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; }
+  .mobile-swipe-controls > button:last-child { left: auto; right: -24px; }
+  .mobile-swipe-controls > button:disabled { visibility: hidden; }
+  .mobile-swipe-controls img.is-previous { transform: scaleX(-1); }
+  .mobile-swipe-dots { display: flex; gap: 8px; justify-content: center; }
+  .mobile-swipe-dots button { display: grid; place-items: center; width: 28px; height: 40px; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
+  .mobile-swipe-dots button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .35; }
+  .mobile-swipe-dots button[aria-pressed="true"]::before { opacity: 1; }
+  .raydium-section-two-copy { grid-template-rows: auto auto; align-content: center; gap: 40px; padding: 64px 24px; }
+  .raydium-section-two-copy > p { line-height: 1.6; }
+  .raydium-section-two-stats .mobile-swipe-slide { display: grid; grid-template-rows: auto auto; align-content: center; min-height: 200px; padding: 16px 8px; text-align: center; }
+  .raydium-section-two-stats strong { font-size: 64px; }
+  .raydium-section-two-stats span { margin-top: 24px; font: 20px/1.4 "DM Sans", sans-serif; }
+  .raydium-opportunity-stats { margin: 0; }
+  .raydium-editorial > .mobile-swipe { margin: 44px 0; }
+  .raydium-opportunity-stats > div { min-height: 240px; border: 0; }
+  .raydium-opportunity-stats > .mobile-swipe-slide { transform: none !important; }
+  .raydium-strategy-list .mobile-swipe-slide { margin: 0; padding: 16px 0 24px; }
+  /* Native flex sizing reserves the tallest slide's height for every step. */
+  .raydium-strategy-list.mobile-swipe-track { height: auto; }
+  .raydium-strategy-final-slide.mobile-swipe-slide { display: block; }
+  .raydium-strategy-final-slide .raydium-strategy-outreach { margin-top: 0; padding-top: 0; }
+  .raydium-strategy-final-slide .raydium-strategy-outreach > p { grid-row: 2; grid-column: 2; }
+  .raydium-strategy-list > .raydium-strategy-row:first-child > p { grid-column: 1 / -1; grid-row: 3; }
+  .raydium-strategy-list > .raydium-strategy-row:first-child .raydium-floorplan { grid-row: 2; margin: 32px 0; }
+  .raydium-strategy-row .raydium-strategy-number { grid-row: 1; }
+  .raydium-gallery-media { touch-action: pan-y; }
+  .raydium-impact-takeover > div { grid-template-columns: 1fr; justify-items: center; text-align: center; min-height: 150px; }
+  .raydium-impact-takeover strong { font-size: 55px; }
+  .raydium-impact-takeover span { margin-top: 16px; font-size: 16px; }
+}
+
 @media print {
   .raydium-page .abelian-site-header,
   .raydium-page .abelian-subnav,
@@ -4280,6 +4333,34 @@ select {
   .catalogue-preview-pagination button { transition: none; animation: none; }
 }
 
+.abelian-mobile-contact-stack { display: none; }
+@media (max-width: 700px) {
+  .abelian-mobile-contact-stack {
+    position: fixed;
+    right: clamp(14px, 2.2vw, 34px);
+    bottom: calc(clamp(18px, 3vw, 36px) + 58px);
+    z-index: 79;
+    display: grid;
+    gap: 10px;
+  }
+  .abelian-mobile-contact-stack a {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    background: rgba(23, 37, 84, 0.92);
+    box-shadow: 0 8px 24px rgba(5, 11, 24, 0.24);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+  }
+  .abelian-mobile-contact-stack svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .abelian-mobile-contact-stack a:hover { color: var(--abelian-orange); }
+}
+.abelian-metric-track { display: contents; }
+.abelian-metric-arrow,
 .abelian-metric-controls,
 .abelian-summary-scroll-cue,
 .abelian-swipe-arrow,
@@ -4306,18 +4387,28 @@ select {
     letter-spacing: 1.2px;
   }
   .abelian-context-stats { margin: 24px 0 60px; }
-  .abelian-metric-carousel { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .abelian-metric-carousel .abelian-metric-slide { display: none; }
+  .abelian-metric-carousel { position: relative; grid-template-columns: minmax(0, 1fr); gap: 0; min-width: 0; }
+  .abelian-metric-track { display: flex; min-width: 0; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .abelian-metric-track::-webkit-scrollbar { display: none; }
+  .abelian-metric-carousel .abelian-metric-slide,
   .abelian-metric-carousel .abelian-metric-slide.is-current {
     display: grid;
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
     grid-template-columns: 1fr;
     align-content: center;
     justify-items: center;
     text-align: center;
     border: 0;
     padding: 16px 0;
-    animation: abelian-metric-enter 450ms ease-out both;
   }
+  .abelian-metric-arrow { display: grid; place-items: center; position: absolute; top: calc(50% - 44px); width: 32px; height: 48px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+  .abelian-metric-arrow.is-previous { left: -12px; }
+  .abelian-metric-arrow.is-next { right: -12px; }
+  .abelian-metric-arrow img { width: 24px; height: 24px; }
+  .abelian-metric-arrow.is-previous img { transform: scaleX(-1); }
   .abelian-section-one-stats .abelian-metric-slide { min-height: 240px; }
   .abelian-section-one-stats strong,
   .abelian-impact-stats strong { font-size: 96px; }

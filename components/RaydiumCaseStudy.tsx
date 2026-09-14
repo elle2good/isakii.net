@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
+import MobileSwipeCarousel from "./MobileSwipeCarousel"
 
 const navigation = [
   { id: "opportunity", label: "Opportunity" },
@@ -103,7 +104,7 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   )
 }
 
-function RevealFromLeft({ children }: { children: React.ReactNode }) {
+function RevealFromLeft({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { amount: 0.45, once: false })
   const reduceMotion = useReducedMotion()
@@ -111,6 +112,7 @@ function RevealFromLeft({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       ref={ref}
+      className={className}
       initial={false}
       animate={{ opacity: inView ? 1 : 0.5, x: inView || reduceMotion ? 0 : -120 }}
       transition={{ duration: reduceMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -247,6 +249,7 @@ function PartnershipCards() {
 
 function OutcomeGallery({ dismissed }: { dismissed: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
   const inView = useInView(ref, { amount: 0.15, once: false })
   const [current, setCurrent] = useState(0)
   const reduceMotion = useReducedMotion()
@@ -267,7 +270,16 @@ function OutcomeGallery({ dismissed }: { dismissed: boolean }) {
   return (
     <motion.div ref={ref} className="raydium-gallery" aria-label="Raydium event gallery" onViewportLeave={() => setCurrent(0)}>
       <button type="button" className="raydium-gallery-arrow is-left" aria-label="Previous gallery item" onClick={() => goTo(current - 1)}>‹</button>
-      <div className="raydium-gallery-media">
+      <div className="raydium-gallery-media" onTouchStart={event => {
+        touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }
+      }} onTouchCancel={() => { touchStart.current = null }} onTouchEnd={event => {
+        const start = touchStart.current
+        touchStart.current = null
+        if (!start) return
+        const dx = event.changedTouches[0].clientX - start.x
+        const dy = event.changedTouches[0].clientY - start.y
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(current + (dx < 0 ? 1 : -1))
+      }}>
         {item.type === "video" ? (
           <video
             key={`${item.src}-${paused ? "paused" : "playing"}`}
@@ -310,6 +322,18 @@ export default function RaydiumCaseStudy() {
   const [heroCopyDismissed, setHeroCopyDismissed] = useState(false)
   const [missionCopyDismissed, setMissionCopyDismissed] = useState(false)
   const [galleryDismissed, setGalleryDismissed] = useState(false)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const showContactButtons = subnavPinned && !isScrolling
+  useEffect(() => {
+    let idleTimer: ReturnType<typeof setTimeout> | undefined
+    const onScroll = () => {
+      setIsScrolling(true)
+      clearTimeout(idleTimer)
+      idleTimer = setTimeout(() => setIsScrolling(false), 500)
+    }
+    document.addEventListener("scroll", onScroll, { passive: true, capture: true })
+    return () => { document.removeEventListener("scroll", onScroll, true); clearTimeout(idleTimer) }
+  }, [])
   const articleRef = useRef<HTMLElement>(null)
   const heroRef = useRef<HTMLElement>(null)
   const missionRef = useRef<HTMLElement>(null)
@@ -426,11 +450,11 @@ export default function RaydiumCaseStudy() {
             <div className="raydium-hero-film-wash" />
             <div className="raydium-section-two-copy">
               <p>Just three months after listing its token on Korea’s largest cryptocurrency exchange, Raydium hosted a branded café rave: the company’s first offline activation in Asia. The event was built around strategies to reach three distinct audience groups at once, and we pulled off an exclusive, successful event for less than the cost of a lower-tier sponsorship at a typical industry side event.</p>
-              <div className="raydium-section-two-stats">
+              <MobileSwipeCarousel className="raydium-section-two-stats" label="Summary metrics">
                 <div><strong>40%↓</strong><span>below industry-standard cost<br />per attendee</span></div>
                 <div><strong>35%</strong><span>open rate on follow-up emails<br />sent 4 months later</span></div>
                 <div><strong>4</strong><span>new local and international<br />partnerships</span></div>
-              </div>
+              </MobileSwipeCarousel>
             </div>
           </motion.div>
         </div>
@@ -447,6 +471,17 @@ export default function RaydiumCaseStudy() {
         </div>
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
+
+      <motion.div className="abelian-mobile-contact-stack" aria-label="Contact" inert={!showContactButtons} aria-hidden={!showContactButtons} initial={false}
+        animate={{ opacity: showContactButtons ? 1 : 0, x: showContactButtons ? 0 : 18 }}
+        transition={{ duration: reduceMotion || !showContactButtons ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}>
+        <a href="mailto:smkim@iskaii.net" aria-label="Email smkim@iskaii.net">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="0.5" /><path d="m4 7 8 6 8-6" /></svg>
+        </a>
+        <a href="https://calendar.app.google/57kbucQfPdUSXNmL9" target="_blank" rel="noreferrer" aria-label="Schedule a call">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.8 9.8 3l2 4.6-2.3 1.7a14.8 14.8 0 0 0 5.2 5.2l1.7-2.3 4.6 2-.8 2.6c-.4 1.4-1.8 2.3-3.2 2.1C10.8 18 6 13.2 5.1 7c-.2-1.4.7-2.8 2.1-3.2Z" /></svg>
+        </a>
+      </motion.div>
 
       <motion.button
         type="button"
@@ -473,10 +508,10 @@ export default function RaydiumCaseStudy() {
           <p className="raydium-lede">When Raydium&apos;s native token RAY listed on Upbit, 24-hour trading volume surged more than 600%, reaching $401M — with zero marketing behind it.</p>
           <p>It was a clear signal that crypto traders and investors were genuinely excited about RAY’s expansion into Korea’s largest exchange. Korea Blockchain Week 2025, held three months after the listing, was the perfect opportunity to reinforce that momentum and signal the brand&apos;s next steps.</p>
         </Reveal>
-        <div className="raydium-opportunity-stats">
+        <MobileSwipeCarousel className="raydium-opportunity-stats" label="Snapshot">
           <RevealFromLeft><strong>1 month</strong><span>planning lead time</span></RevealFromLeft>
           <RevealFromLeft><strong>0</strong><span>prior offline activations in Asia</span></RevealFromLeft>
-        </div>
+        </MobileSwipeCarousel>
         <Reveal className="raydium-opportunity-copy raydium-opportunity-bottom">
           <p>As a Decentralized Exchange already fighting skepticism over unclear legal footing, the brand had always steered clear of the boozy side, event parties that define blockchain conference culture, refusing to reinforce crypto&apos;s “dark and corrupt” reputation.</p>
           <p>A wellness-driven trend that reframed “fun” without the baggage was spotted around the same moment the brand listed on South Korea’s major exchange.</p>
@@ -501,8 +536,8 @@ export default function RaydiumCaseStudy() {
 
       <section id="strategy" className="raydium-strategy">
         <span className="raydium-rail-label">Strategic Approach</span>
-        <div className="raydium-strategy-list">
-          {strategyRows.map((row) => (
+        <MobileSwipeCarousel className="raydium-strategy-list" label="Strategic approach">
+          {strategyRows.slice(0, 2).map((row) => (
             <Reveal key={row.number} className="raydium-strategy-row">
               <span className="raydium-strategy-number">{row.number}</span>
               <h3>{row.title}</h3>
@@ -511,11 +546,18 @@ export default function RaydiumCaseStudy() {
               {row.visual === "cards" && <PartnershipCards />}
             </Reveal>
           ))}
+          <div className="raydium-strategy-final-slide">
+            <Reveal className="raydium-strategy-row raydium-strategy-outreach">
+              <span className="raydium-strategy-number">{strategyRows[2].number}</span>
+              <h3>{strategyRows[2].title}</h3>
+              <p>{strategyRows[2].body}</p>
+            </Reveal>
           <Reveal className="raydium-strategy-closing">
             <span className="raydium-strategy-number">04</span>
             <p>The most important part of the strategy was, without question, <strong>brand research</strong>.<br /><br />As the sole representative of Raydium at the event, I thoroughly researched the brand&apos;s history, mission, and evolution to ensure I could authentically embody its ethos for guests.</p>
           </Reveal>
-        </div>
+          </div>
+        </MobileSwipeCarousel>
       </section>
 
       <section ref={outcomesRef} id="outcomes" className="raydium-outcomes-sequence">

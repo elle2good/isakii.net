@@ -64,6 +64,22 @@ export default function AbelianCaseStudy() {
   const [activeSection, setActiveSection] = useState("context")
   const [subnavPinned, setSubnavPinned] = useState(false)
   const [mobileHeaderHidden, setMobileHeaderHidden] = useState(false)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const showContactButtons = subnavPinned && !isScrolling
+  useEffect(() => {
+    let idleTimer: ReturnType<typeof setTimeout> | undefined
+    const onScroll = () => {
+      setIsScrolling(true)
+      clearTimeout(idleTimer)
+      idleTimer = setTimeout(() => setIsScrolling(false), 500)
+    }
+    // Capture also detects swipes within the horizontal carousels.
+    document.addEventListener("scroll", onScroll, { passive: true, capture: true })
+    return () => {
+      document.removeEventListener("scroll", onScroll, true)
+      clearTimeout(idleTimer)
+    }
+  }, [])
   const [heroCopyDismissed, setHeroCopyDismissed] = useState(false)
   const [impactCopyDismissed, setImpactCopyDismissed] = useState(false)
   const heroSequenceRef = useRef<HTMLElement>(null)
@@ -257,6 +273,23 @@ export default function AbelianCaseStudy() {
         </nav>
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
+
+      <motion.div
+        className="abelian-mobile-contact-stack"
+        aria-label="Contact"
+        inert={!showContactButtons}
+        aria-hidden={!showContactButtons}
+        initial={false}
+        animate={{ opacity: showContactButtons ? 1 : 0, x: showContactButtons ? 0 : 18 }}
+        transition={{ duration: reduceMotion || !showContactButtons ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <a href="mailto:smkim@iskaii.net" aria-label="Email smkim@iskaii.net">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="0.5" /><path d="m4 7 8 6 8-6" /></svg>
+        </a>
+        <a href="https://calendar.app.google/57kbucQfPdUSXNmL9" target="_blank" rel="noreferrer" aria-label="Schedule a call">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.8 9.8 3l2 4.6-2.3 1.7a14.8 14.8 0 0 0 5.2 5.2l1.7-2.3 4.6 2-.8 2.6c-.4 1.4-1.8 2.3-3.2 2.1C10.8 18 6 13.2 5.1 7c-.2-1.4.7-2.8 2.1-3.2Z" /></svg>
+        </a>
+      </motion.div>
 
       <motion.button
         type="button"
