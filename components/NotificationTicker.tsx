@@ -1,5 +1,5 @@
-const NOTIFICATION_TEXT = "Creative Strategy · Project Management · Community · Sales · Cryptocurrency · Entertainment"
-const NOTIFICATION_LOOP_TEXT = `${NOTIFICATION_TEXT} ·\u00a0`
+const NOTIFICATION_TEXT = "Creative Strategy · Field Marketing · Community Management — Data · Relationships · Creativity — Cryptocurrency · Entertainment —"
+const NOTIFICATION_LOOP_TEXT = `${NOTIFICATION_TEXT}\u00a0`
 
 export default function NotificationTicker() {
   return (

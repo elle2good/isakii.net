@@ -11,6 +11,10 @@ import ExternalBlogLink from "./ExternalBlogLink"
 import NotificationTicker from "./NotificationTicker"
 
 const ease = [0.22, 1, 0.36, 1] as const
+const handwritingReveal = {
+  hidden: { clipPath: "inset(0 100% 0 0)" },
+  visible: { clipPath: "inset(0 0% 0 0)" },
+}
 
 function FadeIn({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduceMotion = useReducedMotion()
@@ -150,9 +154,13 @@ export default function AboutExperience() {
           </div>
         )}
 
-        <motion.h1 id="about-title" className="about-handwritten-title" aria-label="hi, there." initial={reduceMotion ? "visible" : "hidden"} whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-          <motion.span className="about-handwriting-word about-handwriting-hi" aria-hidden="true" variants={{ hidden: { clipPath: "inset(0 100% 0 0)" }, visible: { clipPath: "inset(0 0% 0 0)" } }} transition={{ duration: reduceMotion ? 0 : 1.05, delay: 0.24, ease }} />
-          <motion.span className="about-handwriting-word about-handwriting-there" aria-hidden="true" variants={{ hidden: { clipPath: "inset(0 100% 0 0)" }, visible: { clipPath: "inset(0 0% 0 0)" } }} transition={{ duration: reduceMotion ? 0 : 1.48, delay: reduceMotion ? 0 : 1.02, ease }} />
+        <motion.h1 id="about-title" className="about-handwritten-title" initial={reduceMotion ? "visible" : "hidden"} whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
+          <span className="sr-only">hi, there. <span lang="ko">안녕하세요.</span></span>
+          <motion.span className="about-handwriting-word about-handwriting-hi" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.05, delay: reduceMotion ? 0 : 0.24, ease }} />
+          <motion.span className="about-handwriting-word about-handwriting-there" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.48, delay: reduceMotion ? 0 : 1.02, ease }} />
+          <motion.span className="about-handwriting-korean" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.48, delay: reduceMotion ? 0 : 1.02, ease }}>
+            <Image src="/about/hello-korean.png" alt="" width={245} height={60} priority />
+          </motion.span>
         </motion.h1>
 
         <motion.div className="about-portrait-new" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 1.15, delay: 0.5, ease }}>

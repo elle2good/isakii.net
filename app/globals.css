@@ -2177,6 +2177,22 @@ select {
   width: 75px;
 }
 
+.about-handwriting-korean {
+  position: absolute;
+  left: 220px;
+  top: 14px;
+  display: block;
+  width: 245px;
+  height: 60px;
+  will-change: clip-path;
+}
+
+.about-handwriting-korean img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .about-handwriting-there {
   right: 0;
   width: 129px;
@@ -3072,7 +3088,7 @@ select {
   .about-handwritten-title {
     top: 154px;
     left: 24px;
-    transform: scale(0.82);
+    transform: scale(0.68);
     transform-origin: left top;
   }
   .about-portrait-new {
@@ -3355,6 +3371,10 @@ select {
   .work-wave { right: 28px; }
   .work-years { right: 70px; }
   .work-hint { left: 38%; width: 45%; }
+}
+
+@media (max-width: 380px) {
+  .about-handwritten-title { transform: scale(0.58); }
 }
 
 @media (max-width: 700px) and (max-height: 520px) {
