@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
+import AbelianMobileMetrics from "./AbelianMobileMetrics"
 
 const navigation = [
   { id: "context", label: "Context" },
@@ -62,12 +63,25 @@ export default function AbelianCaseStudy() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("context")
   const [subnavPinned, setSubnavPinned] = useState(false)
+  const [mobileHeaderHidden, setMobileHeaderHidden] = useState(false)
   const [heroCopyDismissed, setHeroCopyDismissed] = useState(false)
   const [impactCopyDismissed, setImpactCopyDismissed] = useState(false)
   const heroSequenceRef = useRef<HTMLElement>(null)
   const articleRef = useRef<HTMLElement>(null)
   const subnavRef = useRef<HTMLDivElement>(null)
   const impactRef = useRef<HTMLElement>(null)
+  const solutionsRef = useRef<HTMLDivElement>(null)
+  const [solutionEdges, setSolutionEdges] = useState({ start: true, end: false })
+  useEffect(() => {
+    const list = solutionsRef.current
+    if (!list) return
+    const update = () => setSolutionEdges({ start: list.scrollLeft <= 2, end: list.scrollLeft + list.clientWidth >= list.scrollWidth - 2 })
+    const observer = new ResizeObserver(update)
+    observer.observe(list)
+    list.addEventListener("scroll", update, { passive: true })
+    update()
+    return () => { observer.disconnect(); list.removeEventListener("scroll", update) }
+  }, [])
   const reduceMotion = useReducedMotion()
 
   const { scrollYProgress: heroProgress } = useScroll({
@@ -106,9 +120,17 @@ export default function AbelianCaseStudy() {
   })
 
   useEffect(() => {
+    let previousScrollY = Math.max(0, window.scrollY)
     const update = () => {
       const subnav = subnavRef.current
       setSubnavPinned(Boolean(subnav && subnav.getBoundingClientRect().top <= 1))
+      const currentScrollY = Math.max(0, window.scrollY)
+      if (!window.matchMedia("(max-width: 700px)").matches || currentScrollY === 0) {
+        setMobileHeaderHidden(false)
+      } else if (currentScrollY !== previousScrollY) {
+        setMobileHeaderHidden(currentScrollY > previousScrollY)
+      }
+      previousScrollY = currentScrollY
 
       let next = navigation[0].id
       const checkpoint = window.innerHeight * 0.35 + 78
@@ -141,7 +163,7 @@ export default function AbelianCaseStudy() {
 
   return (
     <main ref={articleRef} className="abelian-page">
-      <div className={`abelian-site-header ${subnavPinned ? "is-hidden" : ""}`}>
+      <div className={`abelian-site-header ${subnavPinned || mobileHeaderHidden ? "is-hidden" : ""}`} inert={subnavPinned || mobileHeaderHidden}>
         <HomeHeader menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((value) => !value)} />
       </div>
 
@@ -206,11 +228,14 @@ export default function AbelianCaseStudy() {
               <p>
                 Abelian needed to move beyond its mining-focused community to build awareness among early adopters and crypto audiences for their upcoming TGE (Token-Generation Event). It was imperative to sustain the technical credibility that gave Abelian its standing while also being accessible to a wider audience.
               </p>
-              <div className="abelian-section-one-stats">
+              <AbelianMobileMetrics className="abelian-section-one-stats" label="Key outcomes">
                 <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
                 <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
                 <div><strong>3</strong><span>products launched</span></div>
-              </div>
+              </AbelianMobileMetrics>
+              <span className="abelian-summary-scroll-cue" aria-hidden="true">
+                <Image src="/case-studies/abelian/arrow-right.png" alt="" width={32} height={32} />
+              </span>
             </div>
           </motion.div>
         </div>
@@ -264,10 +289,11 @@ export default function AbelianCaseStudy() {
           <p className="abelian-lede">The Abelian Foundation was a pre-revenue company that had built a token-mining-focused community, most of whose members were looking forward to their mined tokens being listed on a centralized exchange (CEX).</p>
           <p>Token sales are a primary revenue source for cryptocurrency and blockchain startups. A successful token listing depends on a brand building awareness — both of the token itself and of the functionality and promise of the underlying technology — since that promise is what is expected to drive the token’s value upward over time and convince retail investors to buy in.</p>
         </div>
-        <div className="abelian-context-stats">
+        <span className="abelian-snapshot-label">Snapshot</span>
+        <AbelianMobileMetrics className="abelian-context-stats" label="Snapshot metrics">
           <div><strong>3 months out</strong><span>$ABEL’s first CEX listing</span></div>
           <div><strong>10K</strong><span>community members</span></div>
-        </div>
+        </AbelianMobileMetrics>
         <div className="abelian-editorial-copy abelian-editorial-copy-bottom">
           <p className="abelian-lede">The Foundation also planned to launch quantum-resistant D2C apps and developer tools shortly after the token launch.</p>
           <p>Awareness had to be built simultaneously across multiple audiences — early tech adopters, developers, and retail investors — to drive real adoption of the brand’s technology and pave the way for sustainable growth.</p>
@@ -290,8 +316,12 @@ export default function AbelianCaseStudy() {
           <span>Solutions</span>
           <h2>Forming a highly engaged community that amplifies the brand’s mission and initiatives, each in their own voice.</h2>
         </header>
-        <div className="abelian-solution-list">
-          {solutions.map((solution) => <RevealRow key={solution.number} {...solution} />)}
+        <div className="abelian-solutions-carousel">
+          {!solutionEdges.start && <button type="button" className="abelian-swipe-arrow is-previous" aria-label="Previous solution" onClick={() => solutionsRef.current?.scrollBy({ left: -solutionsRef.current.clientWidth, behavior: reduceMotion ? "instant" : "smooth" })}><Image src="/case-studies/abelian/arrow-right.png" alt="" width={24} height={24} /></button>}
+          <div ref={solutionsRef} className="abelian-solution-list" tabIndex={0} role="region" aria-label="Solutions — swipe to explore" data-lenis-prevent>
+            {solutions.map((solution) => <RevealRow key={solution.number} {...solution} />)}
+          </div>
+          {!solutionEdges.end && <button type="button" className="abelian-swipe-arrow is-next" aria-label="Next solution" onClick={() => solutionsRef.current?.scrollBy({ left: solutionsRef.current.clientWidth, behavior: reduceMotion ? "instant" : "smooth" })}><Image src="/case-studies/abelian/arrow-right.png" alt="" width={24} height={24} /></button>}
         </div>
       </section>
 
@@ -308,7 +338,7 @@ export default function AbelianCaseStudy() {
               <span>Impact</span>
               <h2 className="sr-only">Key outcomes</h2>
             </div>
-            <div className="abelian-impact-stats">
+            <div className="abelian-impact-stats" aria-label="Impact metrics">
               <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
               <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
               <div><strong>3</strong><span>products launched</span></div>

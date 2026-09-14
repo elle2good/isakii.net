@@ -386,6 +386,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                       if (
                         window.matchMedia("(max-width: 700px)").matches &&
                         item.type.toLowerCase() === "flagship" &&
+                        item.slug.toLowerCase() !== "abelian-community" &&
                         !item.ctaLabel.toLowerCase().includes("coming soon")
                       ) {
                         event.preventDefault()
