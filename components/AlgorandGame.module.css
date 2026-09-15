@@ -1,0 +1,31 @@
+.game {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 1;
+}
+
+.rotatePrompt { display: none; }
+
+@media (max-width: 700px) and (orientation: portrait), (pointer: coarse) and (orientation: portrait) {
+  .rotatePrompt {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: max(32px, env(safe-area-inset-top)) 28px max(32px, env(safe-area-inset-bottom));
+    background: #182452;
+    color: #fff0d2;
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    overflow-y: auto;
+  }
+  .rotatePrompt svg { flex-shrink: 0; color: #cab8e6; }
+  .rotatePrompt h1 { margin: 0; font-size: 26px; line-height: 1.2; }
+  .rotatePrompt p { margin: 0; max-width: 320px; font-size: 17px; line-height: 1.5; }
+  .rotatePrompt small { max-width: 290px; font-size: 13px; line-height: 1.5; opacity: .75; }
+}

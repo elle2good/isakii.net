@@ -11,6 +11,9 @@ type CataloguePageProps = {
 
 async function getCatalogueItem(slug: string) {
   const items = await getCatalogueItems()
+  if (slug.toLowerCase() === "algorand-staking-korea-campaign") {
+    return items.find((item) => item.id === "b6a7f66e-bea3-41b3-b053-115ebfe9abbd")
+  }
   return items.find((item) => item.slug.toLowerCase() === slug.toLowerCase())
 }
 
@@ -40,7 +43,7 @@ export default async function CatalogueCaseStudyPage({ params }: CataloguePagePr
     return <RaydiumCaseStudy />
   }
 
-  if (item.slug.toLowerCase() === "algorand-staking-korea-campaign") {
+  if (item.id === "b6a7f66e-bea3-41b3-b053-115ebfe9abbd") {
     return <AlgorandGame />
   }
 

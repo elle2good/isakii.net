@@ -40,6 +40,7 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
   const [ended, setEnded] = useState(false)
   const slug = item.slug.toLowerCase()
   const isKeytalkVideo = slug === "keytalk-movie-deep-search"
+  const shouldLoop = isKeytalkVideo || item.id === "b6a7f66e-bea3-41b3-b053-115ebfe9abbd"
   const mobileAlphaSource = mobile && (!item.mobilePopupImage || item.mobilePopupImage === item.popupImage)
     ? slug === "beauty-ai-search-engine" ? "/media/glamai-popup-mobile-mask.mp4" : isKeytalkVideo ? "/media/deepsearch-popup-mobile-mask.mp4" : null
     : null
@@ -91,7 +92,7 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
   if (mediaKind === "video") {
     return (
       <div className="catalogue-preview-video-wrap">
-        {mobileAlphaSource ? <MobileAlphaVideo src={mobileAlphaSource} label={item.popupImageAlt} videoRef={videoRef} loop={isKeytalkVideo} onEnded={() => { if (!isKeytalkVideo) setEnded(true) }} /> : (
+        {mobileAlphaSource ? <MobileAlphaVideo src={mobileAlphaSource} label={item.popupImageAlt} videoRef={videoRef} loop={shouldLoop} onEnded={() => { if (!shouldLoop) setEnded(true) }} /> : (
         <video
           ref={videoRef}
           className={slug === "keytalk-movie-deep-search" ? "catalogue-preview-video--keytalk" : undefined}
@@ -100,15 +101,15 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
           muted
           playsInline
           autoPlay
-          loop={isKeytalkVideo}
+          loop={shouldLoop}
           preload="auto"
           onEnded={() => {
-            if (!isKeytalkVideo) setEnded(true)
+            if (!shouldLoop) setEnded(true)
           }}
         />
         )}
         <AnimatePresence>
-          {ended && (
+          {ended && !shouldLoop && (
             <motion.div
               className="catalogue-preview-replay"
               initial={{ opacity: 0 }}
@@ -460,6 +461,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                       if (
                         window.matchMedia("(max-width: 700px)").matches &&
                         item.type.toLowerCase() === "flagship" &&
+                        item.id !== "b6a7f66e-bea3-41b3-b053-115ebfe9abbd" &&
                         !["abelian-community", "raydium-event"].includes(item.slug.toLowerCase()) &&
                         !item.ctaLabel.toLowerCase().includes("coming soon")
                       ) {
