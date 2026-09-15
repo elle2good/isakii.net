@@ -6,6 +6,8 @@ import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import type { FormEvent } from "react"
 import type { CatalogueItem } from "@/lib/catalogue"
+import useMobileViewport from "./useMobileViewport"
+import MobileAlphaVideo from "./MobileAlphaVideo"
 
 type CataloguePreviewProps = {
   item: CatalogueItem | null
@@ -32,11 +34,16 @@ function cloudinaryVideoSource(source: string) {
 }
 
 function PreviewMedia({ item }: { item: CatalogueItem }) {
+  const mobile = useMobileViewport()
+  const mediaKind = mobile && item.mobilePopupMediaKind ? item.mobilePopupMediaKind : item.popupMediaKind
   const videoRef = useRef<HTMLVideoElement>(null)
   const [ended, setEnded] = useState(false)
   const slug = item.slug.toLowerCase()
   const isKeytalkVideo = slug === "keytalk-movie-deep-search"
-  const source =
+  const mobileAlphaSource = mobile && (!item.mobilePopupImage || item.mobilePopupImage === item.popupImage)
+    ? slug === "beauty-ai-search-engine" ? "/media/glamai-popup-mobile-mask.mp4" : isKeytalkVideo ? "/media/deepsearch-popup-mobile-mask.mp4" : null
+    : null
+  const source = mobile && item.mobilePopupImage && item.mobilePopupImage !== item.popupImage ? item.mobilePopupImage :
     slug === "beauty-ai-search-engine"
       ? "/media/glamai-popup-alpha.webm"
       : slug === "keytalk-movie-deep-search"
@@ -44,14 +51,14 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
       : item.popupImage || item.coverImage
 
   useEffect(() => {
-    if (item.popupMediaKind !== "video") return
+    if (mediaKind !== "video") return
     const video = videoRef.current
     if (!video) return
 
     setEnded(false)
     video.currentTime = 0
     void video.play().catch(() => undefined)
-  }, [item.id, item.popupMediaKind])
+  }, [item.id, mediaKind, source])
 
   const replay = () => {
     const video = videoRef.current
@@ -81,9 +88,10 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
     )
   }
 
-  if (item.popupMediaKind === "video") {
+  if (mediaKind === "video") {
     return (
       <div className="catalogue-preview-video-wrap">
+        {mobileAlphaSource ? <MobileAlphaVideo src={mobileAlphaSource} label={item.popupImageAlt} videoRef={videoRef} loop={isKeytalkVideo} onEnded={() => { if (!isKeytalkVideo) setEnded(true) }} /> : (
         <video
           ref={videoRef}
           className={slug === "keytalk-movie-deep-search" ? "catalogue-preview-video--keytalk" : undefined}
@@ -98,6 +106,7 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
             if (!isKeytalkVideo) setEnded(true)
           }}
         />
+        )}
         <AnimatePresence>
           {ended && (
             <motion.div
@@ -204,6 +213,7 @@ function NewsletterInterstitial() {
 }
 
 export default function CataloguePreview({ item, items, onClose, onSelect }: CataloguePreviewProps) {
+  const swipeStart = useRef<{ x: number; y: number } | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [showingNewsletter, setShowingNewsletter] = useState(false)
   const [mobileNoticeItemId, setMobileNoticeItemId] = useState<string | null>(null)
@@ -244,6 +254,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
 
   useEffect(() => {
     previewRef.current?.scrollTo({ top: 0 })
+    previewRef.current?.querySelector(".catalogue-preview-body")?.scrollTo({ top: 0 })
   }, [item?.id, showingNewsletter])
 
   useEffect(() => {
@@ -315,6 +326,24 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
             role="dialog"
             aria-modal="true"
             aria-labelledby={showingNewsletter ? "catalogue-newsletter-title" : "catalogue-preview-title"}
+            onDragStart={event => { if (window.matchMedia("(max-width: 700px)").matches) event.preventDefault() }}
+            onPointerDown={event => {
+              swipeStart.current = null
+              if (!window.matchMedia("(max-width: 700px)").matches || !event.isPrimary || (event.target as HTMLElement).closest("button,a,input,textarea")) return
+              swipeStart.current = { x: event.clientX, y: event.clientY }
+              event.currentTarget.setPointerCapture(event.pointerId)
+            }}
+            onPointerCancel={() => { swipeStart.current = null }}
+            onPointerUp={event => {
+              const start = swipeStart.current
+              swipeStart.current = null
+              if (!start) return
+              const dx = event.clientX - start.x
+              const dy = event.clientY - start.y
+              if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.5) return
+              const destination = dx < 0 ? next : previous
+              if (destination) selectItem(destination)
+            }}
             layout={!reduceMotion}
             initial={reduceMotion ? false : { opacity: 0, scale: 0.985, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -352,6 +381,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
               <NewsletterInterstitial />
             ) : (
               <>
+                <div className="catalogue-preview-body">
                 <div className="catalogue-preview-media">
                   <PreviewMedia key={item.id} item={item} />
                 </div>
@@ -403,6 +433,8 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                 </motion.div>
               )}
 
+                </div>
+                </div>
               <div className="catalogue-preview-actions">
                 {item.caseStudyUrl ? (
                   <a
@@ -438,7 +470,6 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                 )}
 
                   </div>
-                </div>
               </>
             )}
             {mobileNoticeItemId === item.id && (

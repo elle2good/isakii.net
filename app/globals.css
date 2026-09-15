@@ -1170,6 +1170,8 @@ select {
 .catalogue-preview-video-wrap {
   position: relative;
 }
+.catalogue-preview-media video.mobile-alpha-source { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.mobile-alpha-canvas { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 .catalogue-preview-media video {
   object-fit: contain;
@@ -1390,12 +1392,10 @@ select {
   gap: 5px;
 }
 
-.catalogue-preview-tags::before {
-  content: "";
-  width: 1px;
-  margin: 1px 2px 1px 0;
-  background: rgba(84, 18, 39, 0.58);
-}
+.catalogue-preview-body { display: contents; }
+.catalogue-preview-body > .catalogue-preview-media { grid-row: 1 / span 2; }
+.catalogue-preview > .catalogue-preview-actions { grid-column: 2; margin-left: 12px; align-self: start; }
+.catalogue-preview-body > .catalogue-preview-content { align-self: end; }
 
 .catalogue-preview-tags span {
   display: inline-flex;
@@ -3253,6 +3253,18 @@ select {
   .catalogue-preview-cta { width: 100%; }
   .catalogue-preview-pagination { justify-content: flex-end; }
   .catalogue-preview-pagination button { flex: 1; }
+  .home-top-chrome.is-hidden { transform: none; pointer-events: auto; }
+  .home-notification-slot { overflow: hidden; }
+  .home-notification-slot .home-ticker { transform: translateY(var(--mobile-ticker-shift, 0px)); }
+  .catalogue-preview-scrim { z-index: 1100; }
+  .catalogue-preview { --mobile-preview-media-height: min(280px, calc((100vw - 68px) * .75)); display: flex; flex-direction: column; overflow: hidden; padding-bottom: 16px; touch-action: pan-y; }
+  .catalogue-preview-body { display: block; overflow-y: auto; min-height: 0; overscroll-behavior-y: contain; }
+  .catalogue-preview-media { height: var(--mobile-preview-media-height); aspect-ratio: auto; }
+  .catalogue-preview-media img { object-fit: contain; }
+  .catalogue-preview > .catalogue-preview-actions { flex-shrink: 0; align-self: stretch; margin: 16px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .catalogue-preview-pagination { display: none; }
+  .catalogue-newsletter-image { height: var(--mobile-preview-media-height); max-height: var(--mobile-preview-media-height); aspect-ratio: auto; }
+  .catalogue-preview.is-newsletter { overflow-y: auto; }
   .home-video-feature { min-height: auto; padding: 72px 20px; }
   .home-footer { min-height: auto; padding: 48px 24px 36px; }
   .home-footer-top { flex-direction: column; min-height: 0; gap: 64px; }

@@ -15,6 +15,10 @@ export type CatalogueItem = {
   caseStudyUrl: string
   downloadUrl: string
   popupImage: string
+  mobilePopupImage?: string
+  mobileCoverImage?: string
+  mobilePopupMediaKind?: "image" | "video"
+  mobileCoverMediaKind?: "image" | "video"
   coverImage: string
   popupMediaKind: "image" | "video"
   coverMediaKind: "image" | "video"
@@ -34,7 +38,9 @@ const READY_ITEM: CatalogueItem = {
   date: "2023–2024",
   type: "Flagship",
   companyName: "Abelian Foundation",
-  tags: ["Social Media", "Community", "Content Strategy"],
+  tags: ["Social Media", "Community Building", "Field Marketing"],
+  mobilePopupImage: "https://res.cloudinary.com/dwto97ayq/image/upload/v1789447329/Codex_Image_Sep_15_2026_01_39_31_PM_g4wln9.png",
+  mobilePopupMediaKind: "image",
   shortSummary:
     "By bootstrapping a quantum-resistant blockchain community, this company turned early promise into real revenue.\n\nRead the full case study to see how.",
   tldr:
@@ -62,7 +68,9 @@ const READY_RAYDIUM_ITEM: CatalogueItem = {
   date: "2025",
   type: "Flagship",
   companyName: "Raydium",
-  tags: ["Event Planning", "Event Management"],
+  tags: ["Event Planning", "Event Management", "Field Marketing"],
+  mobilePopupImage: "https://res.cloudinary.com/dwto97ayq/image/upload/v1789446813/Frame_6_no9gqh_1_jmoixp.png",
+  mobilePopupMediaKind: "image",
   shortSummary:
     "An anonymous DeFi protocol hosted its first offline event in Asia targeting 3 different guest groups.\n\nRead the full case study to find out how.",
   tldr:
@@ -232,11 +240,18 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
       const ctaLabel = text(row.CTA_Label) || "Read the full case study"
       const isComingSoon = ctaLabel.toLowerCase().includes("coming soon")
       const media = mediaByItem.get(row.id ?? -1) ?? []
-      const byType = (type: string) =>
-        media.find((record) => truthy(record.Active) && selectValue(record["Media Type"]).toLowerCase() === type)
-        ?? media.find((record) => selectValue(record["Media Type"]).toLowerCase() === type)
+      const byType = (type: string, device = "desktop") => {
+        const candidates = media.filter(record => {
+          const devices = tagsValue(record.Device).map(value => value.toLowerCase())
+          return truthy(record.Active) && selectValue(record["Media Type"]).toLowerCase() === type && (!devices.length || devices.includes(device))
+        })
+        // A device-specific row takes precedence over a shared asset.
+        return candidates.find(record => tagsValue(record.Device).length === 1) ?? candidates[0]
+      }
       const popup = byType("pop up image")
       const cover = byType("cover")
+      const mobilePopup = byType("pop up image", "mobile")
+      const mobileCover = byType("cover", "mobile")
       const first = popup ?? cover ?? media.find((record) => truthy(record.Active)) ?? media[0]
       const popupImage = text(popup?.["Asset URL"] ?? first?.["Asset URL"])
       const coverImage = text(cover?.["Asset URL"] ?? popupImage)
@@ -263,6 +278,10 @@ function mapCatalogueRows(itemRows: BaserowRow[], mediaRows: BaserowRow[]): Cata
             : text(row["Case Study URL"]),
         downloadUrl: text(row["Download URL"]),
         popupImage,
+        mobilePopupImage: text(mobilePopup?.["Asset URL"]) || undefined,
+        mobileCoverImage: text(mobileCover?.["Asset URL"]) || undefined,
+        mobilePopupMediaKind: mobilePopup ? mediaKind(text(mobilePopup["Asset URL"])) : undefined,
+        mobileCoverMediaKind: mobileCover ? mediaKind(text(mobileCover["Asset URL"])) : undefined,
         coverImage,
         popupMediaKind: mediaKind(popupImage),
         coverMediaKind: mediaKind(coverImage),

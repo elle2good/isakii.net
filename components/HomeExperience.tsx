@@ -12,6 +12,7 @@ import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
 import SmoothScroll from "./SmoothScroll"
 import NotificationTicker from "./NotificationTicker"
+import useMobileViewport from "./useMobileViewport"
 import { galleryImages } from "@/lib/gallery"
 import type { CatalogueItem } from "@/lib/catalogue"
 
@@ -26,12 +27,13 @@ function cloudinaryVideoSource(source: string) {
 }
 
 function ProjectCover({ project, active }: { project: CatalogueItem; active: boolean }) {
+  const mobile = useMobileViewport()
   const videoRef = useRef<HTMLVideoElement>(null)
-  const source = project.coverImage || project.popupImage
-  const isVideo = project.coverMediaKind === "video"
+  const source = (mobile && project.mobileCoverImage) || project.coverImage || project.popupImage
+  const isVideo = (mobile && project.mobileCoverMediaKind ? project.mobileCoverMediaKind : project.coverMediaKind) === "video"
   const slug = project.slug.toLowerCase()
   const videoSource =
-    slug === "raydium-event"
+    mobile && project.mobileCoverImage && project.mobileCoverImage !== project.coverImage ? cloudinaryVideoSource(source) : slug === "raydium-event"
       ? "/media/raydium-cover-alpha.webm"
       : slug === "beauty-ai-search-engine"
         ? "/media/glamai-cover-alpha.webm"
@@ -39,7 +41,7 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
           ? "/media/deepsearch-cover-alpha.webm"
         : cloudinaryVideoSource(source)
   const posterSource =
-    slug === "raydium-event"
+    mobile && project.mobileCoverImage && project.mobileCoverImage !== project.coverImage ? undefined : slug === "raydium-event"
       ? "/media/raydium-cover-poster.png"
       : slug === "beauty-ai-search-engine"
         ? "/media/glamai-cover-poster.png"
@@ -215,6 +217,19 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
       const gallery = gallerySectionRef.current
       const topChrome = topChromeRef.current
       if (!gallery || !topChrome) return
+
+      if (window.matchMedia("(max-width: 700px)").matches) {
+        clearTopChromeHideTimer()
+        beyondGalleryRef.current = false
+        setTopChromeVisible(true)
+        const projectsTop = projectSectionRef.current?.getBoundingClientRect().top ?? window.innerHeight
+        const tickerHeight = topChrome.querySelector<HTMLElement>(".home-ticker")?.offsetHeight ?? 37
+        const shift = Math.min(tickerHeight, Math.max(0, topChrome.offsetHeight - projectsTop))
+        topChrome.style.setProperty("--mobile-ticker-shift", `${-shift}px`)
+        previousScrollY = window.scrollY
+        initialized = true
+        return
+      }
 
       const galleryRect = gallery.getBoundingClientRect()
       const beyondGallery = galleryRect.top <= window.innerHeight / 2
@@ -516,7 +531,7 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
           }}
         />
 
-        <NotificationTicker />
+        <div className="home-notification-slot"><NotificationTicker /></div>
       </div>
 
       <div id="overlay">
