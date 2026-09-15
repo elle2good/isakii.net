@@ -213,7 +213,7 @@ function NewsletterInterstitial() {
 }
 
 export default function CataloguePreview({ item, items, onClose, onSelect }: CataloguePreviewProps) {
-  const swipeStart = useRef<{ x: number; y: number } | null>(null)
+  const swipeStart = useRef<{ x: number; y: number; axis: "pending" | "horizontal" | "vertical" } | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [showingNewsletter, setShowingNewsletter] = useState(false)
   const [mobileNoticeItemId, setMobileNoticeItemId] = useState<string | null>(null)
@@ -330,14 +330,30 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
             onPointerDown={event => {
               swipeStart.current = null
               if (!window.matchMedia("(max-width: 700px)").matches || !event.isPrimary || (event.target as HTMLElement).closest("button,a,input,textarea")) return
-              swipeStart.current = { x: event.clientX, y: event.clientY }
+              // Leave screen-edge gestures to browser Back/Forward navigation.
+              if (event.clientX < 24 || event.clientX > window.innerWidth - 24) return
+              swipeStart.current = { x: event.clientX, y: event.clientY, axis: "pending" }
               event.currentTarget.setPointerCapture(event.pointerId)
+            }}
+            onPointerMove={event => {
+              const start = swipeStart.current
+              if (!start || start.axis !== "pending") return
+              const dx = Math.abs(event.clientX - start.x)
+              const dy = Math.abs(event.clientY - start.y)
+              if (Math.max(dx, dy) < 12) return
+              if (dx > dy * 1.5) {
+                start.axis = "horizontal"
+                event.currentTarget.setPointerCapture(event.pointerId)
+              } else if (dy > dx * 1.2) {
+                start.axis = "vertical"
+                if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+              }
             }}
             onPointerCancel={() => { swipeStart.current = null }}
             onPointerUp={event => {
               const start = swipeStart.current
               swipeStart.current = null
-              if (!start) return
+              if (!start || start.axis === "vertical") return
               const dx = event.clientX - start.x
               const dy = event.clientY - start.y
               if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.5) return

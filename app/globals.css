@@ -3262,7 +3262,10 @@ select {
   .catalogue-preview-media { height: var(--mobile-preview-media-height); aspect-ratio: auto; }
   .catalogue-preview-media img { object-fit: contain; }
   .catalogue-preview > .catalogue-preview-actions { flex-shrink: 0; align-self: stretch; margin: 16px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
-  .catalogue-preview-pagination { display: none; }
+  .catalogue-preview-pagination { display: block; position: relative; inset: auto; flex-shrink: 0; height: 44px; margin-bottom: 8px; }
+  .catalogue-preview-pagination .catalogue-preview-arrow { width: 44px; height: 44px; }
+  .catalogue-preview-pagination .is-previous { left: 0; }
+  .catalogue-preview-pagination .is-next { right: 0; }
   .catalogue-newsletter-image { height: var(--mobile-preview-media-height); max-height: var(--mobile-preview-media-height); aspect-ratio: auto; }
   .catalogue-preview.is-newsletter { overflow-y: auto; }
   .home-video-feature { min-height: auto; padding: 72px 20px; }
@@ -4287,15 +4290,21 @@ select {
   .mobile-swipe-dots button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .35; }
   .mobile-swipe-dots button[aria-pressed="true"]::before { opacity: 1; }
   .raydium-section-two-copy { grid-template-rows: auto auto; align-content: center; gap: 40px; padding: 64px 24px; }
-  .raydium-section-two-copy > p { line-height: 1.6; }
+  .raydium-section-two-copy > p { font: 22px/1.6 "DM Sans", sans-serif; }
   .raydium-section-two-stats .mobile-swipe-slide { display: grid; grid-template-rows: auto auto; align-content: center; min-height: 200px; padding: 16px 8px; text-align: center; }
-  .raydium-section-two-stats strong { font-size: 64px; }
-  .raydium-section-two-stats span { margin-top: 24px; font: 20px/1.4 "DM Sans", sans-serif; }
+  .raydium-section-two-stats strong { font: 400 96px/1 "DM Sans", sans-serif; }
+  .raydium-section-two-stats span { margin-top: 24px; font: 25px/1.4 "DM Sans", sans-serif; }
   .raydium-opportunity-stats { margin: 0; }
   .raydium-editorial > .mobile-swipe { margin: 44px 0; }
   .raydium-opportunity-stats > div { min-height: 240px; border: 0; }
   .raydium-opportunity-stats > .mobile-swipe-slide { transform: none !important; }
-  .raydium-strategy-list .mobile-swipe-slide { margin: 0; padding: 16px 0 24px; }
+  .raydium-strategy-list .mobile-swipe-slide { margin: 0; padding: 16px 0 24px; clip-path: inset(0); }
+  /* Explicit face visibility avoids Safari painting back-facing text through the card. */
+  .raydium-card-face { transition: visibility 0s 350ms; }
+  .raydium-card-front { visibility: visible; transform: translateZ(1px); }
+  .raydium-card-back { visibility: hidden; transform: rotateY(180deg) translateZ(1px); }
+  .raydium-partnership-cards button.is-active .raydium-card-front { visibility: hidden; }
+  .raydium-partnership-cards button.is-active .raydium-card-back { visibility: visible; }
   /* Native flex sizing reserves the tallest slide's height for every step. */
   .raydium-strategy-list.mobile-swipe-track { height: auto; }
   .raydium-strategy-final-slide.mobile-swipe-slide { display: block; }
