@@ -158,8 +158,8 @@ const READY_ALGORAND_ITEM: CatalogueItem = {
   tags: ["Localization", "Community", "User Acquisition"],
   shortSummary: "",
   tldr: "",
-  ctaLabel: "Coming Soon",
-  caseStudyUrl: "",
+  ctaLabel: "Play the game preview",
+  caseStudyUrl: "/catalogue/Algorand-staking-korea-campaign",
   downloadUrl: "",
   popupImage:
     "https://res.cloudinary.com/dwto97ayq/image/upload/v1789197395/Codex_Image_Sep_12_2026_04_16_47_PM_lcilba.png",
@@ -319,7 +319,11 @@ export async function getCatalogueItems(): Promise<CatalogueItem[]> {
       fetchTable(mediaTable, token),
     ])
     const items = mapCatalogueRows(itemRows, mediaRows)
-    return items.length ? items : READY_ITEMS
+    return items.length
+      ? items.map((item) => item.slug.toLowerCase() === READY_ALGORAND_ITEM.slug.toLowerCase()
+        ? { ...item, ctaLabel: READY_ALGORAND_ITEM.ctaLabel, caseStudyUrl: READY_ALGORAND_ITEM.caseStudyUrl }
+        : item)
+      : READY_ITEMS
   } catch (error) {
     console.error("Unable to load the Baserow catalogue; using the checked-in preview.", error)
     return READY_ITEMS

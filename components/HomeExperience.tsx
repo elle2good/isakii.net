@@ -149,12 +149,16 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: Ca
   )
 })
 
-export default function HomeExperience({ catalogueItems }: { catalogueItems: CatalogueItem[] }) {
+export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
+  catalogueItems: CatalogueItem[]
+  initialPreviewSlug?: string
+}) {
+  const initialPreview = catalogueItems.find(item => item.slug.toLowerCase() === initialPreviewSlug?.toLowerCase()) ?? null
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
-  const [topChromeVisible, setTopChromeVisible] = useState(true)
+  const [topChromeVisible, setTopChromeVisible] = useState(!initialPreview)
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
-  const [activeCatalogueItem, setActiveCatalogueItem] = useState<CatalogueItem | null>(null)
+  const [activeCatalogueItem, setActiveCatalogueItem] = useState<CatalogueItem | null>(initialPreview)
   const headerRef = useRef<HTMLElement>(null)
   const topChromeRef = useRef<HTMLDivElement>(null)
   const gallerySectionRef = useRef<HTMLElement>(null)
@@ -497,6 +501,11 @@ export default function HomeExperience({ catalogueItems }: { catalogueItems: Cat
   }, [clearTopChromeHideTimer])
 
   const closeCatalogueItem = () => {
+    const url = new URL(window.location.href)
+    if (url.searchParams.has("preview")) {
+      url.searchParams.delete("preview")
+      window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`)
+    }
     cataloguePreviewOpenRef.current = false
     setActiveCatalogueItem(null)
     setTopChromeVisible(true)

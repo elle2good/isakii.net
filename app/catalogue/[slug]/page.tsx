@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import AlgorandGame from "@/components/AlgorandGame"
 import AbelianCaseStudy from "@/components/AbelianCaseStudy"
 import RaydiumCaseStudy from "@/components/RaydiumCaseStudy"
 import { getCatalogueItems } from "@/lib/catalogue"
@@ -37,6 +38,10 @@ export default async function CatalogueCaseStudyPage({ params }: CataloguePagePr
 
   if (["raydium-event-activation", "raydium-event"].includes(item.slug.toLowerCase())) {
     return <RaydiumCaseStudy />
+  }
+
+  if (item.slug.toLowerCase() === "algorand-staking-korea-campaign") {
+    return <AlgorandGame />
   }
 
   notFound()
