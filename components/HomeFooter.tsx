@@ -8,7 +8,6 @@ type SubmissionState = "idle" | "submitting" | "success" | "error"
 
 const footerLinks = [
   { label: "about", href: "/about" },
-  { label: "blog", href: "/work?language=en" },
   { label: "catalogue", href: "/#projects" },
   { label: "home", href: "/" },
 ]
