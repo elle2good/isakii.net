@@ -14,6 +14,7 @@ import SmoothScroll from "./SmoothScroll"
 import NotificationTicker from "./NotificationTicker"
 import useMobileViewport from "./useMobileViewport"
 import { galleryImages } from "@/lib/gallery"
+import { imageDelivery } from "@/lib/media"
 import type { CatalogueItem } from "@/lib/catalogue"
 
 const TOP_CHROME_PEEK_DURATION = 15_000
@@ -82,13 +83,13 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
         <video
           ref={videoRef}
           className={`home-project-cover-video ${className ?? ""} ${active ? "is-active" : ""}`}
-          src={videoSource}
+          src={active || !posterSource ? videoSource : undefined}
           poster={posterSource}
           aria-label={project.coverImageAlt}
           muted
           playsInline
           loop
-          preload="auto"
+          preload={active ? "auto" : posterSource ? "none" : "metadata"}
           onLoadedData={(event) => {
             if (!active) {
               event.currentTarget.pause()
@@ -101,6 +102,8 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
           <img
             className={`home-project-video-poster ${className ?? ""} ${active ? "is-hidden" : ""}`}
             src={posterSource}
+            loading="lazy"
+            decoding="async"
             alt=""
             aria-hidden="true"
           />
@@ -111,7 +114,7 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={source} alt={project.coverImageAlt} />
+    <img {...imageDelivery(source, "(max-width: 700px) 90vw, 420px")} alt={project.coverImageAlt} loading="lazy" decoding="async" />
   )
 }
 
@@ -137,7 +140,7 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: Ca
           {isComingSoon && coverSource && project.coverMediaKind === "image" && (
             // The duplicate preserves the source alpha as a silhouette-only hover mask.
             // eslint-disable-next-line @next/next/no-img-element
-            <img className="home-project-object-shade" src={coverSource} alt="" aria-hidden="true" />
+            <img className="home-project-object-shade" {...imageDelivery(coverSource, "(max-width: 700px) 90vw, 420px")} alt="" aria-hidden="true" loading="lazy" decoding="async" />
           )}
           {isComingSoon && coverSource && <span className="home-project-coming-soon">Coming soon</span>}
         </div>
@@ -637,11 +640,11 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
           {[...galleryImages, ...galleryImages, ...galleryImages].map((record, index) => (
             <div className="home-gallery-image" key={`${record.id}-${index}`}>
               {record.image.startsWith("/") ? (
-                <Image src={record.image} alt={record.alt} fill sizes="600px" priority={index < 3} />
+                <Image src={record.image} alt={record.alt} fill sizes="(max-width: 700px) 100vw, 600px" />
               ) : (
                 // External database links remain browser-fetched so the database can use any image host.
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={record.image} alt={record.alt} loading={index < 3 ? "eager" : "lazy"} />
+                <img {...imageDelivery(record.image, "(max-width: 700px) 100vw, 600px", 1280)} alt={record.alt} loading="lazy" decoding="async" />
               )}
             </div>
           ))}

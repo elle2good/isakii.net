@@ -5,6 +5,7 @@ import type { MotionProps } from "motion/react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import type { FormEvent } from "react"
+import { imageDelivery } from "@/lib/media"
 import type { CatalogueItem } from "@/lib/catalogue"
 import useMobileViewport from "./useMobileViewport"
 import MobileAlphaVideo from "./MobileAlphaVideo"
@@ -130,7 +131,7 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
 
   // CMS image hosts vary, so the browser renders this validated HTTPS URL directly.
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={source} alt={item.popupImageAlt} />
+  return <img {...imageDelivery(source, "(max-width: 700px) 95vw, 700px", 1280)} alt={item.popupImageAlt} decoding="async" />
 }
 
 function NewsletterInterstitial() {

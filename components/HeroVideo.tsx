@@ -1,5 +1,6 @@
 "use client"
 
+import { cloudinaryHeroVideo } from "@/lib/media"
 import { useEffect, useRef, useState } from "react"
 
 type Props = {
@@ -166,13 +167,16 @@ export default function HeroVideo({
       <div ref={frameRef} className="hero-video-frame">
         <video
           ref={videoRef}
-          src={videoSrc}
           crossOrigin="anonymous"
           autoPlay
           muted
           playsInline
+          preload="auto"
           onLoadedData={() => setIsReady(true)}
-        />
+        >
+          <source media="(max-width: 700px)" src={cloudinaryHeroVideo(videoSrc, 720)} type="video/mp4" />
+          <source src={cloudinaryHeroVideo(videoSrc, 1280)} type="video/mp4" />
+        </video>
       </div>
       <div className="hero-video-gradation" aria-hidden="true" />
     </div>
