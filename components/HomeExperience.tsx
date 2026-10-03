@@ -639,13 +639,15 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
         >
           {[...galleryImages, ...galleryImages, ...galleryImages].map((record, index) => (
             <div className="home-gallery-image" key={`${record.id}-${index}`}>
-              {record.image.startsWith("/") ? (
-                <Image src={record.image} alt={record.alt} fill sizes="(max-width: 700px) 100vw, 600px" />
-              ) : (
-                // External database links remain browser-fetched so the database can use any image host.
-                // eslint-disable-next-line @next/next/no-img-element
-                <img {...imageDelivery(record.image, "(max-width: 700px) 100vw, 600px", 1280)} alt={record.alt} loading="lazy" decoding="async" />
-              )}
+              <div className="home-gallery-image-content">
+                {record.image.startsWith("/") ? (
+                  <Image src={record.image} alt={record.alt} fill sizes="300px" />
+                ) : (
+                  // External database links remain browser-fetched so the database can use any image host.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img {...imageDelivery(record.image, "300px", 640)} alt={record.alt} loading="lazy" decoding="async" />
+                )}
+              </div>
             </div>
           ))}
         </div>
