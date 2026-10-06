@@ -109,6 +109,15 @@ export default function HomeFooter() {
               aria-hidden="true"
             />
           </a>
+          <a href="https://www.producthunt.com/@l2sakim" target="_blank" rel="noreferrer" aria-label="Product Hunt">
+            <Image
+              src="/home/icons/product-hunt.png"
+              alt=""
+              width={28}
+              height={28}
+              aria-hidden="true"
+            />
+          </a>
           <a href="https://calendar.app.google/ynneGAWzZeX47R9w7" target="_blank" rel="noreferrer" aria-label="Schedule a call">
             <svg className="home-footer-call" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M7.1 3.5 9.3 7c.3.5.2 1.1-.2 1.5l-1.4 1.4a14.8 14.8 0 0 0 6.4 6.4l1.4-1.4c.4-.4 1-.5 1.5-.2l3.5 2.2c.5.3.7.9.5 1.4l-.7 2c-.2.6-.8 1-1.5 1C10 21.3 2.7 14 2.7 5.2c0-.7.4-1.3 1-1.5l2-.7c.5-.2 1.1 0 1.4.5Z" />
