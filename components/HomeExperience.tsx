@@ -146,7 +146,7 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: Ca
         </div>
         <p className="home-project-type">{project.contentType}</p>
         <h3>{project.subtitle || project.title}</h3>
-        <p>{project.date}</p>
+        <p>{[project.companyName, project.date].filter(Boolean).join(" | ")}</p>
       </button>
     </article>
   )
@@ -663,7 +663,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
       </section>
 
       <section ref={projectSectionRef} id="projects" className="home-projects">
-        <h2>Project</h2>
+        <h2>Catalogue</h2>
         <div className="home-project-grid">
           {catalogueItems.map((project) => (
             <ProjectCard project={project} onOpen={openCatalogueItem} key={project.id} />
