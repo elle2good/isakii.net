@@ -97,7 +97,7 @@ const READY_GLAMAI_ITEM: CatalogueItem = {
   slug: "beauty-ai-search-engine",
   date: "2019–2022",
   type: "Basic",
-  companyName: "Keytalk AI (Mycelebs)",
+  companyName: "Glamai",
   tags: ["Product Ops", "Data Ops"],
   shortSummary:
     "The idea for Mycelebs emerged during a meeting in which CJ Corporation’s then–Chief Digital Officer watched executives debate which celebrity would be the best fit to promote a new product. Struck by how heavily the decision relied on personal judgment, he envisioned using social media data and AI to bring a more objective, score-based approach to subjective questions. He founded Mycelebs to bring that vision to life.\n\nGlamai became one of the direct-to-consumer apps built on Mycelebs’ AI search technology.",
@@ -126,7 +126,7 @@ const READY_MOVIE_DEEP_SEARCH_ITEM: CatalogueItem = {
   slug: "keytalk-movie-deep-search",
   date: "2023",
   type: "Basic",
-  companyName: "Keytalk AI (Mycelebs)",
+  companyName: "Movie Deep Search",
   tags: ["Marketing", "Community", "User Acquisition"],
   shortSummary:
     "Struggling to reach U.S. audiences through paid marketing for years, Mycelebs turned to Product Hunt’s early adopter community, making online friends to introduce its AI-powered Movie Deep Search. The best part was the results.\n\nRead the full press release for details.",
