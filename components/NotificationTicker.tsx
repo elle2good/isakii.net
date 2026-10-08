@@ -1,4 +1,4 @@
-const NOTIFICATION_TEXT = "LVMH Innovation Award Finalist, 2021 · Product Hunt Best Rated Product of the Month, 2023 · 3,500 followers grown organically"
+const NOTIFICATION_TEXT = "LVMH Innovation Award Finalist, 2021 · Product Hunt Best Rated Product of the Month, 2023"
 const NOTIFICATION_LOOP_TEXT = `${NOTIFICATION_TEXT} ·\u00a0`
 
 export default function NotificationTicker() {
