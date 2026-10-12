@@ -44,6 +44,12 @@ const galleryItems = [
   },
 ]
 
+const resultMetrics = [
+  { value: "40%↓", description: "below industry-standard cost per attendee" },
+  { value: "270", description: "registered for the event in 4 days" },
+  { value: "35%", description: "open rate on newsletter emails 4 months later" },
+]
+
 const strategyRows = [
   {
     number: "01",
@@ -57,12 +63,7 @@ const strategyRows = [
     body: "",
     visual: "cards",
   },
-  {
-    number: "03",
-    title: <>Grassroots Outreach</>,
-    body: "Grassroots outreach was conducted ahead of the event through personal invitations and small dinners, spreading word to Solana ecosystem stakeholders attending Korea Blockchain Week.",
-    visual: "none",
-  },
+
 ]
 
 const partnerCards = [
@@ -451,9 +452,9 @@ export default function RaydiumCaseStudy() {
             <div className="raydium-section-two-copy">
               <p>Just three months after listing its token on Korea’s largest cryptocurrency exchange, Raydium hosted a branded café rave: the company’s first offline activation in Asia. The event was built around strategies to reach three distinct audience groups at once, and we pulled off an exclusive, successful event for less than the cost of a lower-tier sponsorship at a typical industry side event.</p>
               <MobileSwipeCarousel className="raydium-section-two-stats" label="Summary metrics">
-                <div><strong>40%↓</strong><span>below industry-standard cost<br />per attendee</span></div>
-                <div><strong>35%</strong><span>open rate on follow-up emails<br />sent 4 months later</span></div>
-                <div><strong>4</strong><span>new local and international<br />partnerships</span></div>
+                {resultMetrics.map((metric) => (
+                  <div key={metric.value}><strong>{metric.value}</strong><span>{metric.description}</span></div>
+                ))}
               </MobileSwipeCarousel>
             </div>
           </motion.div>
@@ -537,7 +538,7 @@ export default function RaydiumCaseStudy() {
       <section id="strategy" className="raydium-strategy">
         <span className="raydium-rail-label">Strategic Approach</span>
         <MobileSwipeCarousel className="raydium-strategy-list" label="Strategic approach">
-          {strategyRows.slice(0, 2).map((row) => (
+          {strategyRows.map((row) => (
             <Reveal key={row.number} className="raydium-strategy-row">
               <span className="raydium-strategy-number">{row.number}</span>
               <h3>{row.title}</h3>
@@ -546,17 +547,6 @@ export default function RaydiumCaseStudy() {
               {row.visual === "cards" && <PartnershipCards />}
             </Reveal>
           ))}
-          <div className="raydium-strategy-final-slide">
-            <Reveal className="raydium-strategy-row raydium-strategy-outreach">
-              <span className="raydium-strategy-number">{strategyRows[2].number}</span>
-              <h3>{strategyRows[2].title}</h3>
-              <p>{strategyRows[2].body}</p>
-            </Reveal>
-          <Reveal className="raydium-strategy-closing">
-            <span className="raydium-strategy-number">04</span>
-            <p>The most important part of the strategy was, without question, <strong>brand research</strong>.<br /><br />As the sole representative of Raydium at the event, I thoroughly researched the brand&apos;s history, mission, and evolution to ensure I could authentically embody its ethos for guests.</p>
-          </Reveal>
-          </div>
         </MobileSwipeCarousel>
       </section>
 
@@ -567,9 +557,15 @@ export default function RaydiumCaseStudy() {
             <OutcomeGallery key={galleryDismissed ? "dismissed" : "visible"} dismissed={galleryDismissed} />
           </motion.div>
           <motion.div className="raydium-impact-takeover" style={reduceMotion ? undefined : { y: impactTakeoverY }}>
-            <div><strong>40%↓</strong><span>below industry-standard cost<br />per attendee</span></div>
-            <div><strong>35%</strong><span>open rate on follow-up emails<br />sent 4 months later</span></div>
-            <div><strong>4</strong><span>new local and international<br />partnerships</span></div>
+            {resultMetrics.map((metric) => (
+              <div key={metric.value}><strong>{metric.value}</strong><span>{metric.description}</span></div>
+            ))}
+            <a className="raydium-event-button" href="https://luma.com/ea9lcg6b" target="_blank" rel="noopener noreferrer">
+              <Image className="raydium-event-logo" src="/case-studies/raydium/event-button/luma.png" alt="" width={54} height={54} />
+              <span className="raydium-event-label">View the event on Lu.ma</span>
+              <Image className="raydium-event-arrow is-default" src="/case-studies/raydium/event-button/arrow-default.svg" alt="" width={10.8557} height={9.62138} />
+              <Image className="raydium-event-arrow is-hover" src="/case-studies/raydium/event-button/arrow-hover.svg" alt="" width={10.3557} height={9.62138} />
+            </a>
           </motion.div>
         </div>
       </section>
