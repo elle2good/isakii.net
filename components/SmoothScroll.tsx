@@ -5,14 +5,15 @@ import { useEffect, useRef } from "react"
 
 type SmoothScrollProps = {
   intensity?: number
+  anchors?: boolean
   onReady?: (lenis: Lenis | null) => void
 }
 
-export default function SmoothScroll({ intensity = 10, onReady }: SmoothScrollProps) {
+export default function SmoothScroll({ intensity = 10, anchors = false, onReady }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
-    const lenis = new Lenis({ duration: intensity / 10 })
+    const lenis = new Lenis({ duration: intensity / 10, anchors })
     lenisRef.current = lenis
     onReady?.(lenis)
     // Preserve deep links when arriving from another page or reloading.
@@ -63,7 +64,7 @@ export default function SmoothScroll({ intensity = 10, onReady }: SmoothScrollPr
       lenisRef.current = null
       onReady?.(null)
     }
-  }, [intensity, onReady])
+  }, [intensity, anchors, onReady])
 
   return (
     <style>{`

@@ -3621,10 +3621,10 @@ select {
 }
 
 .raydium-section-two-copy > p {
-  width: min(790px, 64vw);
+  width: min(1293px, 100%);
   margin: 0 auto;
-  font-size: clamp(30px, 2.35vw, 36px);
-  line-height: 1.2;
+  font-size: clamp(24px, 2.044vw, 30px);
+  line-height: 1.44;
 }
 
 .raydium-section-two-stats {
@@ -3892,7 +3892,7 @@ select {
 
 .raydium-strategy-row {
   display: grid;
-  grid-template-columns: 90px minmax(220px, 310px) minmax(0, 690px);
+  grid-template-columns: 90px minmax(220px, 310px) minmax(0, 1fr);
   gap: 52px;
   min-height: 248px;
   padding: 14px 0 42px;
@@ -4231,12 +4231,81 @@ select {
 .raydium-event-button:is(:hover, :active, :focus-visible) .is-hover { opacity: 1; }
 .raydium-event-button:focus-visible { outline: 2px solid #ff5a00; outline-offset: 4px; }
 
+/* Raydium's editorial labels and gallery share the updated Figma typography. */
+.raydium-subnav nav a { font-family: "DM Sans", Arial, sans-serif; font-size: 18px; }
+.raydium-rail-label,
+.raydium-mission-title > span,
+.raydium-gallery-stage > span {
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 1.2px;
+  text-align: left;
+}
+.raydium-mission-title > span {
+  position: absolute;
+  top: 85px;
+  left: max(24px, calc((100% - 1228px) / 2));
+  margin: 0;
+}
+.raydium-mission-takeover p { font-family: "DM Sans", Arial, sans-serif; }
+.raydium-opportunity-copy .raydium-lede { font-size: 18px; line-height: 33px; }
+.raydium-section-two-copy > p { font-family: Eulyoo1945, Georgia, serif; }
+.raydium-section-two-stats span { font-size: clamp(19px, 2.04vw, 30px); line-height: 1.44; }
+
+@media (min-width: 701px) {
+  /* One shared canvas keeps the card edges and media edges aligned. */
+  .raydium-strategy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 120px;
+    padding-inline: min(6vw, 88px);
+  }
+  .raydium-strategy > .raydium-rail-label { padding-left: 46px; }
+  .raydium-gallery-stage {
+    padding: 188px max(6%, calc((100% - 1292px) / 2)) 48px;
+    align-content: start;
+  }
+  .raydium-gallery-stage > span {
+    top: 110px;
+    left: max(6%, calc((100% - 1292px) / 2));
+  }
+  .raydium-gallery {
+    width: 100%;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto 64px;
+    gap: 24px;
+  }
+  .raydium-gallery-media { grid-column: 1 / -1; grid-row: 1; }
+  .raydium-gallery-arrow { grid-row: 2; }
+  .raydium-gallery-arrow.is-left { grid-column: 1; justify-self: center; }
+  .raydium-gallery-arrow.is-right { grid-column: 3; justify-self: center; }
+  .raydium-gallery-dots { grid-row: 2; }
+}
+
+@media (min-width: 701px) {
+  .raydium-outcomes-sequence {
+    --outcome-metric-height: 360px;
+    --outcome-button-gap: calc(var(--outcome-metric-height) / 2);
+    --outcome-panel-height: max(100svh, calc(min(88vw, 1292px) * 44 / 75 + 324px), calc(20svh + var(--outcome-metric-height) + var(--outcome-button-gap) + 54.6px));
+    height: calc(var(--outcome-panel-height) + 750px);
+    min-height: 0;
+  }
+  .raydium-outcomes-sticky {
+    height: var(--outcome-panel-height);
+    top: min(0px, calc(100svh - var(--outcome-panel-height)));
+  }
+  .raydium-impact-takeover { row-gap: var(--outcome-button-gap); }
+  .raydium-impact-takeover > div { min-height: var(--outcome-metric-height); }
+  .raydium-event-button { margin-top: 0; }
+}
+
 @media (max-width: 1050px) {
   .raydium-hero-copy { width: calc(100% - 96px); }
   .raydium-hero-meta { right: 42px; bottom: 38px; grid-template-columns: repeat(3, 1fr); gap: 24px; width: calc(100% - 84px); }
   .raydium-subnav { grid-template-columns: minmax(0, 1fr) auto; }
   .raydium-subnav .abelian-subnav-label { display: none; }
-  .raydium-strategy { grid-template-columns: 150px minmax(0, 1fr); gap: 40px; }
+  .raydium-strategy { grid-template-columns: minmax(0, 1fr); gap: 70px; }
   .raydium-strategy-row { grid-template-columns: 70px minmax(190px, 260px) minmax(0, 1fr); gap: 34px; }
   .raydium-partnership-cards { gap: 18px; }
 }
@@ -4518,4 +4587,64 @@ select {
 @keyframes abelian-metric-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .abelian-metric-carousel .abelian-metric-slide.is-current { animation: none; }
+}
+
+/* Fit the longer DM Sans navigation and the enlarged gallery on small screens. */
+@media (max-width: 700px) {
+  .raydium-subnav nav a { font-size: clamp(9px, 2.55vw, 12px); }
+  .raydium-gallery-stage { padding-inline: 24px; }
+  .raydium-gallery { grid-template-columns: 26px minmax(0, 1fr) 26px; }
+  .raydium-gallery-media { grid-column: 1 / -1; grid-row: 1; }
+  .raydium-gallery-arrow, .raydium-gallery-dots { grid-row: 2; }
+  .raydium-gallery-arrow.is-left { grid-column: 1; }
+  .raydium-gallery-arrow.is-right { grid-column: 3; }
+}
+
+/* Updated Summary and Mission text from the Raydium case-study design. */
+.raydium-summary-label {
+  position: absolute;
+  top: 84px;
+  left: max(24px, calc((100% - 1228px) / 2));
+  color: var(--raydium-orange);
+  font: 600 25px/1.2 "DM Sans", Arial, sans-serif;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.raydium-mission-title h2 {
+  width: min(1167px, 100%);
+  font-size: 30px;
+  line-height: 74px;
+  text-align: left;
+}
+.raydium-mission-takeover p {
+  width: min(1151px, calc(100% - 96px));
+  font-size: 30px;
+  line-height: 63px;
+}
+@media (max-width: 700px) {
+  .raydium-summary-label { top: 92px; left: 24px; font-size: 20px; }
+  .raydium-section-two-copy { padding-top: 148px; }
+  .raydium-mission-title h2 { font-size: 24px; line-height: 1.7; }
+  .raydium-mission-takeover p { width: calc(100% - 48px); font-size: 24px; line-height: 1.7; }
+}
+
+/* Align the complete Summary section with the hero headline. */
+.raydium-page { --raydium-text-inset: clamp(48px, 5.5vw, 80px); }
+.raydium-hero-copy { left: var(--raydium-text-inset); }
+.raydium-section-two-copy {
+  width: 100%;
+  padding-inline: var(--raydium-text-inset);
+  text-align: left;
+}
+.raydium-summary-label { left: var(--raydium-text-inset); }
+.raydium-section-two-copy > p { margin-inline: 0; }
+.raydium-section-two-stats { gap: 32px; text-align: left; }
+.raydium-section-two-stats div { justify-items: start; text-align: left; }
+.raydium-section-two-stats span { font-size: 24px; line-height: 1.8; }
+@media (max-width: 700px) {
+  .raydium-page { --raydium-text-inset: 24px; }
+  .raydium-section-two-copy > p { font-family: Eulyoo1945, Georgia, serif; }
+  .raydium-section-two-stats .mobile-swipe-slide { padding-inline: 0; text-align: left; }
+  .raydium-section-two-stats strong { font-family: Abel, Archivo, sans-serif; }
+  .raydium-section-two-stats span { font-size: 24px; line-height: 1.5; }
 }

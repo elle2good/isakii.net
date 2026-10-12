@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import SmoothScroll from "./SmoothScroll"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
@@ -89,7 +90,7 @@ const heroVideoReversed = "https://res.cloudinary.com/dwto97ayq/video/upload/e_r
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { amount: 0.15, once: false })
+  const inView = useInView(ref, { amount: 0.15, once: true })
   const reduceMotion = useReducedMotion()
 
   return (
@@ -107,7 +108,7 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
 
 function RevealFromLeft({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { amount: 0.45, once: false })
+  const inView = useInView(ref, { amount: 0.45, once: true })
   const reduceMotion = useReducedMotion()
 
   return (
@@ -251,7 +252,7 @@ function PartnershipCards() {
 function OutcomeGallery({ dismissed }: { dismissed: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const touchStart = useRef<{ x: number; y: number } | null>(null)
-  const inView = useInView(ref, { amount: 0.15, once: false })
+  const inView = useInView(ref, { amount: 0.15, once: true })
   const [current, setCurrent] = useState(0)
   const reduceMotion = useReducedMotion()
   const goTo = useCallback((next: number) => {
@@ -320,8 +321,6 @@ export default function RaydiumCaseStudy() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("opportunity")
   const [subnavPinned, setSubnavPinned] = useState(false)
-  const [heroCopyDismissed, setHeroCopyDismissed] = useState(false)
-  const [missionCopyDismissed, setMissionCopyDismissed] = useState(false)
   const [galleryDismissed, setGalleryDismissed] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
   const showContactButtons = subnavPinned && !isScrolling
@@ -351,31 +350,19 @@ export default function RaydiumCaseStudy() {
   const heroMediaScale = useTransform(heroProgress, [0, 1], [1, 1.06])
   const heroMediaFilter = useTransform(heroProgress, [0.18, 0.7], ["blur(0px)", "blur(22px)"])
   const heroFilmY = useTransform(heroProgress, [0.16, 0.42], ["100%", "0%"])
+  const heroCopyOpacity = useTransform(() => 1 - Math.min(1, Math.max(0, (heroProgress.get() - 0.16) / 0.18)))
+  const heroCopyY = useTransform(heroProgress, [0.16, 0.34], [0, -120])
 
   const missionMediaY = useTransform(missionProgress, [0, 1], [40, -50])
   const missionTakeoverY = useTransform(missionProgress, [0.16, 0.44], ["100%", "0%"])
+  const missionCopyOpacity = useTransform(() => 1 - Math.min(1, Math.max(0, (missionProgress.get() - 0.16) / 0.18)))
+  const missionCopyY = useTransform(missionProgress, [0.16, 0.34], [0, -104])
 
-  const galleryOpacity = useTransform(outcomesProgress, [0, 0.16, 0.34], [1, 1, 0])
-  const galleryY = useTransform(outcomesProgress, [0.16, 0.36], [0, -96])
-  const impactTakeoverY = useTransform(outcomesProgress, [0.16, 0.46], ["100%", "0%"])
+  const galleryOpacity = useTransform(() => 1 - Math.min(1, Math.max(0, (outcomesProgress.get() - 0.32) / 0.36)))
+  const galleryY = useTransform(outcomesProgress, [0.32, 0.72], [0, -96])
+  const impactTakeoverY = useTransform(outcomesProgress, [0.32, 0.88], ["100%", "0%"])
 
-  useMotionValueEvent(heroProgress, "change", (latest) => {
-    setHeroCopyDismissed((dismissed) => {
-      if (latest >= 0.16) return true
-      if (latest <= 0.04) return false
-      return dismissed
-    })
-  })
-
-  useMotionValueEvent(missionProgress, "change", (latest) => {
-    setMissionCopyDismissed((dismissed) => {
-      if (latest >= 0.16) return true
-      if (latest <= 0.04) return false
-      return dismissed
-    })
-  })
-
-  useMotionValueEvent(outcomesProgress, "change", (latest) => setGalleryDismissed(latest > 0.44))
+  useMotionValueEvent(outcomesProgress, "change", (latest) => setGalleryDismissed(latest > 0.86))
 
   useEffect(() => {
     const update = () => {
@@ -409,6 +396,7 @@ export default function RaydiumCaseStudy() {
 
   return (
     <main ref={articleRef} className="raydium-page">
+      <SmoothScroll intensity={9} anchors />
       <div className={`abelian-site-header ${subnavPinned ? "is-hidden" : ""}`}>
         <HomeHeader menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((value) => !value)} />
       </div>
@@ -435,23 +423,24 @@ export default function RaydiumCaseStudy() {
             <PingPongVideo reduceMotion={Boolean(reduceMotion)} />
           </motion.div>
           <div className="raydium-hero-gradient" />
-          <motion.div className="raydium-hero-copy" initial={false} animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -120 : 0 }} transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.div className="raydium-hero-copy" style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}>
             <motion.span initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.7, delay: 0.12, ease: "easeOut" }}>Case study</motion.span>
             <motion.h1 id="raydium-title" initial={reduceMotion ? false : { opacity: 0, y: 42 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.78, delay: 0.28, ease: "easeOut" }}>One Event, Half the Cost,<br />Triple the Reach</motion.h1>
           </motion.div>
-          <motion.dl className="raydium-hero-meta" initial={false} animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -120 : 0 }} transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.dl className="raydium-hero-meta" style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}>
             <div><dt>Role</dt><dd>Ambassador</dd></div>
             <div><dt>Company</dt><dd>Raydium</dd></div>
             <div><dt>Project date</dt><dd>2025.09.01–2025.09.24</dd></div>
           </motion.dl>
-          <motion.div className="raydium-scroll-cue-wrap" aria-hidden="true" initial={false} animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -120 : 0 }} transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.div className="raydium-scroll-cue-wrap" aria-hidden="true" style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}>
             <span className="abelian-scroll-cue raydium-scroll-cue" />
           </motion.div>
           <motion.div className="raydium-hero-film" style={reduceMotion ? undefined : { y: heroFilmY }}>
             <div className="raydium-hero-film-wash" />
             <div className="raydium-section-two-copy">
-              <p>Just three months after listing its token on Korea’s largest cryptocurrency exchange, Raydium hosted a branded café rave: the company’s first offline activation in Asia. The event was built around strategies to reach three distinct audience groups at once, and we pulled off an exclusive, successful event for less than the cost of a lower-tier sponsorship at a typical industry side event.</p>
-              <MobileSwipeCarousel className="raydium-section-two-stats" label="Summary metrics">
+              <span className="raydium-summary-label">Summary</span>
+              <p>Just three months after listing its token on Korea’s largest cryptocurrency exchange, Raydium hosted a branded café rave: the company’s first offline activation in Asia. The event was built around strategies to reach three distinct audience groups at once, and I pulled off an exclusive, successful event for less than the cost of a lower-tier sponsorship at a typical industry side event.</p>
+              <MobileSwipeCarousel smoothVerticalScroll className="raydium-section-two-stats" label="Summary metrics">
                 {resultMetrics.map((metric) => (
                   <div key={metric.value}><strong>{metric.value}</strong><span>{metric.description}</span></div>
                 ))}
@@ -509,7 +498,7 @@ export default function RaydiumCaseStudy() {
           <p className="raydium-lede">When Raydium&apos;s native token RAY listed on Upbit, 24-hour trading volume surged more than 600%, reaching $401M — with zero marketing behind it.</p>
           <p>It was a clear signal that crypto traders and investors were genuinely excited about RAY’s expansion into Korea’s largest exchange. Korea Blockchain Week 2025, held three months after the listing, was the perfect opportunity to reinforce that momentum and signal the brand&apos;s next steps.</p>
         </Reveal>
-        <MobileSwipeCarousel className="raydium-opportunity-stats" label="Snapshot">
+        <MobileSwipeCarousel smoothVerticalScroll className="raydium-opportunity-stats" label="Snapshot">
           <RevealFromLeft><strong>1 month</strong><span>planning lead time</span></RevealFromLeft>
           <RevealFromLeft><strong>0</strong><span>prior offline activations in Asia</span></RevealFromLeft>
         </MobileSwipeCarousel>
@@ -525,9 +514,9 @@ export default function RaydiumCaseStudy() {
             <Image src="/case-studies/raydium/mission.png" alt="Raydium brand landscape" fill sizes="100vw" />
           </motion.div>
           <div className="raydium-mission-overlay" />
-          <motion.div className="raydium-mission-title" initial={false} animate={{ opacity: missionCopyDismissed ? 0 : 1, y: missionCopyDismissed ? -104 : 0 }} transition={{ duration: reduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.div className="raydium-mission-title" style={reduceMotion ? undefined : { opacity: missionCopyOpacity, y: missionCopyY }}>
             <span>Mission</span>
-            <h2>Raydium is 1) a decentralized exchange for <u>crypto users</u> everywhere, 2) an open-source DeFi protocol with SDKs and APIs for <u>developers</u>, and 3) core infrastructure to <u>Solana’s ecosystem</u>.</h2>
+            <h2>Raydium is 1) a decentralized exchange for crypto users everywhere, 2) an open-source DeFi protocol with SDKs and APIs for developers, and 3) core infrastructure to Solana’s ecosystem.</h2>
           </motion.div>
           <motion.div className="raydium-mission-takeover" style={reduceMotion ? undefined : { y: missionTakeoverY }}>
             <p>The Café Rave had to be inviting, accessible, and satisfying to all of Raydium&apos;s stakeholders: retail users, developers, and the broader Solana ecosystem.</p>
@@ -537,7 +526,7 @@ export default function RaydiumCaseStudy() {
 
       <section id="strategy" className="raydium-strategy">
         <span className="raydium-rail-label">Strategic Approach</span>
-        <MobileSwipeCarousel className="raydium-strategy-list" label="Strategic approach">
+        <MobileSwipeCarousel smoothVerticalScroll className="raydium-strategy-list" label="Strategic approach">
           {strategyRows.map((row) => (
             <Reveal key={row.number} className="raydium-strategy-row">
               <span className="raydium-strategy-number">{row.number}</span>

@@ -5,7 +5,7 @@ import Image from "next/image"
 import { useReducedMotion } from "motion/react"
 
 /** Keeps the original desktop grid; enables native touch scrolling on mobile. */
-export default function MobileSwipeCarousel({ children, className = "", label }: { children: ReactNode; className?: string; label: string }) {
+export default function MobileSwipeCarousel({ children, className = "", label, smoothVerticalScroll = false }: { children: ReactNode; className?: string; label: string; smoothVerticalScroll?: boolean }) {
   const slides = Children.toArray(children)
   const [active, setActive] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
@@ -31,7 +31,7 @@ export default function MobileSwipeCarousel({ children, className = "", label }:
     if (track) track.scrollTo({ left: Math.max(0, Math.min(slides.length - 1, index)) * track.clientWidth, behavior: reducedMotion ? "instant" : "smooth" })
   }
   return <div className="mobile-swipe" role="group" aria-label={label}>
-    <div ref={ref} className={`${className} mobile-swipe-track`} tabIndex={0} data-lenis-prevent onKeyDown={event => {
+    <div ref={ref} className={`${className} mobile-swipe-track`} tabIndex={0} data-lenis-prevent={smoothVerticalScroll ? undefined : true} data-lenis-prevent-touch={smoothVerticalScroll ? true : undefined} onKeyDown={event => {
       if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
         event.preventDefault()
         navigate(active + (event.key === "ArrowRight" ? 1 : -1))
