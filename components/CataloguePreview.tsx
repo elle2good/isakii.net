@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import type { MotionProps } from "motion/react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import type { FormEvent } from "react"
 import { imageDelivery } from "@/lib/media"
 import type { CatalogueItem } from "@/lib/catalogue"
 import useMobileViewport from "./useMobileViewport"
@@ -134,81 +133,32 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
   return <img {...imageDelivery(source, "(max-width: 700px) 95vw, 700px", 1280)} alt={item.popupImageAlt} decoding="async" />
 }
 
-function NewsletterInterstitial() {
-  const [email, setEmail] = useState("")
-  const [submissionState, setSubmissionState] = useState<"idle" | "loading" | "success" | "error">("idle")
-  const [statusMessage, setStatusMessage] = useState("")
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const trimmedEmail = email.trim()
-
-    if (!trimmedEmail) {
-      setSubmissionState("error")
-      setStatusMessage("Enter your email address.")
-      return
-    }
-
-    setSubmissionState("loading")
-    setStatusMessage("")
-
-    try {
-      const response = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmedEmail }),
-      })
-      const result = (await response.json()) as { error?: string; message?: string }
-
-      if (!response.ok) throw new Error(result.error || "Unable to subscribe.")
-
-      setSubmissionState("success")
-      setStatusMessage(result.message || "You're subscribed.")
-      setEmail("")
-    } catch (error) {
-      setSubmissionState("error")
-      setStatusMessage(error instanceof Error ? error.message : "Unable to subscribe.")
-    }
-  }
-
+function ContactInterstitial() {
   return (
-    <div className="catalogue-newsletter">
+    <div className="catalogue-newsletter catalogue-contact">
       <div className="catalogue-newsletter-image">
-        <Image
-          src="/home/newsletter-preview-portrait.jpg"
-          alt="Portrait of Lisa Kim"
-          fill
-          sizes="(max-width: 760px) calc(100vw - 68px), 470px"
-        />
+        <Image src="/home/newsletter-preview-portrait.jpg" alt="Portrait of Lisa Kim" fill sizes="(max-width: 760px) calc(100vw - 68px), 470px" />
       </div>
       <div className="catalogue-newsletter-content">
-        <p className="catalogue-newsletter-eyebrow">Newsletter Sign-Up</p>
+        <p className="catalogue-newsletter-eyebrow">LET’S WORK TOGETHER</p>
         <div className="catalogue-newsletter-copy">
-          <h2 id="catalogue-newsletter-title">Was this helpful?</h2>
-          <p>Get new case studies and insight reports as soon as they&apos;re published.</p>
+          <h2 id="catalogue-newsletter-title">Looking for a friendly creative strategist?</h2>
+          <p>Let’s explore how I can help turn your goals into results.</p>
         </div>
-        <form className="catalogue-newsletter-form" onSubmit={handleSubmit}>
-          <label className="sr-only" htmlFor="catalogue-newsletter-email">Email address</label>
-          <input
-            id="catalogue-newsletter-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="Email Address"
-            disabled={submissionState === "loading"}
-            required
-          />
-          <button type="submit" disabled={submissionState === "loading"}>
-            {submissionState === "loading" ? "Subscribing…" : "Subscribe"}
-          </button>
-        </form>
-        {statusMessage && (
-          <p className={`catalogue-newsletter-status is-${submissionState}`} role="status" aria-live="polite">
-            {statusMessage}
-          </p>
-        )}
+        <div className="catalogue-contact-actions">
+          <a href="https://calendar.app.google/GYAJYPauZoJfZQ4F9" target="_blank" rel="noopener noreferrer">
+            <span className="catalogue-contact-calendar" aria-hidden="true">
+              <span className="calendar-outline" />
+              <Image className="calendar-line" src="/home/contact/calendar-line.svg" alt="" width={18} height={1.5} />
+              <Image className="calendar-pin first" src="/home/contact/calendar-pin.svg" alt="" width={4.5} height={1.5} />
+              <Image className="calendar-pin second" src="/home/contact/calendar-pin.svg" alt="" width={4.5} height={1.5} />
+              <Image className="calendar-dots first" src="/home/contact/calendar-dots.svg" alt="" width={12.5} height={1.5} />
+              <Image className="calendar-dots second" src="/home/contact/calendar-dots.svg" alt="" width={12.5} height={1.5} />
+            </span>
+            Find a time to chat
+          </a>
+          <a href="mailto:smkim@isakii.net"><Image src="/home/contact/mail.svg" alt="" width={21.5} height={17.5} aria-hidden="true" />Email me</a>
+        </div>
       </div>
     </div>
   )
@@ -396,7 +346,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
             </div>
 
             {showingNewsletter ? (
-              <NewsletterInterstitial />
+              <ContactInterstitial />
             ) : (
               <>
                 <div className="catalogue-preview-body">

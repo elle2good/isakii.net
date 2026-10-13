@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import CaseStudyContactActions from "./CaseStudyContactActions"
 import Link from "next/link"
 import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useRef, useState } from "react"
@@ -8,6 +9,7 @@ import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
 import AbelianMobileMetrics from "./AbelianMobileMetrics"
+import AbelianSolutions, { AbelianMotion } from "./AbelianMedia"
 
 const navigation = [
   { id: "context", label: "Context" },
@@ -15,49 +17,6 @@ const navigation = [
   { id: "solutions", label: "Solutions" },
   { id: "impact", label: "Key outcomes" },
 ]
-
-const solutions = [
-  {
-    number: "01",
-    title: "Community gamification",
-    body: "Leaderboards, quests, and unlockable rewards were thoughtfully designed to incentivize social sharing and participation across a growing Discord server and third-party platforms like Zealy — lightweight systems built to deliver a rewarding community experience without straining the team's resources.",
-  },
-  {
-    number: "02",
-    title: "Friendly, digestible content",
-    body: "Technical articles written from a first-time learner's perspective, paired with livestreamed sessions, made deep-tech messaging more approachable for a broader audience. Community members were invited to lend their own voices to funny, shareable content about Abelian, helping it spread organically across social media.",
-  },
-  {
-    number: "03",
-    title: "Community-response streamlining",
-    body: "An FAQ, automated channel security, and moderation guidelines kept community management efficient — protecting the brand's image and helping the team navigate a tricky narrative challenge: marketing technology built around a quantum threat that hasn't happened yet.",
-  },
-  {
-    number: "04",
-    title: "Ambassador programs",
-    body: "Fifteen ambassadors spanning seven languages — each active on their own preferred social platform — were selected from within the community and managed to carry Abelian's brand awareness into corners of the global online world the team couldn't have reached on its own.",
-  },
-]
-
-function RevealRow({ number, title, body }: (typeof solutions)[number]) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { amount: 0.45, once: false })
-  const reduceMotion = useReducedMotion()
-
-  return (
-    <motion.div
-      ref={ref}
-      className="abelian-solution-row"
-      initial={false}
-      animate={{ opacity: inView ? 1 : 0.5, y: inView || reduceMotion ? 0 : 18 }}
-      transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <span className="abelian-solution-number">{number}</span>
-      <h3>{title}</h3>
-      <p>{body}</p>
-    </motion.div>
-  )
-}
 
 export default function AbelianCaseStudy() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -86,18 +45,7 @@ export default function AbelianCaseStudy() {
   const articleRef = useRef<HTMLElement>(null)
   const subnavRef = useRef<HTMLDivElement>(null)
   const impactRef = useRef<HTMLElement>(null)
-  const solutionsRef = useRef<HTMLDivElement>(null)
-  const [solutionEdges, setSolutionEdges] = useState({ start: true, end: false })
-  useEffect(() => {
-    const list = solutionsRef.current
-    if (!list) return
-    const update = () => setSolutionEdges({ start: list.scrollLeft <= 2, end: list.scrollLeft + list.clientWidth >= list.scrollWidth - 2 })
-    const observer = new ResizeObserver(update)
-    observer.observe(list)
-    list.addEventListener("scroll", update, { passive: true })
-    update()
-    return () => { observer.disconnect(); list.removeEventListener("scroll", update) }
-  }, [])
+  const impactEntered = useInView(impactRef, { amount: "some", once: true })
   const reduceMotion = useReducedMotion()
 
   const { scrollYProgress: heroProgress } = useScroll({
@@ -178,7 +126,7 @@ export default function AbelianCaseStudy() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <main ref={articleRef} className="abelian-page">
+    <main ref={articleRef} className="abelian-page abelian-revised">
       <div className={`abelian-site-header ${subnavPinned || mobileHeaderHidden ? "is-hidden" : ""}`} inert={subnavPinned || mobileHeaderHidden}>
         <HomeHeader menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((value) => !value)} />
       </div>
@@ -209,13 +157,13 @@ export default function AbelianCaseStudy() {
 
           <motion.div
             className="abelian-hero-copy"
-            initial={reduceMotion ? false : { opacity: 0, y: -42 }}
+            initial={false}
             animate={{ opacity: heroCopyDismissed ? 0 : 1, y: heroCopyDismissed ? -104 : 0 }}
             transition={{ duration: reduceMotion ? 0 : heroCopyDismissed ? 0.48 : 1.05, delay: heroCopyDismissed ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="abelian-hero-copy-motion">
-              <span className="abelian-eyebrow">Case study</span>
-              <h1 id="abelian-title">Bootstrapping<br />a Global Community from a Very Niche Technology</h1>
+              <AbelianMotion as="span" node="119:29" className="abelian-eyebrow">Case study</AbelianMotion>
+              <div id="abelian-title"><AbelianMotion as="h1" node="119:30">Bootstrapping<br />a Global Community from a Very Niche Technology</AbelianMotion></div>
             </div>
           </motion.div>
 
@@ -241,13 +189,14 @@ export default function AbelianCaseStudy() {
           <motion.div className="abelian-hero-film" style={reduceMotion ? undefined : { y: filmY }}>
             <div className="abelian-film-wash" />
             <div className="abelian-section-one-copy">
+              <span className="abelian-summary-label">Summary</span>
               <p>
                 Abelian needed to move beyond its mining-focused community to build awareness among early adopters and crypto audiences for their upcoming TGE (Token-Generation Event). It was imperative to sustain the technical credibility that gave Abelian its standing while also being accessible to a wider audience.
               </p>
               <AbelianMobileMetrics className="abelian-section-one-stats" label="Key outcomes">
-                <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
+                <div><strong>25X</strong><span>growth across<br />7 community channels</span></div>
                 <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
-                <div><strong>3</strong><span>products launched</span></div>
+                <div><strong>40K</strong><span>App Installations</span></div>
               </AbelianMobileMetrics>
               <span className="abelian-summary-scroll-cue" aria-hidden="true">
                 <Image src="/case-studies/abelian/arrow-right.png" alt="" width={32} height={32} />
@@ -257,7 +206,7 @@ export default function AbelianCaseStudy() {
         </div>
       </section>
 
-      <div ref={subnavRef} className="abelian-subnav">
+      <div ref={subnavRef} className="abelian-subnav has-contact-actions">
         <span className="abelian-subnav-label">On this page:</span>
         <nav aria-label="Case study sections">
           {navigation.map((item) => (
@@ -271,6 +220,7 @@ export default function AbelianCaseStudy() {
             </a>
           ))}
         </nav>
+        <CaseStudyContactActions />
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
 
@@ -283,10 +233,10 @@ export default function AbelianCaseStudy() {
         animate={{ opacity: showContactButtons ? 1 : 0, x: showContactButtons ? 0 : 18 }}
         transition={{ duration: reduceMotion || !showContactButtons ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
       >
-        <a href="mailto:smkim@iskaii.net" aria-label="Email smkim@iskaii.net">
+        <a href="mailto:smkim@isakii.net" aria-label="Email smkim@isakii.net">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="0.5" /><path d="m4 7 8 6 8-6" /></svg>
         </a>
-        <a href="https://calendar.app.google/57kbucQfPdUSXNmL9" target="_blank" rel="noreferrer" aria-label="Schedule a call">
+        <a href="https://calendar.app.google/GYAJYPauZoJfZQ4F9" target="_blank" rel="noreferrer" aria-label="Schedule a call">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.8 9.8 3l2 4.6-2.3 1.7a14.8 14.8 0 0 0 5.2 5.2l1.7-2.3 4.6 2-.8 2.6c-.4 1.4-1.8 2.3-3.2 2.1C10.8 18 6 13.2 5.1 7c-.2-1.4.7-2.8 2.1-3.2Z" /></svg>
         </a>
       </motion.div>
@@ -324,8 +274,8 @@ export default function AbelianCaseStudy() {
         </div>
         <span className="abelian-snapshot-label">Snapshot</span>
         <AbelianMobileMetrics className="abelian-context-stats" label="Snapshot metrics">
-          <div><strong>3 months out</strong><span>$ABEL’s first CEX listing</span></div>
-          <div><strong>10K</strong><span>community members</span></div>
+          <div><AbelianMotion as="strong" node="154:614">3 months out</AbelianMotion><AbelianMotion as="span" node="154:615">$ABEL’s first CEX listing</AbelianMotion></div>
+          <div><AbelianMotion as="strong" node="154:617">9K</AbelianMotion><AbelianMotion as="span" node="154:618">community members</AbelianMotion></div>
         </AbelianMobileMetrics>
         <div className="abelian-editorial-copy abelian-editorial-copy-bottom">
           <p className="abelian-lede">The Foundation also planned to launch quantum-resistant D2C apps and developer tools shortly after the token launch.</p>
@@ -339,24 +289,12 @@ export default function AbelianCaseStudy() {
         </div>
         <div className="abelian-chapter-overlay" />
         <div className="abelian-chapter-copy">
-          <span>Core challenges</span>
-          <h2>Building a brand community at the pre-revenue stage, centered on communicating the probabilistic quantum threat to cryptography to a predominantly crypto-enthusiast audience.</h2>
+          <span>Challenges</span>
+          <AbelianMotion as="h2" node="119:56">Building a brand community at the pre-revenue stage, centered on communicating the probabilistic quantum threat to cryptography to a predominantly crypto-enthusiast audience.</AbelianMotion>
         </div>
       </section>
 
-      <section id="solutions" className="abelian-solutions">
-        <header>
-          <span>Solutions</span>
-          <h2>Forming a highly engaged community that amplifies the brand’s mission and initiatives, each in their own voice.</h2>
-        </header>
-        <div className="abelian-solutions-carousel">
-          {!solutionEdges.start && <button type="button" className="abelian-swipe-arrow is-previous" aria-label="Previous solution" onClick={() => solutionsRef.current?.scrollBy({ left: -solutionsRef.current.clientWidth, behavior: reduceMotion ? "instant" : "smooth" })}><Image src="/case-studies/abelian/arrow-right.png" alt="" width={24} height={24} /></button>}
-          <div ref={solutionsRef} className="abelian-solution-list" tabIndex={0} role="region" aria-label="Solutions — swipe to explore" data-lenis-prevent>
-            {solutions.map((solution) => <RevealRow key={solution.number} {...solution} />)}
-          </div>
-          {!solutionEdges.end && <button type="button" className="abelian-swipe-arrow is-next" aria-label="Next solution" onClick={() => solutionsRef.current?.scrollBy({ left: solutionsRef.current.clientWidth, behavior: reduceMotion ? "instant" : "smooth" })}><Image src="/case-studies/abelian/arrow-right.png" alt="" width={24} height={24} /></button>}
-        </div>
-      </section>
+      <AbelianSolutions />
 
       <section ref={impactRef} id="impact" className="abelian-impact-sequence">
         <div className="abelian-impact-sticky">
@@ -368,14 +306,19 @@ export default function AbelianCaseStudy() {
             transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="abelian-impact-heading">
-              <span>Impact</span>
+              <span>IMPACT</span>
               <h2 className="sr-only">Key outcomes</h2>
             </div>
-            <div className="abelian-impact-stats" aria-label="Impact metrics">
-              <div><strong>6X</strong><span>growth across<br />7 community channels</span></div>
+            <motion.div
+              className="abelian-impact-stats"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: impactEntered || reduceMotion ? 1 : 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.5, ease: "easeOut" }}
+            >
+              <div><strong>25X</strong><span>growth across<br />7 community channels</span></div>
               <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
-              <div><strong>3</strong><span>products launched</span></div>
-            </div>
+              <div><strong>40K</strong><span>App Installations</span></div>
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -386,8 +329,6 @@ export default function AbelianCaseStudy() {
             <div className="abelian-impact-story-wash" />
             <div className="abelian-impact-story-copy">
               <p>Following a successful TGE, the Abelian Foundation moved from a pre-revenue stage company to a revenue-generating one, sustaining upward price momentum post-listing.</p>
-              <p>Beyond the launch of its native token, $ABEL, heightened community engagement supported the same-year launch of two additional products: Abelian Pro, a D2C quantum-resistant mobile wallet, and MaxPool, an innovative mining pool built on a novel difficulty-smoothing algorithm.</p>
-              <p>Abelian’s native blockchain explorer recorded approximately 15,000 wallet addresses created between October 2023 and January 2024.</p>
             </div>
           </motion.div>
         </div>

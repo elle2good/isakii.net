@@ -2185,22 +2185,6 @@ select {
   width: 75px;
 }
 
-.about-handwriting-korean {
-  position: absolute;
-  left: 220px;
-  top: 14px;
-  display: block;
-  width: 245px;
-  height: 60px;
-  will-change: clip-path;
-}
-
-.about-handwriting-korean img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 .about-handwriting-there {
   right: 0;
   width: 129px;
@@ -4647,4 +4631,44 @@ select {
   .raydium-section-two-stats .mobile-swipe-slide { padding-inline: 0; text-align: left; }
   .raydium-section-two-stats strong { font-family: Abel, Archivo, sans-serif; }
   .raydium-section-two-stats span { font-size: 24px; line-height: 1.5; }
+}
+
+/* Raydium typography refresh from Figma 237:794; font properties only. */
+.raydium-page .raydium-summary-label { font-size: 20px; }
+.raydium-page .raydium-impact-takeover strong,
+.raydium-page .raydium-section-two-stats strong { font-family: "DM Sans", Arial, sans-serif; font-size: 60px; font-weight: 400; line-height: 43.2px; }
+.raydium-page .raydium-impact-takeover > div > span { font-family: "DM Sans", Arial, sans-serif; font-size: 24px; font-weight: 400; line-height: 43.2px; }
+.raydium-page .raydium-card-front .raydium-card-copy { font-family: "DM Sans", Arial, sans-serif; font-weight: 400; }
+.raydium-page .raydium-partnership-cards button:nth-child(1) .raydium-card-front .raydium-card-copy { font-size: 34px; line-height: 45px; }
+.raydium-page .raydium-partnership-cards button:nth-child(2) .raydium-card-front .raydium-card-copy { font-size: 38px; line-height: 45px; }
+.raydium-page .raydium-partnership-cards button:nth-child(3) .raydium-card-front .raydium-card-copy { font-size: 25px; line-height: 35px; }
+@media (max-width: 1100px) {
+ .raydium-page .raydium-partnership-cards button:nth-child(1) .raydium-card-front .raydium-card-copy { font-size: 25px; line-height: 33px; }
+ .raydium-page .raydium-partnership-cards button:nth-child(2) .raydium-card-front .raydium-card-copy { font-size: 28px; line-height: 33px; }
+ .raydium-page .raydium-partnership-cards button:nth-child(3) .raydium-card-front .raydium-card-copy { font-size: 22px; line-height: 30px; }
+}
+
+/* Shared interstitial shown during catalogue browsing and after a case-study return. */
+.catalogue-contact .catalogue-newsletter-eyebrow { font-family: "DM Sans", Arial, sans-serif; font-weight: 400; }
+.catalogue-contact .catalogue-newsletter-copy { max-width: 564px; }
+.catalogue-contact .catalogue-newsletter-copy h2,
+.catalogue-contact .catalogue-newsletter-copy p { letter-spacing: -1px; }
+.catalogue-contact-actions { display: flex; flex-wrap: wrap; gap: 20px 34px; margin-top: 48px; }
+.catalogue-contact-actions > a { display: flex; align-items: center; justify-content: center; gap: 25px; width: 222px; min-height: 52px; padding: 12px 16px; background: #111827; color: #fff; font: 700 14px/18px "DM Sans", Arial, sans-serif; text-decoration: none; }
+.catalogue-contact-actions > a:last-child { width: 214px; background: #111c2d; }
+.catalogue-contact-actions > a:hover { background: #172554; }
+.catalogue-contact-actions > a:focus-visible { outline: 2px solid #ff5a00; outline-offset: 4px; }
+.catalogue-contact-calendar { position: relative; flex: 0 0 18px; height: 20px; }
+.catalogue-contact-calendar .calendar-outline { position: absolute; top: 1.5px; left: 0; width: 18px; height: 18px; border: 1.5px solid #fff; border-radius: 5px; }
+.catalogue-contact-calendar img { position: absolute; }
+.catalogue-contact-calendar .calendar-line { left: 0; top: 5.75px; }
+.catalogue-contact-calendar .calendar-pin { top: 1px; transform: rotate(90deg); }
+.catalogue-contact-calendar .calendar-pin.first { left: 2.25px; }
+.catalogue-contact-calendar .calendar-pin.second { left: 11.25px; }
+.catalogue-contact-calendar .calendar-dots { left: 2.75px; }
+.catalogue-contact-calendar .calendar-dots.first { top: 9.75px; }
+.catalogue-contact-calendar .calendar-dots.second { top: 13.75px; }
+@media (max-width: 700px) {
+ .catalogue-contact-actions { gap: 12px; margin-top: 32px; }
+ .catalogue-contact-actions > a, .catalogue-contact-actions > a:last-child { width: 100%; }
 }

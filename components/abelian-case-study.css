@@ -1,0 +1,123 @@
+/* Abelian-only Figma revision: keep shared case-study styles unchanged. */
+.abelian-revised .abelian-subnav a { font-family: "DM Sans", sans-serif; font-size: 18px; }
+.abelian-revised .abelian-eyebrow { display: inline-block; }
+.abelian-revised .abelian-section-label,
+.abelian-revised .abelian-solutions > header > span,
+.abelian-summary-label { font: 600 20px/1.2 "DM Sans", sans-serif; letter-spacing: 1.2px; text-transform: uppercase; color: #ff5a00; }
+.abelian-summary-label { position: absolute; top: 9%; left: 5.5%; }
+.abelian-revised .abelian-section-one-copy > p { font-family: "DM Sans", sans-serif; font-size: clamp(22px, 2.1vw, 30px); line-height: 1.5; }
+.abelian-revised .abelian-section-one-stats strong { font-family: "DM Sans", sans-serif; font-size: clamp(48px, 4.1vw, 60px); }
+.abelian-revised .abelian-editorial { min-height: 989px; padding-block: 76px 90px; }
+.abelian-revised .abelian-editorial-copy .abelian-lede { font-size: 18px; line-height: 29px; margin-bottom: 26px; }
+.abelian-revised .abelian-editorial-copy p { line-height: 29px; }
+.abelian-revised .abelian-context-stats span { font-family: "DM Sans", sans-serif; }
+.abelian-revised .abelian-challenges { min-height: 593px; height: 593px; }
+.abelian-revised .abelian-challenges .abelian-chapter-copy > span { position: absolute; top: 99px; left: max(6.1%, calc((100% - 1288px) / 2)); font: 600 20px/1.2 "DM Sans", sans-serif; text-align: left; }
+.abelian-revised .abelian-challenges h2 { font-size: 35px; line-height: 55px; }
+.abelian-revised .abelian-solutions-expanded { padding: 170px max(24px, 8.4%) 60px; min-height: 0; }
+.abelian-revised .abelian-solutions-expanded > header { gap: 70px; margin-bottom: 110px; }
+.abelian-revised .abelian-solutions-expanded > header h2 { font: 400 36px/44px "DM Sans", sans-serif; }
+.abelian-solution-block { padding-bottom: 90px; margin-bottom: 75px; border-bottom: 1px solid rgba(12,3,25,.16); }
+.abelian-solution-block:last-child { margin-bottom: 0; }
+.abelian-solution-heading { display: grid; grid-template-columns: 90px minmax(220px, 310px) minmax(0, 1fr); gap: 52px; }
+.abelian-solution-heading h3 { margin: 0; font: 400 30px/36px "DM Sans", sans-serif; }
+.abelian-solution-heading p { margin: 0; font: 400 17px/27px "DM Sans", sans-serif; }
+.abelian-games-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin: 105px -5% 25px 4%; }
+.abelian-hover-gallery, .abelian-hover-video, .abelian-brochure { margin: 0; min-width: 0; }
+/* Expand hit areas without moving or shrinking their visible media. */
+.abelian-media-hover-area { box-sizing: border-box; display: block; width: calc(100% + 30px); border: 0; padding: 60px 30px; margin: -45px -15px; background: transparent; color: inherit; cursor: pointer; text-decoration: none; }
+.abelian-media-hover-area:focus-visible { outline: 2px solid #ff5a00; outline-offset: 0; }
+.abelian-gallery-stack, .abelian-video-stage { display: block; position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #fff; }
+.abelian-gallery-stack img { object-fit: cover; opacity: 0; transition: opacity 250ms ease-in-out; }
+.abelian-gallery-stack img.is-active { opacity: 1; }
+.abelian-video-stage img { object-fit: cover; }
+.abelian-video-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+.abelian-content-performance { margin: 42px 0 50px 142px; max-width: 690px; font: 600 17px/27px "DM Sans",sans-serif; }
+.abelian-content-performance p { margin: 0; }
+.abelian-content-performance ul { margin: 0; padding-left: 25px; }
+.abelian-paid-videos { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; margin-left: 127px; }
+.abelian-live-videos { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 30px; margin: 85px 0 0 127px; }
+.abelian-live-videos .abelian-hover-video { position: relative; padding-inline: 12px; }
+.abelian-live-videos .abelian-hover-video + .abelian-hover-video::before { content: ""; position: absolute; width: 1px; background: #c6c6c6; left: -15px; top: -30px; height: 269px; }
+.abelian-video-description { margin: 7px 15px 0; font: 400 17px/27px "DM Sans",sans-serif; min-height: 135px; }
+.abelian-video-description strong { display: block; font-weight: 600; }
+.abelian-field-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 50px; align-items: end; margin: 40px 0 50px 127px; }
+.abelian-field-grid > .abelian-motion { min-width: 0; }
+.abelian-hover-gallery.is-banner { max-width: 224px; }
+.abelian-hover-gallery.is-banner .abelian-gallery-stack { aspect-ratio: 194/445; }
+.abelian-hover-gallery.is-shirt .abelian-gallery-stack { aspect-ratio: 313/382; }
+.abelian-hover-gallery:is(.is-banner,.is-shirt) img { object-fit: contain; }
+.abelian-hover-gallery.is-banner img[src*="before"] { padding: 0 7%; border: 1px solid #000; }
+.abelian-brochure > div { position: relative; aspect-ratio: 286/409; margin: 15px; }
+.abelian-brochure img { object-fit: contain; }
+.abelian-field-grid figcaption { margin: 24px 15px 0; font: 400 17px/27px "DM Sans",sans-serif; }
+.abelian-field-grid figcaption strong { display: block; font-weight: 600; }
+.abelian-revised .abelian-impact-stats strong { font: 400 60px/1 "DM Sans",sans-serif; }
+.abelian-revised .abelian-impact-stats span { font: 400 24px/43.2px "DM Sans",sans-serif; }
+.abelian-revised .abelian-impact-stats > div { border: 0; }
+.abelian-revised .abelian-impact-story-copy { font: 400 25px/1.6 Eulyoo1945,Georgia,serif; }
+@media (max-width: 1100px) {
+ .abelian-solution-heading { grid-template-columns: 55px minmax(180px, .8fr) 1.2fr; gap: 24px; }
+ .abelian-revised .abelian-solutions-expanded { padding-inline: 5%; }
+ .abelian-content-performance { margin-left: 79px; }
+ .abelian-paid-videos, .abelian-live-videos, .abelian-field-grid { margin-left: 64px; gap: 20px; }
+ .abelian-games-grid { margin-inline: -15px; }
+}
+@media (max-width: 700px) {
+ .abelian-revised .abelian-subnav a { font-size: 12px; }
+ .abelian-revised .abelian-editorial { min-height: 0; padding: 64px 24px; }
+ .abelian-summary-label { top: 40px; left: 24px; }
+ .abelian-revised .abelian-section-one-copy { padding-top: 92px; }
+ .abelian-revised .abelian-section-one-copy > p { font-size: 20px; line-height: 1.4; }
+ .abelian-revised .abelian-challenges .abelian-chapter-copy > span { left: 24px; top: 64px; }
+ .abelian-revised .abelian-challenges h2 { font-size: 29px; line-height: 1.5; }
+ .abelian-revised .abelian-solutions-expanded { padding: 76px 24px 48px; }
+ .abelian-revised .abelian-solutions-expanded > header { gap: 28px; margin-bottom: 64px; }
+ .abelian-revised .abelian-solutions-expanded > header h2 { font-size: 28px; line-height: 1.35; }
+ .abelian-solution-heading { grid-template-columns: 40px 1fr; gap: 18px; }
+ .abelian-solution-heading h3 { font-size: 25px; line-height: 1.3; }
+ .abelian-solution-heading p { grid-column: 2; }
+ .abelian-solution-heading .abelian-solution-number { font-size: 34px; }
+ .abelian-solution-block { margin-bottom: 54px; padding-bottom: 48px; }
+ .abelian-games-grid,.abelian-paid-videos,.abelian-live-videos,.abelian-field-grid { grid-template-columns: 1fr; margin: 40px -15px 0; gap: 28px; }
+ .abelian-content-performance { margin: 32px 0; font-size: 16px; }
+ .abelian-live-videos .abelian-hover-video { padding: 0; }
+ .abelian-live-videos .abelian-hover-video + .abelian-hover-video::before { display: none; }
+ .abelian-video-description { min-height: 0; }
+ .abelian-field-grid { max-width: 350px; margin-inline: auto; gap: 50px; }
+ .abelian-field-grid .abelian-hover-gallery { margin-inline: auto; }
+ .abelian-revised .abelian-impact-stats strong { font-size: 60px; }
+ .abelian-revised .abelian-impact-stats span { font-size: 22px; line-height: 1.45; }
+}
+@media (prefers-reduced-motion: reduce) { .abelian-gallery-stack img { transition: none; } }
+/* The banner's Figma motion ends 40.5px lower than the shirt's; reserve it in layout. */
+.abelian-field-grid > [data-motion="461:364"] { margin-bottom: 40.5px; }
+.abelian-brochure { max-width: 316px; }
+@media (min-width: 1101px) {
+ .abelian-solution-block:first-of-type .abelian-solution-heading { grid-template-columns: 90px minmax(310px,390px) minmax(0,1fr); }
+}
+
+.abelian-revised .abelian-impact-heading > span { font: 600 20px/1.2 "DM Sans", sans-serif; }
+
+.abelian-gallery-cue { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid rgba(255,255,255,.6); border-radius: 50%; background: rgba(12,3,25,.72); color: #fff; pointer-events: none; transition: opacity 180ms ease; }
+.abelian-gallery-cue svg { width: 19px; height: 19px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.abelian-hover-gallery .abelian-media-hover-area:is(:hover,:focus-visible) .abelian-gallery-cue { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .abelian-gallery-cue { transition: none; } }
+
+.abelian-revised .abelian-impact-story { display: flex; align-items: center; }
+.abelian-revised .abelian-impact-story-copy { width: min(1100px, calc(100% - 96px)); margin: 0 auto; padding: 80px 0; }
+.abelian-revised .abelian-impact-story-copy p { margin: 0; }
+@media (max-width: 700px) {
+ .abelian-revised .abelian-impact-story { min-height: 60svh; }
+ .abelian-revised .abelian-impact-story-copy { width: calc(100% - 48px); padding: 64px 0; }
+}
+
+.abelian-brochure-book { display: block; position: relative; aspect-ratio: 595 / 842; perspective: 1100px; background: #11151f; }
+.abelian-brochure-book > img { opacity: 0; }
+.abelian-brochure-book > img.is-active { opacity: 1; }
+.abelian-brochure-turn { position: absolute; inset: 0; transform-origin: left center; backface-visibility: hidden; animation: abelian-brochure-flip 550ms ease-in-out 350ms both; }
+.abelian-brochure-turn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(0,0,0,.35)); opacity: 0; animation: abelian-brochure-shadow 550ms ease-in-out 350ms both; }
+.abelian-brochure-preview .abelian-media-hover-area:is(:hover,:focus-visible) .abelian-gallery-cue { opacity: 0; }
+@keyframes abelian-brochure-flip { from { transform: rotateY(0deg); } to { transform: rotateY(90deg); } }
+@keyframes abelian-brochure-shadow { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .abelian-brochure-turn, .abelian-brochure-turn::after { animation: none; } }

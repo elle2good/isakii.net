@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import CaseStudyContactActions from "./CaseStudyContactActions"
 import Link from "next/link"
 import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -450,25 +451,22 @@ export default function RaydiumCaseStudy() {
         </div>
       </section>
 
-      <div ref={subnavRef} className="abelian-subnav raydium-subnav">
+      <div ref={subnavRef} className="abelian-subnav raydium-subnav has-contact-actions">
         <span className="abelian-subnav-label">On this page:</span>
         <nav aria-label="Case study sections">
           {navigation.map((item) => <a key={item.id} href={`#${item.id}`} className={activeSection === item.id ? "is-active" : ""} aria-current={activeSection === item.id ? "location" : undefined}>{item.label}</a>)}
         </nav>
-        <div className="raydium-subnav-actions">
-          <a href="https://calendar.app.google/ynneGAWzZeX47R9w7" target="_blank" rel="noreferrer" aria-label="Book a call"><Image src="/case-studies/raydium/nav-icon-2.svg" alt="" width={13} height={13} aria-hidden="true" /></a>
-          <button type="button" aria-label="Download or save this case study as PDF" onClick={() => window.print()}><Image src="/case-studies/raydium/nav-icon-1.svg" alt="" width={10} height={10} aria-hidden="true" /></button>
-        </div>
+        <CaseStudyContactActions />
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
 
       <motion.div className="abelian-mobile-contact-stack" aria-label="Contact" inert={!showContactButtons} aria-hidden={!showContactButtons} initial={false}
         animate={{ opacity: showContactButtons ? 1 : 0, x: showContactButtons ? 0 : 18 }}
         transition={{ duration: reduceMotion || !showContactButtons ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}>
-        <a href="mailto:smkim@iskaii.net" aria-label="Email smkim@iskaii.net">
+        <a href="mailto:smkim@isakii.net" aria-label="Email smkim@isakii.net">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="0.5" /><path d="m4 7 8 6 8-6" /></svg>
         </a>
-        <a href="https://calendar.app.google/57kbucQfPdUSXNmL9" target="_blank" rel="noreferrer" aria-label="Schedule a call">
+        <a href="https://calendar.app.google/GYAJYPauZoJfZQ4F9" target="_blank" rel="noreferrer" aria-label="Schedule a call">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.8 9.8 3l2 4.6-2.3 1.7a14.8 14.8 0 0 0 5.2 5.2l1.7-2.3 4.6 2-.8 2.6c-.4 1.4-1.8 2.3-3.2 2.1C10.8 18 6 13.2 5.1 7c-.2-1.4.7-2.8 2.1-3.2Z" /></svg>
         </a>
       </motion.div>

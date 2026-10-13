@@ -155,12 +155,9 @@ export default function AboutExperience() {
         )}
 
         <motion.h1 id="about-title" className="about-handwritten-title" initial={reduceMotion ? "visible" : "hidden"} whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-          <span className="sr-only">hi, there. <span lang="ko">안녕하세요.</span></span>
+          <span className="sr-only">hi, there.</span>
           <motion.span className="about-handwriting-word about-handwriting-hi" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.05, delay: reduceMotion ? 0 : 0.24, ease }} />
           <motion.span className="about-handwriting-word about-handwriting-there" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.48, delay: reduceMotion ? 0 : 1.02, ease }} />
-          <motion.span className="about-handwriting-korean" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.48, delay: reduceMotion ? 0 : 1.02, ease }}>
-            <Image src="/about/hello-korean.png" alt="" width={245} height={60} priority />
-          </motion.span>
         </motion.h1>
 
         <motion.div className="about-portrait-new" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 1.15, delay: 0.5, ease }}>
@@ -180,9 +177,8 @@ export default function AboutExperience() {
           <FadeIn className="about-body-new" delay={0.12}>
             <p>I was born in Seoul, South Korea, on August 10th, 1996, and I currently live in Gangnam-gu, at the heart of the city.</p>
             <p>I graduated with a Bachelor of Science in Clothing &amp; Textiles from Sookmyung Women&apos;s University. Since then, I&apos;ve worked full-time at an AI startup (before ChatGPT even launched) and later continued my journey in emerging tech as a self-employed blockchain consultant and freelancer.</p>
-            <p>In my free time, I enjoy listening to music, practicing yoga, jogging, and doing anything creative.</p>
-            <p>I&apos;m entrepreneurial by nature, which gives me a naturally optimistic outlook. In 2026, I started studying for the LSAT as a way to sharpen my reasoning skills: a good counterbalance to that optimism.</p>
-            <p>Anyway, I&apos;m glad you found me. Thanks for stopping by.</p>
+            <p>As a hyper-generalist, I work across the non-technical side of technology, with data analytics in the mix. You may have already noticed my creative side, but I also enjoy a good reasoning challenge: I scored 164 on the LSAT in April 2026 after three months of studying.</p>
+            <p>Anyway, I’m happy you found me. Book a call or drop me a note about whatever’s on your mind!<br />I’d love to hear from you.</p>
           </FadeIn>
         </div>
 
