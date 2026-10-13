@@ -1,0 +1,22 @@
+export const assets = {
+  "412:240-imgGrowthGraph": "/case-studies/algorand/412-240-imgGrowthGraph.png",
+  "412:240-imgGrowthGraph1": "/case-studies/algorand/412-240-imgGrowthGraph1.png",
+  "412:240-imgGrowthGraph2": "/case-studies/algorand/412-240-imgGrowthGraph2.png",
+  "412:240-imgPartnerContent": "/case-studies/algorand/412-240-imgPartnerContent.png",
+  "412:240-imgPage": "/case-studies/algorand/412-240-imgPage.png",
+  "412:240-imgContentCalendar": "/case-studies/algorand/412-240-imgContentCalendar.png",
+  "412:240-imgPeraGraphicDesign": "/case-studies/algorand/412-240-imgPeraGraphicDesign.png",
+  "412:240-imgGiveawayGraphicDesign": "/case-studies/algorand/412-240-imgGiveawayGraphicDesign.png",
+  "412:240-imgAlphaGraphicDesign": "/case-studies/algorand/412-240-imgAlphaGraphicDesign.png",
+  "412:240-imgGraphicDesign": "/case-studies/algorand/412-240-imgGraphicDesign.png",
+  "412:240-imgSquareGraphicDesign": "/case-studies/algorand/412-240-imgSquareGraphicDesign.png",
+  "433:244-imgLine32": "/case-studies/algorand/433-244-imgLine32.svg",
+  "433:244-imgVector": "/case-studies/algorand/433-244-imgVector.svg",
+  "433:244-imgLine33": "/case-studies/algorand/433-244-imgLine33.svg",
+  "433:244-imgPage": "/case-studies/algorand/433-244-imgPage.png",
+  "433:244-imgScreenshot20261011At2002511": "/case-studies/algorand/433-244-imgScreenshot20261011At2002511.png",
+  "433:244-imgScreenshot20261012At1435141": "/case-studies/algorand/433-244-imgScreenshot20261012At1435141.png",
+  "433:223-imgStakingRewardsBlogBanner21": "/case-studies/algorand/433-223-imgStakingRewardsBlogBanner21.png",
+  "algoDesign-imgDown": "/case-studies/algorand/algoDesign-imgDown.svg",
+  "algoDesign-imgUntitledDesign11": "/case-studies/algorand/algoDesign-imgUntitledDesign11.png"
+} as const

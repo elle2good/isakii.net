@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import AlgorandCaseStudy from "@/components/AlgorandCaseStudy"
 import AlgorandGame from "@/components/AlgorandGame"
 import AbelianCaseStudy from "@/components/AbelianCaseStudy"
 import RaydiumCaseStudy from "@/components/RaydiumCaseStudy"
@@ -44,7 +45,7 @@ export default async function CatalogueCaseStudyPage({ params }: CataloguePagePr
   }
 
   if (item.id === "b6a7f66e-bea3-41b3-b053-115ebfe9abbd") {
-    return <AlgorandGame />
+    return slug.toLowerCase() === "algorand-staking-korea-campaign" ? <AlgorandGame /> : <AlgorandCaseStudy />
   }
 
   notFound()

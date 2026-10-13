@@ -148,29 +148,29 @@ const READY_MOVIE_DEEP_SEARCH_ITEM: CatalogueItem = {
 const READY_ALGORAND_ITEM: CatalogueItem = {
   id: "b6a7f66e-bea3-41b3-b053-115ebfe9abbd",
   order: 2,
-  contentType: "Playable Case Study",
-  title: "One Campaign, Two Perspectives",
-  subtitle: "Full-Funnel Community Marketing Campaign",
+  contentType: "Campaign Report",
+  title: "Marketing Campaign Built on Momentum",
+  subtitle: "Full-funnel Community Marketing Campaign",
   slug: "Algorand-korea-community",
   date: "2025",
   type: "Flagship",
   companyName: "Algorand Foundation",
   tags: ["Localization", "Community", "User Acquisition"],
-  shortSummary: "A playable case study that walks you through a real localized full-funnel marketing campaign presented in both the community manager's perspective and the user's perspective.\n\nFull case study is coming soon.",
-  tldr: "",
-  ctaLabel: "Play the Teaser",
+  shortSummary: "Rising competition signals growing interest. Turn that attention into community growth with a targeted campaign.",
+  tldr: "I turned rising competition in Korea’s crypto market into a growth opportunity for Algorand, combining eight influencer partnerships with targeted content and community events. The campaign delivered 21.3% community growth and an estimated 88% retention 12 days after closing. Supporting activations generated 239 dApp conversions, and 405 AMA listeners across live and replay.",
+  ctaLabel: "Read the full case study",
   caseStudyUrl: "/catalogue/Algorand-korea-community",
   downloadUrl: "",
   popupImage:
-    "https://res.cloudinary.com/dwto97ayq/video/upload/v1789479665/algorand-desktop-1-to-4-9x10_lpqmls.mov",
-  mobilePopupImage: "https://res.cloudinary.com/dwto97ayq/video/upload/v1789479580/algorand-desktop-1-to-4_odfkeh.mp4",
+    "https://res.cloudinary.com/dwto97ayq/video/upload/v1791813984/group-17-470x518-no-padding_cok8vo.mp4",
+  mobilePopupImage: "https://res.cloudinary.com/dwto97ayq/video/upload/v1791813839/group-17-657x370-no-padding_de7sel.mp4",
   mobilePopupMediaKind: "video",
   coverImage:
-    "https://res.cloudinary.com/dwto97ayq/image/upload/v1789480194/game-cover-transparent_lzhht6.png",
+    "https://res.cloudinary.com/dwto97ayq/image/upload/v1791812600/ChatGPT_Image_Oct_12_2026_10_43_57_PM_ojuhgg.png",
   popupMediaKind: "video",
   coverMediaKind: "image",
-  popupImageAlt: "One Campaign, Two Perspectives game teaser",
-  coverImageAlt: "One Campaign, Two Perspectives game case cover",
+  popupImageAlt: "Marketing Campaign Built on Momentum campaign preview",
+  coverImageAlt: "Marketing Campaign Built on Momentum campaign report cover",
 }
 
 const READY_ITEMS = [
@@ -321,11 +321,7 @@ export async function getCatalogueItems(): Promise<CatalogueItem[]> {
       fetchTable(mediaTable, token),
     ])
     const items = mapCatalogueRows(itemRows, mediaRows)
-    return items.length
-      ? items.map((item) => item.slug.toLowerCase() === READY_ALGORAND_ITEM.slug.toLowerCase()
-        ? { ...item, ctaLabel: READY_ALGORAND_ITEM.ctaLabel, caseStudyUrl: READY_ALGORAND_ITEM.caseStudyUrl }
-        : item)
-      : READY_ITEMS
+    return items.length ? items : READY_ITEMS
   } catch (error) {
     console.error("Unable to load the Baserow catalogue; using the checked-in preview.", error)
     return READY_ITEMS
