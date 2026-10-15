@@ -158,8 +158,10 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
 }) {
   const initialPreview = catalogueItems.find(item => item.slug.toLowerCase() === initialPreviewSlug?.toLowerCase()) ?? null
   const orderedCatalogueItems = catalogueItems.filter(item => item.order > 0).sort((a, b) => a.order - b.order)
+  const mobileCatalogue = useMobileViewport()
+  const [catalogueExpanded, setCatalogueExpanded] = useState(false)
   const [catalogueShifted, setCatalogueShifted] = useState(false)
-  const catalogueOffset = catalogueShifted && orderedCatalogueItems.length > 5 ? 1 : 0
+  const catalogueOffset = !mobileCatalogue && catalogueShifted && orderedCatalogueItems.length > 5 ? 1 : 0
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
   const [topChromeVisible, setTopChromeVisible] = useState(!initialPreview)
@@ -670,7 +672,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
         <div className="home-project-carousel">
           <div id="catalogue-project-grid" className={`home-project-grid home-project-track${catalogueOffset ? " is-shifted" : ""}`}>
             {orderedCatalogueItems.slice(0, 6).map((project, index) => {
-              const visible = index >= catalogueOffset && index < catalogueOffset + 5
+              const visible = mobileCatalogue ? index < 5 || catalogueExpanded : index >= catalogueOffset && index < catalogueOffset + 5
               return <div className="home-project-slide" key={project.id} inert={!visible} aria-hidden={!visible}>
                 <ProjectCard project={project} onOpen={openCatalogueItem} />
               </div>
@@ -679,11 +681,12 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
         </div>
         <button
           type="button"
-          className={`home-catalogue-link${catalogueOffset ? " is-shifted" : ""}`}
+          className={`home-catalogue-link${catalogueOffset ? " is-shifted" : ""}${mobileCatalogue && catalogueExpanded ? " is-expanded" : ""}`}
           disabled={orderedCatalogueItems.length <= 5}
           aria-controls="catalogue-project-grid"
-          aria-label={catalogueOffset ? "Show catalogue items 1 to 5" : "Show catalogue items 2 to 6"}
-          onClick={() => setCatalogueShifted(shifted => !shifted)}
+          aria-expanded={mobileCatalogue ? catalogueExpanded : undefined}
+          aria-label={mobileCatalogue ? (catalogueExpanded ? "Show fewer catalogue items" : "Show sixth catalogue item") : catalogueOffset ? "Show catalogue items 1 to 5" : "Show catalogue items 2 to 6"}
+          onClick={() => mobileCatalogue ? setCatalogueExpanded(expanded => !expanded) : setCatalogueShifted(shifted => !shifted)}
         >
           <span className="home-catalogue-button-label">VIEW CATALOGUE</span>
           <span className="home-catalogue-arrow" aria-hidden="true">→</span>

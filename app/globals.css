@@ -4635,7 +4635,7 @@ select {
 .home-catalogue-link.is-shifted .home-catalogue-arrow { left: 19px; transform: rotate(180deg); }
 .home-catalogue-link.is-shifted .home-catalogue-button-label { transform: translateX(26px); }
 .home-catalogue-link:active { transform: scale(.97); }
-@media (max-width: 760px) {
+@media (max-width: 700px) {
   .home-project-track { display: grid; grid-template-columns: 1fr; gap: 38px; }
   .home-project-track.is-shifted { transform: none; }
   .home-project-slide[aria-hidden="true"] { display: none; }
@@ -4785,3 +4785,8 @@ select {
 .raydium-event-cta-section .raydium-event-button { margin: 0; }
 
 @media(max-width:700px){.hero-video-frame video{object-position:center}}
+
+@media (max-width:700px) {
+ .home-catalogue-link .home-catalogue-arrow { transform: rotate(90deg); }
+ .home-catalogue-link.is-expanded .home-catalogue-arrow { transform: rotate(-90deg); }
+}

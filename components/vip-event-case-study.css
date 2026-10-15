@@ -92,3 +92,9 @@
  .vip-page .vip-lesson-cards .raydium-card-face { padding:24px 20px; }
  .vip-page .vip-lesson-cards .raydium-card-copy { font-size:clamp(16px,4.6vw,20px); line-height:1.4; }
 }
+
+/* The mobile hero is one screen; Summary follows in normal flow. */
+@media(max-width:700px) {
+ .vip-hero .vip-backdrop, .vip-hero .vip-shade { height:100svh; bottom:auto; }
+ .vip-hero .vip-backdrop { inset-inline:0; transform:none!important; filter:none!important; }
+}
