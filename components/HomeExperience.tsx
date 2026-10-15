@@ -7,6 +7,7 @@ import { FocusEvent, memo, useCallback, useEffect, useRef, useState } from "reac
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
+import FooterContactPrompt from "./FooterContactPrompt"
 import CataloguePreview from "./CataloguePreview"
 import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
@@ -157,6 +158,9 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
   initialPreviewSlug?: string
 }) {
   const initialPreview = catalogueItems.find(item => item.slug.toLowerCase() === initialPreviewSlug?.toLowerCase()) ?? null
+  const orderedCatalogueItems = catalogueItems.filter(item => item.order > 0).sort((a, b) => a.order - b.order)
+  const [catalogueShifted, setCatalogueShifted] = useState(false)
+  const catalogueOffset = catalogueShifted && orderedCatalogueItems.length > 5 ? 1 : 0
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)
   const [topChromeVisible, setTopChromeVisible] = useState(!initialPreview)
@@ -621,7 +625,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
 
       <CataloguePreview
         item={activeCatalogueItem}
-        items={catalogueItems}
+        items={orderedCatalogueItems}
         onClose={closeCatalogueItem}
         onSelect={setActiveCatalogueItem}
       />
@@ -664,21 +668,25 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
 
       <section ref={projectSectionRef} id="projects" className="home-projects">
         <h2>Catalogue</h2>
-        <div className="home-project-grid">
-          {catalogueItems.map((project) => (
-            <ProjectCard project={project} onOpen={openCatalogueItem} key={project.id} />
-          ))}
+        <div className="home-project-carousel">
+          <div id="catalogue-project-grid" className={`home-project-grid home-project-track${catalogueOffset ? " is-shifted" : ""}`}>
+            {orderedCatalogueItems.slice(0, 6).map((project, index) => {
+              const visible = index >= catalogueOffset && index < catalogueOffset + 5
+              return <div className="home-project-slide" key={project.id} inert={!visible} aria-hidden={!visible}>
+                <ProjectCard project={project} onOpen={openCatalogueItem} />
+              </div>
+            })}
+          </div>
         </div>
         <button
           type="button"
-          className="home-catalogue-link"
-          aria-disabled="true"
-          aria-label="Catalogue coming soon"
+          className={`home-catalogue-link${catalogueOffset ? " is-shifted" : ""}`}
+          disabled={orderedCatalogueItems.length <= 5}
+          aria-controls="catalogue-project-grid"
+          aria-label={catalogueOffset ? "Show catalogue items 1 to 5" : "Show catalogue items 2 to 6"}
+          onClick={() => setCatalogueShifted(shifted => !shifted)}
         >
-          <span className="home-catalogue-labels" aria-hidden="true">
-            <span className="home-catalogue-label-default">VIEW CATALOGUE</span>
-            <span className="home-catalogue-label-coming">MORE COMING SOON</span>
-          </span>
+          <span className="home-catalogue-button-label">VIEW CATALOGUE</span>
           <span className="home-catalogue-arrow" aria-hidden="true">→</span>
         </button>
       </section>
@@ -698,6 +706,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
       </section>
 
       <HomeFooter />
+      <FooterContactPrompt blocked={menuOpen || blogExpanded || activeCatalogueItem !== null} />
     </main>
   )
 }

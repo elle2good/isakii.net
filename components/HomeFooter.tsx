@@ -123,6 +123,12 @@ export default function HomeFooter() {
               <path d="M7.1 3.5 9.3 7c.3.5.2 1.1-.2 1.5l-1.4 1.4a14.8 14.8 0 0 0 6.4 6.4l1.4-1.4c.4-.4 1-.5 1.5-.2l3.5 2.2c.5.3.7.9.5 1.4l-.7 2c-.2.6-.8 1-1.5 1C10 21.3 2.7 14 2.7 5.2c0-.7.4-1.3 1-1.5l2-.7c.5-.2 1.1 0 1.4.5Z" />
             </svg>
           </a>
+          <a href="mailto:smkim@isakii.net" aria-label="Email smkim@isakii.net">
+            <svg className="home-footer-mail" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="1" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+          </a>
         </div>
         <div className="home-footer-legal" aria-label="Legal information">
           <Link href="/privacy">Privacy</Link>

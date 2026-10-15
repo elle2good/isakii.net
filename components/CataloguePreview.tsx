@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import type { MotionProps } from "motion/react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import { claimContactPrompt, releaseContactPrompt } from "@/lib/contactPrompt"
 import { imageDelivery } from "@/lib/media"
 import type { CatalogueItem } from "@/lib/catalogue"
 import useMobileViewport from "./useMobileViewport"
@@ -133,7 +134,7 @@ function PreviewMedia({ item }: { item: CatalogueItem }) {
   return <img {...imageDelivery(source, "(max-width: 700px) 95vw, 700px", 1280)} alt={item.popupImageAlt} decoding="async" />
 }
 
-function ContactInterstitial() {
+export function ContactInterstitial({ children, titleId = "catalogue-newsletter-title" }: { children?: React.ReactNode; titleId?: string }) {
   return (
     <div className="catalogue-newsletter catalogue-contact">
       <div className="catalogue-newsletter-image">
@@ -142,7 +143,7 @@ function ContactInterstitial() {
       <div className="catalogue-newsletter-content">
         <p className="catalogue-newsletter-eyebrow">LET’S WORK TOGETHER</p>
         <div className="catalogue-newsletter-copy">
-          <h2 id="catalogue-newsletter-title">Looking for a friendly creative strategist?</h2>
+          <h2 id={titleId}>Looking for a friendly creative strategist?</h2>
           <p>Let’s explore how I can help turn your goals into results.</p>
         </div>
         <div className="catalogue-contact-actions">
@@ -159,6 +160,7 @@ function ContactInterstitial() {
           </a>
           <a href="mailto:smkim@isakii.net"><Image src="/home/contact/mail.svg" alt="" width={21.5} height={17.5} aria-hidden="true" />Email me</a>
         </div>
+        {children}
       </div>
     </div>
   )
@@ -168,6 +170,18 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
   const swipeStart = useRef<{ x: number; y: number; axis: "pending" | "horizontal" | "vertical" } | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [showingNewsletter, setShowingNewsletter] = useState(false)
+  const [repeatContact, setRepeatContact] = useState(false)
+  const dontShowContact = useRef(false)
+  const contactActive = useRef(false)
+  const dismissContact = () => {
+    if (!contactActive.current) return
+    releaseContactPrompt(dontShowContact.current)
+    contactActive.current = false
+    dontShowContact.current = false
+  }
+  useEffect(() => () => {
+    if (contactActive.current) releaseContactPrompt(dontShowContact.current)
+  }, [])
   const [mobileNoticeItemId, setMobileNoticeItemId] = useState<string | null>(null)
   const navigationClickCountRef = useRef(0)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -192,6 +206,10 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
       if (!returnItem) return
       setExpanded(false)
       setMobileNoticeItemId(null)
+      const claim = claimContactPrompt()
+      if (!claim) return
+      contactActive.current = true
+      setRepeatContact(claim.repeat)
       setShowingNewsletter(true)
       onSelect(returnItem)
     }
@@ -238,6 +256,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
     : contentMotion
 
   const closePreview = () => {
+    dismissContact()
     setMobileNoticeItemId(null)
     setExpanded(false)
     setShowingNewsletter(false)
@@ -246,13 +265,19 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
   }
 
   const selectItem = (nextItem: CatalogueItem) => {
+    dismissContact()
     setMobileNoticeItemId(null)
     navigationClickCountRef.current += 1
     setExpanded(false)
 
     if (navigationClickCountRef.current % 4 === 0) {
-      setShowingNewsletter(true)
-      return
+      const claim = claimContactPrompt()
+      if (claim) {
+        contactActive.current = true
+        setRepeatContact(claim.repeat)
+        setShowingNewsletter(true)
+        return
+      }
     }
 
     setShowingNewsletter(false)
@@ -346,7 +371,9 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
             </div>
 
             {showingNewsletter ? (
-              <ContactInterstitial />
+              <ContactInterstitial>
+                {repeatContact && <label className="footer-contact-opt-out"><input type="checkbox" defaultChecked={false} onChange={event => { dontShowContact.current = event.target.checked }}/><span>Don’t show me this message again</span></label>}
+              </ContactInterstitial>
             ) : (
               <>
                 <div className="catalogue-preview-body">
@@ -413,7 +440,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
                         window.matchMedia("(max-width: 700px)").matches &&
                         item.type.toLowerCase() === "flagship" &&
                         item.id !== "b6a7f66e-bea3-41b3-b053-115ebfe9abbd" &&
-                        !["abelian-community", "raydium-event"].includes(item.slug.toLowerCase()) &&
+                        !["abelian-community", "raydium-event", "cancelled-futures-dinner"].includes(item.slug.toLowerCase()) &&
                         !item.ctaLabel.toLowerCase().includes("coming soon")
                       ) {
                         event.preventDefault()

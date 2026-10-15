@@ -33,6 +33,14 @@ function FadeIn({ children, className = "", delay = 0 }: { children: ReactNode; 
 }
 
 export default function AboutExperience() {
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem("isakii:footer-contact:bottom-reached-this-visit") === "true") {
+        sessionStorage.setItem("isakii:footer-contact:return-from-about", "true")
+      }
+    } catch { /* Browsing still works when session storage is unavailable. */ }
+  }, [])
+
   const reduceMotion = useReducedMotion()
   const [menuOpen, setMenuOpen] = useState(false)
   const [blogExpanded, setBlogExpanded] = useState(false)

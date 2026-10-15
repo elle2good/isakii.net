@@ -30,7 +30,7 @@ type BaserowRow = Record<string, unknown> & { id?: number }
 
 const READY_ITEM: CatalogueItem = {
   id: "9cd62da9-5ef0-4357-a610-6983c766160e",
-  order: 3,
+  order: 4,
   contentType: "Case Study Report",
   title: "Bootstrapping a Global Community from a Very Niche Technology",
   subtitle: "From Pre-Revenue to Revenue",
@@ -60,7 +60,7 @@ const READY_ITEM: CatalogueItem = {
 
 const READY_RAYDIUM_ITEM: CatalogueItem = {
   id: "21bc99d4-bde5-4ad3-8d9d-3dcaf17e464b",
-  order: 1,
+  order: 2,
   contentType: "Case Study Report",
   title: "One Event, Half the Cost, Triple the Reach",
   subtitle: "Trendy Event Activation",
@@ -119,7 +119,7 @@ const READY_GLAMAI_ITEM: CatalogueItem = {
 
 const READY_MOVIE_DEEP_SEARCH_ITEM: CatalogueItem = {
   id: "36aae65c-01b3-491b-a535-89cfaa62d93e",
-  order: 4,
+  order: 6,
   contentType: "Press Release (Kor.)",
   title: "User Acquisition Made Easy",
   subtitle: "Best-Rated Product of the Month on Product Hunt",
@@ -147,7 +147,7 @@ const READY_MOVIE_DEEP_SEARCH_ITEM: CatalogueItem = {
 
 const READY_ALGORAND_ITEM: CatalogueItem = {
   id: "b6a7f66e-bea3-41b3-b053-115ebfe9abbd",
-  order: 2,
+  order: 3,
   contentType: "Campaign Report",
   title: "Marketing Campaign Built on Momentum",
   subtitle: "Full-funnel Community Marketing Campaign",
@@ -175,7 +175,7 @@ const READY_ALGORAND_ITEM: CatalogueItem = {
 
 const READY_FUTURES_ITEM: CatalogueItem = {
   id: "395c43bd-2c7b-4c19-9057-d71761c92363",
-  order: 0,
+  order: 1,
   contentType: "Case Study & Insights Report",
   title: "VIP Event, Cancelled.",
   subtitle: "Crisis Response and Recovery",
