@@ -6,6 +6,18 @@
 <meta name="description" content="Explore open and re-open rates across a three-part newsletter series, compared with eight earlier emails.">
 <style>
 @font-face{font-family:"DM Sans";src:url("/fonts/dm-sans-regular.ttf") format("truetype");font-weight:400}:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#fff;color:#242b28;font:15px/1.5 "DM Sans",Arial,sans-serif}.chart-card{width:100%;background:#fff}.card-top{padding:20px 22px;border-bottom:1px solid #e4e7e2}.definitions{display:flex;gap:30px;flex-wrap:wrap;font-size:12px;color:#69716c}.definitions b{display:block;color:#242b28;font-size:13px;margin-bottom:3px}.plot-scroll{overflow-x:auto;padding:8px 18px 0}.plot{min-width:760px}svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:"DM Sans",Arial,sans-serif}.axis{fill:#808982;font-size:12px}.grid{stroke:#e7eae5;stroke-width:1}.axis-title{fill:#58645c;font-size:11px;letter-spacing:1px}.x-label{fill:#49534d;font-size:14px}.baseline-label{fill:#6a716b;font-size:12px}.baseline-value{fill:#454e47;font-size:15px;font-weight:400}.region-legend{padding:0 22px 19px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap}.region{display:flex;gap:8px;align-items:center;color:#69716c;font-size:12px}.swatch{opacity:.5;height:8px;width:8px;border-radius:50%;background:var(--color)}.region strong{font-weight:400;color:#242b28}.tooltip{position:fixed;pointer-events:none;z-index:5;background:#25392e;color:white;padding:10px 13px;border-radius:8px;font-size:12px;display:none}.tooltip b{display:block;font-size:13px}@media(max-width:800px){.card-top{padding:18px}.definitions{gap:20px}.plot-scroll{padding:0 8px}.region-legend{gap:20px;padding:4px 14px 16px}}
+/* Fit the complete three-newsletter plot inside phone viewports. */
+@media(max-width:700px){
+ .plot{min-width:0;width:100%}
+ .plot-scroll{overflow:visible;padding:8px 0 0}
+ .card-top{padding:12px 0}
+ .definitions{gap:16px;font-size:10px}
+ .definitions b{font-size:12px}
+ .axis,.axis-title{font-size:22px}
+ .x-label,.baseline-label,.baseline-value,#lines text{font-size:24px}
+ .region-legend{gap:16px;padding:12px 0 16px}
+ .region{gap:5px;font-size:11px}
+}
 </style>
 </head>
 <body>

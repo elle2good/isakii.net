@@ -66,3 +66,29 @@
 @media(max-width:700px) {
  .vip-deck, .vip-profiles, .vip-floor-wrap, .vip-documents > div { transform: none !important; }
 }
+
+/* Give stacked mobile metrics room in ordinary page flow. */
+@media(max-width:700px) {
+ .vip-sequence { height: auto; }
+ .vip-sticky { position: relative; height: auto; overflow: hidden; }
+ .vip-hero .vip-opening { position: relative; height: 100svh; opacity: 1!important; transform: none!important; }
+ .vip-crisis .vip-opening { position: relative; opacity: 1!important; transform: none!important; }
+ .vip-takeover { position: relative; inset: auto; transform: none!important; }
+ .vip-takeover-content, .vip-crisis .vip-takeover-content { height: auto; padding: 64px 24px; }
+ .vip-crisis .vip-editorial { margin: 36px 0 0!important; }
+ .vip-metrics, .vip-newsletter-metrics { grid-template-columns: minmax(0,1fr); gap: 40px; }
+ .vip-metrics strong { font-size: 44px; }
+ .vip-metrics p { font-size: 18px; line-height: 1.5; margin-top: 16px; }
+ .vip-summary-metrics { margin-top: 48px; }
+ .vip-crisis-content { min-height: 0; padding: 64px 24px; }
+ .vip-crisis-content>.vip-label, .vip-crisis .vip-takeover-content>.vip-label { position: static; margin: 0 0 36px; }
+ .vip-crisis-content>.vip-metrics { margin-top: 0; }
+}
+
+@media(max-width:700px){.vip-chart-hover iframe{height:300px}}
+
+@media(max-width:700px){
+ .vip-page .vip-lesson-cards button { width:88%; justify-self:center; height:auto; min-height:0; aspect-ratio:1 / 1; }
+ .vip-page .vip-lesson-cards .raydium-card-face { padding:24px 20px; }
+ .vip-page .vip-lesson-cards .raydium-card-copy { font-size:clamp(16px,4.6vw,20px); line-height:1.4; }
+}

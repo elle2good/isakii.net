@@ -18,27 +18,28 @@ export function AbelianMotion({ node, as = "div", className = "", children }: {
 
 const media = (name: string) => `/case-studies/abelian/media/${name}.webp`
 
-function HoverGallery({ title, images, shape = "landscape", labels }: {
-  title: string; images: string[]; shape?: "landscape" | "banner" | "shirt"; labels?: string[]
+function HoverGallery({ title, images, shape = "landscape", labels, activeIndex, onAdvance }: {
+  title: string; images: string[]; shape?: "landscape" | "banner" | "shirt"; labels?: string[]; activeIndex?: number; onAdvance?: () => void
 }) {
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
-  const [active, setActive] = useState(0)
+  const [localActive, setActive] = useState(0)
+  const active = activeIndex ?? localActive
   const reduced = useReducedMotion()
   const ref = useRef<HTMLButtonElement>(null)
   const visible = useInView(ref, { amount: 0.05 })
-  const playing = (hovered || focused) && visible && !reduced
+  const playing = activeIndex === undefined && (hovered || focused) && visible && !reduced
   useEffect(() => {
     if (!playing) return
     const timer = setInterval(() => setActive(index => (index + 1) % images.length), 900)
     return () => clearInterval(timer)
   }, [playing, images.length])
-  const reset = () => setActive(0)
+  const reset = () => { if (activeIndex === undefined) setActive(0) }
   return <figure className={`abelian-hover-gallery is-${shape}`}>
     <button ref={ref} type="button" aria-label={`${title}: show next image`} className="abelian-media-hover-area"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => { setHovered(false); if (!focused) reset() }}
       onFocus={() => setFocused(true)} onBlur={() => { setFocused(false); if (!hovered) reset() }}
-      onClick={() => setActive(index => (index + 1) % images.length)}>
+      onClick={() => onAdvance ? onAdvance() : setActive(index => (index + 1) % images.length)}>
       <span className="abelian-gallery-stack">
         {images.map((name, index) => <Image key={name} src={media(name)} alt={`${title}${labels ? ` — ${labels[index]}` : `, image ${index + 1}`}`} fill sizes="(max-width: 700px) 85vw, 32vw" className={index === active ? "is-active" : ""} aria-hidden={index !== active} />)}
         <span className="abelian-gallery-cue" aria-hidden="true">
@@ -113,6 +114,16 @@ function SolutionHeading({ number, title, children, node }: { number: string; ti
 }
 
 export default function AbelianSolutions() {
+  const fieldRef = useRef<HTMLDivElement>(null)
+  const fieldVisible = useInView(fieldRef, { amount: 0.05 })
+  const reduced = useReducedMotion()
+  const [fieldActive, setFieldActive] = useState(0)
+  const advanceField = () => setFieldActive(index => (index + 1) % 2)
+  useEffect(() => {
+    if (!fieldVisible || reduced) return
+    const timer = setInterval(() => setFieldActive(index => (index + 1) % 2), 2000)
+    return () => clearInterval(timer)
+  }, [fieldVisible, reduced])
   return <section id="solutions" className="abelian-solutions abelian-solutions-expanded">
     <header><span>Solutions</span><h2>Forming a highly engaged community that amplifies the brand’s mission and initiatives, each in their own voice.</h2></header>
     <section className="abelian-solution-block">
@@ -141,9 +152,9 @@ export default function AbelianSolutions() {
     </section>
     <section className="abelian-solution-block">
       <SolutionHeading number="04" title="Field Marketing" node="156:690">Created marketing collateral for international community events and conferences.</SolutionHeading>
-      <div className="abelian-field-grid">
-        <AbelianMotion node="461:364"><HoverGallery title="Roll-up banner" images={["banner-after", "banner-before"]} shape="banner" labels={["AFTER", "BEFORE"]} /></AbelianMotion>
-        <AbelianMotion node="461:363"><HoverGallery title="Tshirt" images={["shirt-after", "shirt-before"]} shape="shirt" labels={["AFTER", "BEFORE"]} /></AbelianMotion>
+      <div ref={fieldRef} className="abelian-field-grid">
+        <AbelianMotion node="461:364"><HoverGallery activeIndex={fieldActive} onAdvance={advanceField} title="Roll-up banner" images={["banner-after", "banner-before"]} shape="banner" labels={["AFTER", "BEFORE"]} /></AbelianMotion>
+        <AbelianMotion node="461:363"><HoverGallery activeIndex={fieldActive} onAdvance={advanceField} title="Tshirt" images={["shirt-after", "shirt-before"]} shape="shirt" labels={["AFTER", "BEFORE"]} /></AbelianMotion>
         <AbelianMotion node="459:358"><BrochurePreview /></AbelianMotion>
       </div>
     </section>

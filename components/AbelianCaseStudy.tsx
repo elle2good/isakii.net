@@ -9,7 +9,6 @@ import HomeFooter from "./HomeFooter"
 import SmoothScroll from "./SmoothScroll"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
-import AbelianMobileMetrics from "./AbelianMobileMetrics"
 import AbelianSolutions, { AbelianMotion } from "./AbelianMedia"
 
 const navigation = [
@@ -195,11 +194,11 @@ export default function AbelianCaseStudy() {
               <p>
                 Abelian needed to move beyond its mining-focused community to build awareness among early adopters and crypto audiences for their upcoming TGE (Token-Generation Event). It was imperative to sustain the technical credibility that gave Abelian its standing while also being accessible to a wider audience.
               </p>
-              <AbelianMobileMetrics className="abelian-section-one-stats" label="Key outcomes">
+              <div className="abelian-section-one-stats" aria-label="Key outcomes">
                 <div><strong>25X</strong><span>growth across<br />7 community channels</span></div>
                 <div><strong>~25%</strong><span>of community members<br />converted to users</span></div>
                 <div><strong>40K</strong><span>App Installations</span></div>
-              </AbelianMobileMetrics>
+              </div>
               <span className="abelian-summary-scroll-cue" aria-hidden="true">
                 <Image src="/case-studies/abelian/arrow-right.png" alt="" width={32} height={32} />
               </span>
@@ -222,7 +221,7 @@ export default function AbelianCaseStudy() {
             </a>
           ))}
         </nav>
-        <CaseStudyContactActions />
+        <CaseStudyContactActions activeSection={activeSection} />
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
 
@@ -275,10 +274,10 @@ export default function AbelianCaseStudy() {
           <p>Token sales are a primary revenue source for cryptocurrency and blockchain startups. A successful token listing depends on a brand building awareness — both of the token itself and of the functionality and promise of the underlying technology — since that promise is what is expected to drive the token’s value upward over time and convince retail investors to buy in.</p>
         </div>
         <span className="abelian-snapshot-label">Snapshot</span>
-        <AbelianMobileMetrics className="abelian-context-stats" label="Snapshot metrics">
+        <div className="abelian-context-stats" aria-label="Snapshot metrics">
           <div><AbelianMotion as="strong" node="154:614">3 months out</AbelianMotion><AbelianMotion as="span" node="154:615">$ABEL’s first CEX listing</AbelianMotion></div>
           <div><AbelianMotion as="strong" node="154:617">9K</AbelianMotion><AbelianMotion as="span" node="154:618">community members</AbelianMotion></div>
-        </AbelianMobileMetrics>
+        </div>
         <div className="abelian-editorial-copy abelian-editorial-copy-bottom">
           <p className="abelian-lede">The Foundation also planned to launch quantum-resistant D2C apps and developer tools shortly after the token launch.</p>
           <p>Awareness had to be built simultaneously across multiple audiences — early tech adopters, developers, and retail investors — to drive real adoption of the brand’s technology and pave the way for sustainable growth.</p>

@@ -4759,3 +4759,69 @@ select {
  .raydium-mission-title h2, .raydium-mission-takeover p { font-size: 22px; line-height: 1.5; }
  .abelian-mobile-contact-stack { display: none; }
 }
+
+/* Mobile case studies are a continuous vertical read, including every metric and asset. */
+.raydium-desktop-gallery { width: 100%; }
+.raydium-mobile-gallery { display: none; }
+@media (max-width: 700px) {
+  .raydium-hero-sequence, .abelian-hero-sequence { height: auto; }
+  .raydium-hero-sticky, .abelian-hero-sticky { position: relative; height: auto; min-height: 0; padding-top: 100svh; }
+  .raydium-hero-media, .raydium-hero-gradient, .abelian-hero-image, .abelian-hero-gradient { height: 100svh; bottom: auto; }
+  .raydium-hero-copy, .abelian-hero-copy { top: 32svh; bottom: auto; opacity: 1 !important; transform: none !important; }
+  .raydium-hero-meta, .abelian-hero-meta { top: 72svh; bottom: auto; opacity: 1 !important; transform: none !important; }
+  .raydium-scroll-cue-wrap, .abelian-hero-sticky > .abelian-scroll-cue { top: 92svh; bottom: auto; }
+  .raydium-hero-film, .abelian-hero-film { position: relative; inset: auto; transform: none !important; overflow: visible; }
+  .raydium-page .raydium-section-two-copy, .abelian-revised .abelian-section-one-copy { height: auto; padding: 64px 24px; display: grid; grid-template-rows: auto; gap: 40px; }
+  .abelian-summary-scroll-cue { display: none; }
+  .raydium-page .raydium-summary-label { position: static; margin: 0; }
+  .raydium-page .raydium-section-two-copy { row-gap: 24px; }
+  .raydium-page .raydium-section-two-copy > p { margin: 0; }
+  .raydium-page .raydium-section-two-stats { margin-top: 16px; }
+  .raydium-section-two-stats, .raydium-opportunity-stats, .abelian-section-one-stats, .abelian-context-stats { display: grid; grid-template-columns: minmax(0,1fr); gap: 40px; }
+  .raydium-section-two-stats > div, .raydium-opportunity-stats > div,
+  .abelian-section-one-stats > div, .abelian-context-stats > div { display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; justify-items: center; text-align: center; min-height: 0; padding: 0; transform: none !important; }
+  .raydium-page .raydium-section-two-stats strong, .abelian-revised .abelian-section-one-stats strong { font-size: 48px; line-height: 1.15; }
+  .raydium-page .raydium-section-two-stats span, .abelian-revised .abelian-section-one-stats span { margin-top: 16px; font-size: 18px; line-height: 1.5; }
+  .raydium-opportunity-stats { margin: 44px 0; }
+  .raydium-strategy-list { display: grid; gap: 56px; }
+  .raydium-strategy-row:nth-child(n) { margin-top: 0; }
+  .raydium-outcomes-sequence { height: auto; min-height: 0; }
+  .raydium-outcomes-sticky { position: relative; height: auto; min-height: 0; overflow: visible; }
+  .raydium-gallery-stage { position: relative; inset: auto; display: block; padding: 64px 24px 40px; opacity: 1 !important; transform: none !important; }
+  .raydium-gallery-stage > span { position: static; display: block; margin-bottom: 32px; }
+  .raydium-desktop-gallery { display: none; }
+  .raydium-mobile-gallery { display: grid; gap: 24px; }
+  .raydium-mobile-gallery .raydium-gallery-media { grid-column: auto; }
+  .raydium-page .raydium-impact-takeover { position: relative; inset: auto; height: auto; min-height: 0; transform: none !important; padding: 48px 24px 64px; }
+}
+@media(max-width:700px) {
+ .raydium-mobile-gallery { grid-template-columns: minmax(0,1fr); }
+ .raydium-mobile-gallery .raydium-gallery-media { grid-column: 1; grid-row: auto; }
+}
+
+/* One continuous Mission section on mobile; desktop keeps its takeover. */
+@media (max-width: 700px) {
+  .raydium-mission-sequence { height: auto; }
+  .raydium-mission-sticky { position: relative; height: auto; min-height: 0; padding: 64px 24px; }
+  .raydium-mission-title, .raydium-mission-takeover { position: relative; inset: auto; display: block; padding: 0; opacity: 1 !important; transform: none !important; }
+  .raydium-mission-title > span { position: static; display: block; margin: 0 0 32px; font-size: 20px; }
+  .raydium-mission-takeover { margin-top: 32px; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .raydium-mission-title h2, .raydium-mission-takeover p { width: 100%; max-width: none; margin: 0; font: 400 22px/1.5 Eulyoo1945, Georgia, serif; text-align: left; }
+}
+@media (max-width: 700px) {
+  .raydium-mission-sequence { scroll-margin-top: 78px; }
+  .raydium-mission-title > span { text-align: left; }
+}
+@media (max-width: 700px) {
+  .raydium-page .raydium-partnership-cards button { width: 100%; height: auto; min-height: 0; aspect-ratio: 1 / 1; }
+}
+
+/* Standalone Lu.ma CTA below the Impact section, matching the white Figma panel. */
+.raydium-event-cta-section {
+  display: grid;
+  place-items: center;
+  min-height: clamp(220px, 28.75vw, 422px);
+  padding: 64px 24px;
+  background: #fff;
+}
+.raydium-event-cta-section .raydium-event-button { margin: 0; }

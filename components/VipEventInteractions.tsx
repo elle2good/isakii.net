@@ -84,7 +84,7 @@ export function NewsletterPerformance() {
   return <>
     <Entrance className="vip-chart-title" scale={1 / 1.2}><h3>Newsletter Performance</h3></Entrance>
     <div ref={ref} className="vip-chart-hover vip-hover-area" onMouseEnter={() => { if (inView && ready) play() }}>
-      <iframe ref={iframe} src={base + "newsletter-chart.html"} title="Newsletter open and re-open rates by region" loading="lazy" onLoad={() => setReady(true)}/>
+      <iframe ref={iframe} src={base + "newsletter-chart.html?v=mobile-fit-1"} title="Newsletter open and re-open rates by region" loading="lazy" onLoad={() => setReady(true)}/>
       <button type="button" className="vip-replay-chart" aria-label="Replay newsletter chart" title="Replay chart" onClick={play}>↻</button>
     </div>
     <div className="vip-newsletter-metrics" data-unlocked={unlocked} aria-hidden={!unlocked}>

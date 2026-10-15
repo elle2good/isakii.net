@@ -9,7 +9,6 @@ import SmoothScroll from "./SmoothScroll"
 import HomeFooter from "./HomeFooter"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
-import MobileSwipeCarousel from "./MobileSwipeCarousel"
 
 const navigation = [
   { id: "opportunity", label: "Opportunity" },
@@ -441,11 +440,11 @@ export default function RaydiumCaseStudy() {
             <div className="raydium-section-two-copy">
               <span className="raydium-summary-label">Summary</span>
               <p>Just three months after listing its token on Korea’s largest cryptocurrency exchange, Raydium hosted a branded café rave: the company’s first offline activation in Asia. The event was built around strategies to reach three distinct audience groups at once, and I pulled off an exclusive, successful event for less than the cost of a lower-tier sponsorship at a typical industry side event.</p>
-              <MobileSwipeCarousel smoothVerticalScroll className="raydium-section-two-stats" label="Summary metrics">
+              <div className="raydium-section-two-stats" aria-label="Summary metrics">
                 {resultMetrics.map((metric) => (
                   <div key={metric.value}><strong>{metric.value}</strong><span>{metric.description}</span></div>
                 ))}
-              </MobileSwipeCarousel>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -456,7 +455,7 @@ export default function RaydiumCaseStudy() {
         <nav aria-label="Case study sections">
           {navigation.map((item) => <a key={item.id} href={`#${item.id}`} className={activeSection === item.id ? "is-active" : ""} aria-current={activeSection === item.id ? "location" : undefined}>{item.label}</a>)}
         </nav>
-        <CaseStudyContactActions />
+        <CaseStudyContactActions activeSection={activeSection} />
         <motion.div className="abelian-progress" style={{ scaleX: articleProgress }} />
       </div>
 
@@ -496,10 +495,10 @@ export default function RaydiumCaseStudy() {
           <p className="raydium-lede">When Raydium&apos;s native token RAY listed on Upbit, 24-hour trading volume surged more than 600%, reaching $401M — with zero marketing behind it.</p>
           <p>It was a clear signal that crypto traders and investors were genuinely excited about RAY’s expansion into Korea’s largest exchange. Korea Blockchain Week 2025, held three months after the listing, was the perfect opportunity to reinforce that momentum and signal the brand&apos;s next steps.</p>
         </Reveal>
-        <MobileSwipeCarousel smoothVerticalScroll className="raydium-opportunity-stats" label="Snapshot">
+        <div className="raydium-opportunity-stats" aria-label="Snapshot">
           <RevealFromLeft><strong>1 month</strong><span>planning lead time</span></RevealFromLeft>
           <RevealFromLeft><strong>0</strong><span>prior offline activations in Asia</span></RevealFromLeft>
-        </MobileSwipeCarousel>
+        </div>
         <Reveal className="raydium-opportunity-copy raydium-opportunity-bottom">
           <p>As a Decentralized Exchange already fighting skepticism over unclear legal footing, the brand had always steered clear of the boozy side, event parties that define blockchain conference culture, refusing to reinforce crypto&apos;s “dark and corrupt” reputation.</p>
           <p>A wellness-driven trend that reframed “fun” without the baggage was spotted around the same moment the brand listed on South Korea’s major exchange.</p>
@@ -524,7 +523,7 @@ export default function RaydiumCaseStudy() {
 
       <section id="strategy" className="raydium-strategy">
         <span className="raydium-rail-label">Strategic Approach</span>
-        <MobileSwipeCarousel smoothVerticalScroll className="raydium-strategy-list" label="Strategic approach">
+        <div className="raydium-strategy-list" aria-label="Strategic approach">
           {strategyRows.map((row) => (
             <Reveal key={row.number} className="raydium-strategy-row">
               <span className="raydium-strategy-number">{row.number}</span>
@@ -534,27 +533,39 @@ export default function RaydiumCaseStudy() {
               {row.visual === "cards" && <PartnershipCards />}
             </Reveal>
           ))}
-        </MobileSwipeCarousel>
+        </div>
       </section>
 
       <section ref={outcomesRef} id="outcomes" className="raydium-outcomes-sequence">
         <div className="raydium-outcomes-sticky">
           <motion.div className="raydium-gallery-stage" style={reduceMotion ? undefined : { opacity: galleryOpacity, y: galleryY }}>
             <span>Key Outcomes</span>
-            <OutcomeGallery key={galleryDismissed ? "dismissed" : "visible"} dismissed={galleryDismissed} />
+            <div className="raydium-desktop-gallery"><OutcomeGallery key={galleryDismissed ? "dismissed" : "visible"} dismissed={galleryDismissed} /></div>
+            <div className="raydium-mobile-gallery" aria-label="Raydium event gallery">
+              {galleryItems.map(item => <div key={item.src} className="raydium-gallery-media">
+                {item.type === "video" ? <video src={item.src} aria-label={item.alt} controls muted playsInline preload="none" /> :
+                  // Cloudinary supplies browser-compatible formats.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={item.src} alt={item.alt} loading="lazy" />}
+              </div>)}
+            </div>
           </motion.div>
           <motion.div className="raydium-impact-takeover" style={reduceMotion ? undefined : { y: impactTakeoverY }}>
             {resultMetrics.map((metric) => (
               <div key={metric.value}><strong>{metric.value}</strong><span>{metric.description}</span></div>
             ))}
+
+          </motion.div>
+        </div>
+      </section>
+
+      <section id="event" className="raydium-event-cta-section" aria-label="View the Raydium event">
             <a className="raydium-event-button" href="https://luma.com/ea9lcg6b" target="_blank" rel="noopener noreferrer">
               <Image className="raydium-event-logo" src="/case-studies/raydium/event-button/luma.png" alt="" width={54} height={54} />
               <span className="raydium-event-label">View the event on Lu.ma</span>
               <Image className="raydium-event-arrow is-default" src="/case-studies/raydium/event-button/arrow-default.svg" alt="" width={10.8557} height={9.62138} />
               <Image className="raydium-event-arrow is-hover" src="/case-studies/raydium/event-button/arrow-hover.svg" alt="" width={10.3557} height={9.62138} />
             </a>
-          </motion.div>
-        </div>
       </section>
 
       <HomeFooter />

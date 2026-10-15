@@ -23,7 +23,7 @@
 .algo-artboard{position:relative;width:100%;min-width:0}.algo-artboard>div{position:absolute;left:0;top:0}.algo-artboard img{object-fit:cover}.algo-plan-back{position:absolute;left:-309px;top:0;width:433px;height:400px;filter:blur(2.4px)}.algo-plan-back>div{position:absolute;inset:0;background:#06060680}.algo-calendar{position:absolute;left:-215.5px;top:102px;width:421px;height:450px;box-shadow:-23px 5px 5.9px #0004}
 .algo-graphic,.algo-tutorial{position:absolute}.algo-tutorial{left:63px;top:151px;width:377px;height:212px;z-index:2}.algo-tutorial video{width:100%;height:100%;object-fit:contain;background:#111827}.algo-graphic.pera{left:294px;top:0;width:138px;height:138px}.algo-graphic.giveaway{left:63px;top:84px;width:220px;height:138px}.algo-graphic.alpha{left:63px;top:381px;width:95px;height:95px}.algo-graphic.wide{left:165px;top:381px;width:168px;height:94px}.algo-graphic.square{left:340px;top:279px;width:94px;height:94px}
 .algo-monitor{position:absolute;left:0;top:0}.algo-partner-content{position:relative;width:100%;height:255px}.algo-growth-charts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.algo-growth-charts>div{position:relative;height:104px}
-.algo-results .algo-container{padding-top:103px;padding-bottom:140px}.algo-results .algo-step-heading{margin-top:155px}.algo-report-body{gap:75px;align-items:start}.algo-report-pages{position:relative;width:413px;height:546px}.report-page{position:absolute;box-shadow:-9px 4px 6px #0006}.report-page.first{left:0;top:0;width:300px;height:390px}.report-page.second{left:47px;top:67px;width:300px;height:388px}.report-page.third{left:102px;top:143px;width:311px;height:403px}.report-page i{position:absolute;inset:0;background:#06060666}.report-page.second i{background:#06060633}
+.algo-results .algo-container{padding-top:103px;padding-bottom:140px}.algo-results .algo-step-heading{margin-top:155px}.algo-report-body{gap:75px;align-items:center}.algo-report-pages{position:relative;width:413px;height:546px}.report-page{position:absolute;box-shadow:-9px 4px 6px #0006}.report-page.first{left:0;top:0;width:300px;height:390px}.report-page.second{left:47px;top:67px;width:300px;height:388px}.report-page.third{left:102px;top:143px;width:311px;height:403px}.report-page i{position:absolute;inset:0;background:#06060666}.report-page.second i{background:#06060633}
 .algo-report-form-wrap{margin-top:55px;max-width:568px}.algo-report-form{display:flex;gap:20px;align-items:center}.algo-report-form input{min-width:0;flex:1;border:0;border-bottom:1px solid #ffffffbf;background:transparent;color:white;padding:10px 5px 14px;font:400 18px/27px "DM Sans",sans-serif;border-radius:0;outline:none}.algo-report-form input::placeholder{color:#ffffffbf;font-size:clamp(12px,1.18vw,18px)}.algo-report-form.is-focused input{border-color:white}.algo-report-form button{border:0;background:none;color:#ffffffbf;font-size:28px;cursor:pointer;padding:10px 0}.algo-report-form.is-focused button{color:white}.algo-report-form.has-email button{color:#ff5a00}.algo-report-form button:focus-visible{outline:2px solid #ff5a00;outline-offset:4px}.algo-report-form button:disabled{cursor:wait}.algo-form-message{min-height:27px;font-size:15px;margin-top:10px!important;color:#ffd6c0}.algo-report-success{font-size:18px;line-height:27px;color:#FFF0D2}.algo-report-success span{margin-left:16px;color:#ff5a00}
 .algo-staking-banner{position:relative;width:100%;aspect-ratio:1468/448}.algo-staking-banner img{object-fit:cover}.algo-results-summary{padding:clamp(140px,20vw,360px) 4.5%;background:white;color:#050505}.algo-results-summary>.algo-metrics{max-width:1337px;margin:auto}
 @media(min-width:1700px){.algo-container{padding-inline:120px}}
@@ -45,4 +45,26 @@
  .algo-report-form input::placeholder { font-size: 14px; }
  .algo-report-form button { min-width: 44px; min-height: 44px; }
  .algo-results-summary { padding: 64px 24px; }
+}
+
+/* The report request follows the staking artwork on every screen size. */
+.algo-case-study #report-request { padding: 64px 24px; background: #172554; color: #fff; }
+#report-request .algo-report-form-wrap { margin: 0 auto; }
+
+/* Mobile artwork has balanced gutters; the report request is a distinct white panel. */
+@media (max-width:700px) {
+ .algo-step-body .algo-artboard { width: 80%; margin-inline: auto; }
+ .algo-planning .algo-plan-back { left: -274px; }
+ .algo-planning .algo-calendar { left: -180.5px; }
+ .algo-report-artboard .algo-report-pages { left: 55px; }
+ .algo-case-study #report-request { background: #fff; color: #000; margin: 0; padding: 48px 24px; }
+ #report-request .algo-report-form-wrap { margin: 0 auto; }
+ #report-request .algo-report-form { display: grid; grid-template-columns: minmax(0, 1fr) 44px; }
+ #report-request .algo-report-form label { position: static; grid-column: 1 / -1; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: normal; color: rgb(0 0 0 / 40%); font: 400 16px/1.5 "DM Sans", sans-serif; }
+ #report-request .algo-report-form input { color: #000; border-bottom-color: #000; }
+ #report-request .algo-report-form input::placeholder { color: transparent; }
+ #report-request .algo-report-form button { color: #000; }
+ #report-request .algo-report-form button:focus-visible { outline-color: #000; }
+ #report-request .algo-form-message { color: #000; }
+ #report-request .algo-report-success, #report-request .algo-report-success span { color: #172554; }
 }
