@@ -7,7 +7,6 @@ import { FocusEvent, memo, useCallback, useEffect, useRef, useState } from "reac
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
-import FooterContactPrompt from "./FooterContactPrompt"
 import CataloguePreview from "./CataloguePreview"
 import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
@@ -706,7 +705,6 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
       </section>
 
       <HomeFooter />
-      <FooterContactPrompt blocked={menuOpen || blogExpanded || activeCatalogueItem !== null} />
     </main>
   )
 }
