@@ -173,7 +173,32 @@ const READY_ALGORAND_ITEM: CatalogueItem = {
   coverImageAlt: "Marketing Campaign Built on Momentum campaign report cover",
 }
 
+const READY_FUTURES_ITEM: CatalogueItem = {
+  id: "395c43bd-2c7b-4c19-9057-d71761c92363",
+  order: 0,
+  contentType: "Case Study & Insights Report",
+  title: "VIP Event, Cancelled.",
+  subtitle: "Crisis Response and Recovery",
+  slug: "cancelled-futures-dinner",
+  date: "2025–2026",
+  type: "Flagship",
+  companyName: "Independent",
+  tags: ["Communications", "Reputation Management", "Event Planning"],
+  shortSummary: "A VIP event planned for Abu Dhabi Finance Week was cancelled just hours before it began. Managing the fallout sharpened my resilience, and changed how I approach new initiatives.\n\nRead the full case study.",
+  tldr: "A VIP event planned for Abu Dhabi Finance Week attracted over 1,000 registrations before funding shortfalls and a venue dispute forced its cancellation. Crisis response sustained audience engagement and secured the deposit’s return, limiting losses to $450.",
+  ctaLabel: "Read the full case study & insights report",
+  caseStudyUrl: "/catalogue/cancelled-futures-dinner",
+  downloadUrl: "",
+  coverImage: "https://res.cloudinary.com/dwto97ayq/image/upload/v1791985269/ChatGPT_Image_Oct_14_2026_10_41_22_PM_w9lqsy.png",
+  popupImage: "https://res.cloudinary.com/dwto97ayq/image/upload/v1791985695/ChatGPT_Image_Oct_14_2026_10_48_48_PM_jcuyjy.png",
+  mobilePopupImage: "https://res.cloudinary.com/dwto97ayq/image/upload/v1791985752/ChatGPT_Image_Oct_14_2026_10_49_51_PM_opkkyk.png",
+  popupMediaKind: "image", mobilePopupMediaKind: "image", coverMediaKind: "image",
+  popupImageAlt: "VIP Event, Cancelled. case study preview",
+  coverImageAlt: "VIP Event, Cancelled. case study cover",
+}
+
 const READY_ITEMS = [
+  READY_FUTURES_ITEM,
   READY_RAYDIUM_ITEM,
   READY_ALGORAND_ITEM,
   READY_ITEM,

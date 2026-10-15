@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Newsletter engagement — animated series</title>
+<meta name="description" content="Explore open and re-open rates across a three-part newsletter series, compared with eight earlier emails.">
+<style>
+@font-face{font-family:"DM Sans";src:url("/fonts/dm-sans-regular.ttf") format("truetype");font-weight:400}:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#fff;color:#242b28;font:15px/1.5 "DM Sans",Arial,sans-serif}.chart-card{width:100%;background:#fff}.card-top{padding:20px 22px;border-bottom:1px solid #e4e7e2}.definitions{display:flex;gap:30px;flex-wrap:wrap;font-size:12px;color:#69716c}.definitions b{display:block;color:#242b28;font-size:13px;margin-bottom:3px}.plot-scroll{overflow-x:auto;padding:8px 18px 0}.plot{min-width:760px}svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:"DM Sans",Arial,sans-serif}.axis{fill:#808982;font-size:12px}.grid{stroke:#e7eae5;stroke-width:1}.axis-title{fill:#58645c;font-size:11px;letter-spacing:1px}.x-label{fill:#49534d;font-size:14px}.baseline-label{fill:#6a716b;font-size:12px}.baseline-value{fill:#454e47;font-size:15px;font-weight:400}.region-legend{padding:0 22px 19px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap}.region{display:flex;gap:8px;align-items:center;color:#69716c;font-size:12px}.swatch{opacity:.5;height:8px;width:8px;border-radius:50%;background:var(--color)}.region strong{font-weight:400;color:#242b28}.tooltip{position:fixed;pointer-events:none;z-index:5;background:#25392e;color:white;padding:10px 13px;border-radius:8px;font-size:12px;display:none}.tooltip b{display:block;font-size:13px}@media(max-width:800px){.card-top{padding:18px}.definitions{gap:20px}.plot-scroll{padding:0 8px}.region-legend{gap:20px;padding:4px 14px 16px}}
+</style>
+</head>
+<body>
+ <section class="chart-card" aria-label="Animated newsletter engagement chart">
+  <div class="card-top"><div class="definitions"><div><b>Open rate</b>Opened ÷ emails sent</div><div><b>Re-open rate</b>Re-openers ÷ people who opened</div></div></div>
+  <div class="plot-scroll"><div class="plot"><svg id="chart" viewBox="0 0 1200 460" role="img" aria-labelledby="chart-title chart-desc"><title id="chart-title">Open and re-open rates by region across Newsletter #1, #2 and #3</title><desc id="chart-desc">The Y-axis runs from 0 to 60 percent. Historical averages are 29.75 percent open rate and 11 percent re-open rate. Baselines appear first, followed by open rate lines and then re-open rate lines, in the order USA, Asia, MENA, EMEA. Re-open rate is re-openers divided by people who opened. The open reference label is rounded to 30%.</desc><defs id="clips"></defs><g id="grid"></g><g id="baselines"></g><g id="xlabels"></g><g id="lines"></g></svg></div></div>
+  <div class="region-legend" aria-label="Region colors"><span class="region" data-region="USA" style="--color:#bf631e"><i class="swatch"></i><strong>USA</strong></span><span class="region" data-region="Asia" style="--color:#3267bb"><i class="swatch"></i><strong>Asia</strong></span><span class="region" data-region="MENA" style="--color:#8058a4"><i class="swatch"></i><strong>MENA</strong></span><span class="region" data-region="EMEA" style="--color:#23846c"><i class="swatch"></i><strong>EMEA</strong></span></div>
+ </section>
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+<script>
+/* Standalone, dependency-free chart. All timings are seconds. */
+const DATA=[
+ {name:'USA',color:'#bf631e',counts:[[54,24,2],[87,40,8],[85,21,8]]},
+ {name:'Asia',color:'#3267bb',counts:[[93,24,8],[134,75,17],[129,32,12]]},
+ {name:'MENA',color:'#8058a4',counts:[[59,17,5],[86,32,10],[85,42,18]]},
+ {name:'EMEA',color:'#23846c',counts:[[71,18,8],[99,39,12],[98,50,21]]}
+];
+const HISTORICAL={open:29.75,reopen:11};
+const X=[85,465,845],Y=v=>390-v/60*330,NS='http://www.w3.org/2000/svg';
+const el=(tag,attrs,parent,text)=>{const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;parent.append(n);return n;};
+const $=s=>document.querySelector(s), clamp=x=>Math.max(0,Math.min(1,x)), smooth=x=>{x=clamp(x);return x*x*(3-2*x);};
+el('text',{x:85,y:30,class:'axis-title'},$('#grid'),'RATE (%)');
+for(let v=0;v<=60;v+=10){el('line',{x1:85,x2:845,y1:Y(v),y2:Y(v),class:'grid',...(v===60?{id:'sixty-percent-line'}:{})},$('#grid'));el('text',{x:65,y:Y(v)+4,'text-anchor':'end',class:'axis'},$('#grid'),v+'%');}
+el('line',{x1:85,x2:85,y1:60,y2:390,stroke:'#cfd6ce'},$('#grid'));
+el('line',{x1:85,x2:845,y1:390,y2:390,stroke:'#cfd6ce'},$('#grid'));
+for(let i=0;i<3;i++){el('text',{x:X[i],y:423,'text-anchor':'middle',class:'x-label'},$('#xlabels'),'Newsletter #'+(i+1));}
+const reveals=[];let clock=1.2;
+const stages=[];
+function clip(id,parent){const cp=el('clipPath',{id},$('#clips'));const rect=el('rect',{x:79,y:40,width:0,height:370},cp);const g=el('g',{'clip-path':'url(#'+id+')'},parent);return {rect,g};}
+for(const[k,label]of [['open','Open'],['reopen','Re-open']]){
+ const start=clock;const {rect,g}=clip('prior-'+k,$('#baselines'));const v=HISTORICAL[k];
+ el('line',{x1:85,x2:845,y1:Y(v),y2:Y(v),stroke:'#8c958b','stroke-width':1.7,'stroke-dasharray':'3 6'},g);
+ const txt=el('g',{opacity:0},$('#baselines'));
+ el('line',{x1:857,x2:875,y1:Y(v),y2:Y(v),stroke:'#9aa297','stroke-width':1},txt);
+ el('text',{x:889,y:Y(v)-7,class:'baseline-label'},txt,'PRIOR 8 EMAILS');
+ el('text',{x:889,y:Y(v)+15,class:'baseline-value'},txt,v.toFixed(0)+'% '+label.toLowerCase()+' rate');
+ reveals.push({type:'baseline',start,duration:1.35,rect,txt});stages.push({start,label:'Historical reference · '+label.toLowerCase()+' rate'});clock+=2.8;
+}
+const labelStart=clock;stages.push({start:clock,label:'The three newsletters'});clock+=1.65;
+const tooltip=$('#tooltip');
+function showTip(e,region,metric,i,value){tooltip.innerHTML='<b>'+region+' · '+metric+'</b>Newsletter #'+(i+1)+' · '+value.toFixed(2)+'%';tooltip.style.display='block';const r=e.target.getBoundingClientRect();const x=e.clientX||r.x+r.width/2,y=e.clientY||r.y;tooltip.style.left=Math.max(8,Math.min(innerWidth-205,x+12))+'px';tooltip.style.top=Math.max(8,y-64)+'px';}
+const metricLabels=[];
+for(const metric of ['open','reopen']){
+ if(metric==='reopen'){stages.push({start:clock,label:'Open rates complete · a moment to compare'});clock+=1.2;}
+ const label=metric==='open'?'Open':'Re-open';
+ const labelY=metric==='open'?Y(60)+12:Y(40)-44;
+ const group=el('g',{id:metric+'-key',opacity:0,'aria-label':label},$('#lines'));
+ el('line',{x1:892,x2:928,y1:labelY+21,y2:labelY+21,stroke:'#294125','stroke-width':3.5,...(metric==='reopen'?{'stroke-dasharray':'7 5'}:{})},group);
+ el('text',{x:940,y:labelY+27,fill:'#20331d','font-size':16,'font-weight':400},group,label);
+ metricLabels.push({metric,start:clock,duration:.65,group});stages.push({start:clock,label});clock+=1.65;
+ for(const region of DATA){
+ const start=clock,values=region.counts.map(([sent,opened,reopened])=>100*(metric==='open'?opened/sent:reopened/opened));
+ const {rect,g}=clip(region.name+'-'+metric,$('#lines'));
+ el('path',{d:values.map((v,i)=>(i?'L':'M')+X[i]+','+Y(v)).join(' '),fill:'none',stroke:region.color,'stroke-width':2.8,'stroke-linejoin':'round','stroke-linecap':'round',...(metric==='reopen'?{'stroke-dasharray':'7 6'}:{})},g);
+ const dots=values.map((v,i)=>{const dot=el('circle',{cx:X[i],cy:Y(v),r:4.5,fill:metric==='open'?region.color:'#fff',stroke:region.color,'stroke-width':2,opacity:0,tabindex:-1,role:'img','aria-label':region.name+' '+(metric==='open'?'open':'re-open')+' rate, Newsletter #'+(i+1)+': '+v.toFixed(2)+'%'},$('#lines'));for(const name of ['pointerenter','focus'])dot.addEventListener(name,e=>showTip(e,region.name,metric==='open'?'Open':'Re-open',i,v));for(const name of ['pointerleave','blur'])dot.addEventListener(name,()=>tooltip.style.display='none');return dot;});
+ reveals.push({type:'region',start,duration:1.4,rect,dots,region:region.name,metric});stages.push({start,label:region.name+' · '+(metric==='open'?'Open rate':'Re-open rate')});clock+=1.65;
+ }
+}
+const PLAYBACK_RATE=1.3;
+const TOTAL=clock+.35;let t=0,playing=false,last=0,raf=0,started=false,notified=false;
+function render(value){
+ t=Math.max(0,Math.min(TOTAL,value));
+ if(t>=TOTAL&&!notified){notified=true;parent.postMessage({type:"vip-chart-complete"},location.origin);}
+ document.documentElement.dataset.progress=String(t/TOTAL);
+ for(const r of reveals){const p=clamp((t-r.start)/r.duration);r.rect.setAttribute('width',p*778);if(r.type==='baseline')r.txt.setAttribute('opacity',smooth((t-r.start-r.duration)/.45));else r.dots.forEach((dot,i)=>{const opacity=smooth((t-r.start-r.duration*i/2)/.14);dot.setAttribute('opacity',opacity);dot.setAttribute('tabindex',opacity>.95?'0':'-1');dot.style.pointerEvents=opacity>.95?'auto':'none';});}
+ $('#xlabels').setAttribute('opacity',smooth((t-labelStart)/.65));
+ for(const label of metricLabels)label.group.setAttribute('opacity',smooth((t-label.start)/label.duration));
+ // Pulse each legend circle for both of its lines, then reveal all at the end.
+ for(const region of DATA){
+  const pulses=reveals.filter(r=>r.region===region.name).map(r=>smooth((t-r.start)/.2)*(1-smooth((t-r.start-r.duration)/.25)));
+  const finalFade=smooth((t-clock)/.35);
+  $('.region[data-region="'+region.name+'"] .swatch').style.opacity=String(.5+.5*Math.max(finalFade,...pulses));
+ }
+
+}
+function setPlaying(v){playing=v;cancelAnimationFrame(raf);if(v){last=performance.now();raf=requestAnimationFrame(tick);}}
+function tick(now){const delta=(now-last)/1000;last=now;render(t+Math.min(delta,.1)*PLAYBACK_RATE);if(t>=TOTAL)setPlaying(false);else if(playing)raf=requestAnimationFrame(tick);}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)setPlaying(false);else if(started&&t<TOTAL)setPlaying(true);});
+render(0);
+function play(){if(playing)return;started=true;render(0);if(matchMedia('(prefers-reduced-motion: reduce)').matches){render(TOTAL);}else setPlaying(true);}
+window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==parent)return;if(event.data?.type==='vip-chart-play')play();if(event.data?.type==='vip-chart-finish'){setPlaying(false);started=true;render(TOTAL);}if(event.data?.type==='vip-chart-check-ready')parent.postMessage({type:'vip-chart-ready'},location.origin);});
+parent.postMessage({type:'vip-chart-ready'},location.origin);
+</script>
+</body>
+</html>

@@ -1511,6 +1511,17 @@ select {
   transition: background-color 180ms ease, color 180ms ease;
 }
 
+.catalogue-preview-cta--futures {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 52px;
+  height: auto;
+  padding: 16px 20px;
+  white-space: normal;
+  line-height: 1.4;
+  gap: 16px;
+}
+
 .catalogue-preview-cta:hover,
 .catalogue-preview-cta:focus-visible {
   border-color: var(--catalogue-orange);

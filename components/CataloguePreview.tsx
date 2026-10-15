@@ -406,7 +406,7 @@ export default function CataloguePreview({ item, items, onClose, onSelect }: Cat
               <div className="catalogue-preview-actions">
                 {item.caseStudyUrl ? (
                   <a
-                    className="catalogue-preview-cta"
+                    className={`catalogue-preview-cta${item.id === "395c43bd-2c7b-4c19-9057-d71761c92363" ? " catalogue-preview-cta--futures" : ""}`}
                     href={item.caseStudyUrl}
                     onClick={(event) => {
                       if (

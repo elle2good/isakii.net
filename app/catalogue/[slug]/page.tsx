@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import AlgorandCaseStudy from "@/components/AlgorandCaseStudy"
 import AlgorandGame from "@/components/AlgorandGame"
 import AbelianCaseStudy from "@/components/AbelianCaseStudy"
+import VipEventCaseStudy from "@/components/VipEventCaseStudy"
 import RaydiumCaseStudy from "@/components/RaydiumCaseStudy"
 import { getCatalogueItems } from "@/lib/catalogue"
 
@@ -35,6 +36,8 @@ export default async function CatalogueCaseStudyPage({ params }: CataloguePagePr
   const item = await getCatalogueItem(slug)
 
   if (!item) notFound()
+
+  if (item.id === "395c43bd-2c7b-4c19-9057-d71761c92363") return <VipEventCaseStudy />
 
   if (item.slug.toLowerCase() === "abelian-community") {
     return <AbelianCaseStudy />
