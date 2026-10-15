@@ -3,182 +3,22 @@
 import { cloudinaryHeroVideo } from "@/lib/media"
 import { useEffect, useRef, useState } from "react"
 
-type Props = {
-  videoSrc?: string
-  loopStart?: number
-  loopEnd?: number
-}
+type Props = { videoSrc?: string }
 
-export default function HeroVideo({
-  videoSrc = "https://res.cloudinary.com/dwto97ayq/video/upload/v1778476848/Landingpage_Portrait_Vid_z1b78s.mp4",
-  loopStart = 12,
-  loopEnd = 15,
-}: Props) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const stageRef = useRef<HTMLDivElement>(null)
-  const frameRef = useRef<HTMLDivElement>(null)
-  const ambientCanvasRef = useRef<HTMLCanvasElement>(null)
-  const hasLoopedRef = useRef(false)
+export default function HeroVideo({ videoSrc = "/home/seoul-voxel-hero.mp4" }: Props) {
   const [isReady, setIsReady] = useState(false)
-
+  const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      setIsReady(true)
-    }
-
-    const handleTimeUpdate = () => {
-      if (hasLoopedRef.current && video.currentTime >= loopEnd) video.currentTime = loopStart
-    }
-    const handleEnded = () => {
-      if (!hasLoopedRef.current) {
-        hasLoopedRef.current = true
-        video.currentTime = loopStart
-        void video.play()
-      }
-    }
-
-    video.addEventListener("timeupdate", handleTimeUpdate)
-    video.addEventListener("ended", handleEnded)
-    return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate)
-      video.removeEventListener("ended", handleEnded)
-    }
-  }, [loopStart, loopEnd])
-
-  useEffect(() => {
-    const video = videoRef.current
-    const stage = stageRef.current
-    const frame = frameRef.current
-    const canvas = ambientCanvasRef.current
-    if (!video || !stage || !frame || !canvas) return
-
-    const context = canvas.getContext("2d")
-    if (!context) return
-
-    let animationFrame = 0
-    let videoFrame = 0
-    let disposed = false
-    let bounds = stage.getBoundingClientRect()
-    let frameBounds = frame.getBoundingClientRect()
-    let pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
-
-    const measureLayout = () => {
-      bounds = stage.getBoundingClientRect()
-      frameBounds = frame.getBoundingClientRect()
-      pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
-    }
-
-    const drawAmbientFrame = () => {
-      if (disposed || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return
-
-      const width = Math.max(1, Math.round(bounds.width * pixelRatio))
-      const height = Math.max(1, Math.round(bounds.height * pixelRatio))
-
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width
-        canvas.height = height
-      }
-
-      const frameWidth = frameBounds.width * pixelRatio
-      const frameHeight = frameBounds.height * pixelRatio
-      const frameLeft = (frameBounds.left - bounds.left) * pixelRatio
-      const frameTop = (frameBounds.top - bounds.top) * pixelRatio
-      if (!frameWidth || !frameHeight) return
-      const sourceAspect = video.videoWidth / video.videoHeight
-      const frameAspect = frameWidth / frameHeight
-
-      let sourceX = 0
-      let sourceY = 0
-      let sourceWidth = video.videoWidth
-      let sourceHeight = video.videoHeight
-
-      if (sourceAspect > frameAspect) {
-        sourceWidth = video.videoHeight * frameAspect
-        sourceX = (video.videoWidth - sourceWidth) / 2
-      } else {
-        sourceHeight = video.videoWidth / frameAspect
-        sourceY = (video.videoHeight - sourceHeight) / 2
-      }
-
-      context.clearRect(0, 0, width, height)
-
-      // Extend the exact visible edge pixels of the foreground video into the
-      // surrounding canvas. The subtle blur prevents hard bands while keeping
-      // every shade change synchronized to the live video frame.
-      context.drawImage(video, sourceX, sourceY, 2, sourceHeight, 0, 0, frameLeft + 2, height)
-      context.drawImage(
-        video,
-        sourceX + sourceWidth - 2,
-        sourceY,
-        2,
-        sourceHeight,
-        frameLeft + frameWidth - 2,
-        0,
-        width - frameLeft - frameWidth + 2,
-        height,
-      )
-      context.drawImage(
-        video,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        2,
-        frameLeft,
-        0,
-        frameWidth,
-        frameTop + 22 * pixelRatio,
-      )
-    }
-
-    const queueFrame = () => {
-      drawAmbientFrame()
-      if ("requestVideoFrameCallback" in video) {
-        videoFrame = video.requestVideoFrameCallback(queueFrame)
-      } else {
-        animationFrame = window.requestAnimationFrame(queueFrame)
-      }
-    }
-
-    const updateLayout = () => {
-      measureLayout()
-      drawAmbientFrame()
-    }
-    const observer = new ResizeObserver(updateLayout)
-    observer.observe(stage)
-    observer.observe(frame)
-    window.addEventListener("resize", updateLayout)
-    queueFrame()
-
-    return () => {
-      disposed = true
-      observer.disconnect()
-      window.removeEventListener("resize", updateLayout)
-      if (animationFrame) window.cancelAnimationFrame(animationFrame)
-      if (videoFrame && "cancelVideoFrameCallback" in video) video.cancelVideoFrameCallback(videoFrame)
-    }
-  }, [])
-
+    if (videoRef.current && videoRef.current.readyState >= 2) setIsReady(true)
+  }, [videoSrc])
   return (
-    <div ref={stageRef} className={`hero-video-stage ${isReady ? "is-ready" : ""}`}>
-      <canvas ref={ambientCanvasRef} className="hero-video-ambient" aria-hidden="true" />
-      <div ref={frameRef} className="hero-video-frame">
-        <video
-          ref={videoRef}
-          crossOrigin="anonymous"
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onLoadedData={() => setIsReady(true)}
-        >
-          <source media="(max-width: 700px)" src={cloudinaryHeroVideo(videoSrc, 720)} type="video/mp4" />
+    <div className={`hero-video-stage ${isReady ? "is-ready" : ""}`}>
+      <div className="hero-video-frame">
+        <video ref={videoRef} autoPlay loop muted playsInline preload="auto" onLoadedData={() => setIsReady(true)}>
+          <source media="(max-width: 700px)" src="/home/seoul-rooftop-mobile.mp4" type="video/mp4" />
           <source src={cloudinaryHeroVideo(videoSrc, 1280)} type="video/mp4" />
         </video>
       </div>
-      <div className="hero-video-gradation" aria-hidden="true" />
     </div>
   )
 }
