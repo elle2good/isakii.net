@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import AlgorandCaseStudy from "@/components/AlgorandCaseStudy"
 import AlgorandGame from "@/components/AlgorandGame"
@@ -19,15 +19,31 @@ async function getCatalogueItem(slug: string) {
   return items.find((item) => item.slug.toLowerCase() === slug.toLowerCase())
 }
 
-export async function generateMetadata({ params }: CataloguePageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: CataloguePageProps, parent: ResolvingMetadata): Promise<Metadata> {
   const { slug } = await params
   const item = await getCatalogueItem(slug)
 
   if (!item) return {}
 
+  const inherited = await parent
+  const title = `${item.companyName} case study | isakii`
+  const description = item.shortSummary.replace(/\s+/g, " ").trim()
+
   return {
-    title: `${item.companyName} case study | isakii`,
-    description: item.tldr || item.shortSummary,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      siteName: "isakii",
+      images: inherited.openGraph?.images ?? [],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: inherited.twitter?.images ?? [],
+    },
   }
 }
 
