@@ -25,6 +25,20 @@ export async function generateMetadata({ params }: CataloguePageProps, parent: R
 
   if (!item) return {}
 
+  const heroImages: Record<string, string> = {
+    "raydium-event": "raydium",
+    "raydium-event-activation": "raydium",
+    "algorand-korea-community": "algorand",
+    "abelian-community": "abelian",
+    "cancelled-futures-dinner": "futures-dinner",
+  }
+  const heroImage = heroImages[slug.toLowerCase()]
+  const previewImage = heroImage ? {
+    url: `/social/${heroImage}-hero.jpg`,
+    width: 1200,
+    height: 800,
+    alt: `${item.title} — hero section`,
+  } : undefined
   const inherited = await parent
   const title = `${item.companyName} case study | isakii`
   const description = item.shortSummary.replace(/\s+/g, " ").trim()
@@ -36,13 +50,13 @@ export async function generateMetadata({ params }: CataloguePageProps, parent: R
       title,
       description,
       siteName: "isakii",
-      images: inherited.openGraph?.images ?? [],
+      images: previewImage ? [previewImage] : inherited.openGraph?.images ?? [],
     },
     twitter: {
-      card: "summary",
+      card: previewImage ? "summary_large_image" : "summary",
       title,
       description,
-      images: inherited.twitter?.images ?? [],
+      images: previewImage ? [previewImage] : inherited.twitter?.images ?? [],
     },
   }
 }
