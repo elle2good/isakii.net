@@ -125,6 +125,7 @@ const lessons = [
   ["Companies’ marketing budgets are regularly exhausted by Q4 and event confirmations should precede at least 2 months ahead.", "Choose opportunities that allow enough time to prepare, manage risk, and build in a buffer."],
   ["After an educational second newsletter, open rates rose across every region.", "People make time for useful knowledge. Education can be great marketing content."],
   ["I still question whether the outcome would have been different had it been the bull market.", "Market sentiment matters just as much as business goals."],
+  ["As the event fell apart, some speakers offered to take their sessions online to help salvage it.", "Choose partners who show up even when things go wrong. They make all the difference."],
 ]
 export function LessonCards() {
   const [active, setActive] = useState<Set<number>>(() => new Set())
