@@ -6,6 +6,7 @@ import Link from "next/link"
 import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import HomeFooter from "./HomeFooter"
+import SmoothScroll from "./SmoothScroll"
 import HomeHeader from "./HomeHeader"
 import MenuContactActions from "./MenuContactActions"
 import AbelianMobileMetrics from "./AbelianMobileMetrics"
@@ -127,6 +128,7 @@ export default function AbelianCaseStudy() {
 
   return (
     <main ref={articleRef} className="abelian-page abelian-revised">
+      <SmoothScroll intensity={9} anchors />
       <div className={`abelian-site-header ${subnavPinned || mobileHeaderHidden ? "is-hidden" : ""}`} inert={subnavPinned || mobileHeaderHidden}>
         <HomeHeader menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((value) => !value)} />
       </div>

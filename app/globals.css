@@ -4741,3 +4741,21 @@ select {
   .footer-contact-dialog .footer-contact-opt-out { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .footer-contact-dialog::backdrop { animation: none; } }
+
+/* Mobile case studies: a consistent reading rhythm without desktop type overrides. */
+@media (max-width: 700px) {
+ .raydium-page .raydium-section-two-stats strong,
+ .raydium-page .raydium-impact-takeover strong { font-size: 48px; line-height: 1.15; }
+ .raydium-page .raydium-section-two-stats span,
+ .raydium-page .raydium-impact-takeover > div > span { font-size: 18px; line-height: 1.5; }
+ .raydium-section-two-copy > p { font-size: 18px; line-height: 1.6; }
+ .raydium-section-two-copy { gap: 32px; padding-top: 130px; padding-bottom: 32px; }
+ .raydium-section-two-stats .mobile-swipe-slide { min-height: 170px; }
+ .raydium-page .raydium-impact-takeover { padding: 88px 24px 48px; row-gap: 24px; }
+ .raydium-impact-takeover > div { padding: 20px 0; }
+ .raydium-event-button { margin-top: 24px; min-height: 44px; }
+ .raydium-page .raydium-partnership-cards .raydium-card-face { padding: 28px 24px; }
+ .raydium-page .raydium-partnership-cards button:nth-child(n) .raydium-card-copy { font-size: 22px; line-height: 1.5; }
+ .raydium-mission-title h2, .raydium-mission-takeover p { font-size: 22px; line-height: 1.5; }
+ .abelian-mobile-contact-stack { display: none; }
+}

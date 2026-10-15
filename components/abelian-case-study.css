@@ -121,3 +121,19 @@
 @keyframes abelian-brochure-flip { from { transform: rotateY(0deg); } to { transform: rotateY(90deg); } }
 @keyframes abelian-brochure-shadow { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .abelian-brochure-turn, .abelian-brochure-turn::after { animation: none; } }
+
+/* Phone layouts reserve space for the artwork rather than desktop hover hitboxes. */
+@media (max-width: 700px) {
+ .abelian-games-grid, .abelian-paid-videos, .abelian-live-videos, .abelian-field-grid { margin-inline: 0; gap: 40px; }
+ .abelian-media-hover-area { width: 100%; padding: 0; margin: 0; }
+ .abelian-solution-heading p { grid-column: 1 / -1; font-size: 17px; line-height: 1.65; }
+ .abelian-video-description { margin: 20px 0 0; opacity: 1; }
+ .abelian-field-grid figcaption { margin: 20px 0 0; }
+ .abelian-field-grid > [data-motion="461:364"] { margin-bottom: 0; }
+ .abelian-revised .abelian-impact-story-copy { font-size: 22px; line-height: 1.6; }
+ .abelian-solutions-expanded .abelian-motion[data-motion].is-visible { animation: abelian-mobile-enter 450ms ease-out both; translate: none; }
+ .abelian-solutions-expanded .abelian-motion[data-motion].is-visible p,
+ .abelian-solutions-expanded .abelian-motion[data-motion].is-visible li { animation: none; translate: none; }
+}
+@keyframes abelian-mobile-enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .abelian-solutions-expanded .abelian-motion[data-motion].is-visible { animation: none; } }

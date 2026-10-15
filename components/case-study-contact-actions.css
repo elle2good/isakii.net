@@ -16,3 +16,11 @@
  .abelian-subnav.has-contact-actions > nav a { flex-shrink: 0; white-space: nowrap; }
  .case-study-contact-actions { gap: 10px; }
 }
+
+@media (max-width: 700px) {
+ .abelian-subnav.has-contact-actions { column-gap: 8px; padding-inline: 16px; }
+ .abelian-subnav.has-contact-actions > nav { gap: 20px; padding-block: 0; overscroll-behavior-x: contain; }
+ .abelian-subnav.has-contact-actions > nav a { display: flex; align-items: center; min-height: 56px; font-size: 12px; }
+ .case-study-contact-actions { gap: 4px; }
+ .abelian-subnav .case-study-contact-actions > a { width: 44px; height: 44px; flex-basis: 44px; }
+}

@@ -47,3 +47,22 @@
 .vip-opening{opacity:var(--vip-copy-opacity,1)!important}
 .vip-page .home-footer-navigation a{font-family:Abel,sans-serif;font-size:22px;line-height:28px}
 @media(max-width:700px){.vip-group-hitbox{inset:-65px -45px}}
+
+@media (max-width:700px) {
+ .vip-group-hitbox { inset: 0; }
+ .vip-hover-area { padding: 0; margin: 0; box-sizing: border-box; }
+ .vip-planning-grid article { overflow-wrap: anywhere; }
+ .vip-planning-grid p, .vip-management-row p { font-size: 17px; line-height: 1.65; }
+ .vip-floor-wrap, .vip-documents, .vip-deck, .vip-profiles { margin-top: 32px; margin-bottom: 32px; }
+ .vip-chart-hover { margin-top: 24px; }
+ .vip-newsletter-metrics { margin-top: 40px; }
+ .vip-email { margin-top: 64px; }
+ .vip-email form { gap: 12px; }
+ .vip-email button { min-width: 44px; min-height: 44px; }
+ .vip-lesson-cards { margin-top: 40px; gap: 24px; }
+ .vip-lesson-cards .raydium-card-copy, .vip-lesson-cards .raydium-card-back .raydium-card-copy { font-size: 20px; line-height: 1.5; }
+ .vip-lesson-cards .raydium-card-face { padding: 32px 24px; }
+}
+@media(max-width:700px) {
+ .vip-deck, .vip-profiles, .vip-floor-wrap, .vip-documents > div { transform: none !important; }
+}

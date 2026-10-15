@@ -34,3 +34,15 @@
 .algo-hero-down{position:absolute;z-index:2;bottom:42px;left:50%;transform:translateX(-50%) rotate(-90deg)}
 @media(max-width:700px){.algo-hero-down{top:calc(100svh - 90px);bottom:auto}}
 @media(prefers-reduced-motion:reduce) and (min-width:701px){.algo-hero-copy{top:50svh}.algo-hero-meta{top:55svh;bottom:auto}.algo-hero-down{top:calc(100svh - 100px);bottom:auto}}
+
+@media(max-width:700px) {
+ .algo-step-body { gap: 32px; margin-top: 32px; }
+ .algo-prose { font-size: 17px; line-height: 1.65; }
+ .algo-prose p { margin-bottom: 24px; }
+ .algo-prose li + li { margin-top: 8px; }
+ .algo-results .algo-step-heading { margin-top: 48px; }
+ .algo-report-form-wrap { margin-top: 32px; }
+ .algo-report-form input::placeholder { font-size: 14px; }
+ .algo-report-form button { min-width: 44px; min-height: 44px; }
+ .algo-results-summary { padding: 64px 24px; }
+}

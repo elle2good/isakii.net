@@ -13,7 +13,14 @@ export default function SmoothScroll({ intensity = 10, anchors = false, onReady 
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
-    const lenis = new Lenis({ duration: intensity / 10, anchors })
+    const lenis = new Lenis({
+      duration: intensity / 10,
+      anchors,
+      syncTouch: true,
+      syncTouchLerp: 0.12,
+      touchMultiplier: 1,
+      prevent: node => node.matches("dialog, .catalogue-preview-body, .mobile-swipe-track, .abelian-subnav nav"),
+    })
     lenisRef.current = lenis
     onReady?.(lenis)
     // Preserve deep links when arriving from another page or reloading.
