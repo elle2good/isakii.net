@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       <article className="privacy-policy">
         <p className="privacy-eyebrow">Legal</p>
         <h1>Privacy Policy</h1>
-        <p className="privacy-updated">Last Updated on <strong>09/12/2026</strong></p>
+        <p className="privacy-updated">Last Updated on <strong>October 19, 2026</strong></p>
 
         <p>
           This Privacy policy (“Policy”) will help you understand how <strong>LISA KIM</strong> (“Provider”)
@@ -88,6 +88,14 @@ export default function PrivacyPage() {
 
         <section>
           <h2>OUR COOKIE POLICY</h2>
+          <p>
+            We use PostHog to compare homepage card previews with direct navigation. Browser storage keeps a pseudonymous
+            identifier and experiment assignment consistent. We measure card exposure, preview opens, case-study visits,
+            foreground reading time, and contact-link clicks. Experiment outcomes are attributed within 24 hours of first
+            exposure. PostHog processes this data in its US region. Session recording and automatic form-content capture
+            are disabled for this experiment. You can exclude this browser from PostHog and Vercel Analytics in your{" "}
+            <Link href="/analytics-preferences">analytics preferences</Link>.
+          </p>
           <p>
             LISA KIM uses cookies and similar technology (collectively “Cookies”) to collect data regarding your online behavior,
             such as analyzing web traffic, web pages you visit and on which you spend time. Company uses Cookies to:

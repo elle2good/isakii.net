@@ -823,6 +823,12 @@ select {
   outline: none;
 }
 
+a.home-project-card-link { text-decoration: none; }
+a.home-project-card-link:focus-visible {
+  outline: 2px solid #cdbfe3;
+  outline-offset: 4px;
+}
+
 .home-project-image {
   position: relative;
   width: 239px;

@@ -1,6 +1,7 @@
 "use client"
 
 import { Analytics, type BeforeSend } from "@vercel/analytics/next"
+import ExperimentAnalytics from "./ExperimentAnalytics"
 
 // Read on every event so opting out also covers client-side navigation.
 const beforeSend: BeforeSend = event => {
@@ -15,5 +16,5 @@ const beforeSend: BeforeSend = event => {
 }
 
 export default function SiteAnalytics() {
-  return <Analytics beforeSend={beforeSend} />
+  return <><Analytics beforeSend={beforeSend} /><ExperimentAnalytics /></>
 }

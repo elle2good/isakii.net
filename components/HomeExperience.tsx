@@ -13,6 +13,8 @@ import ExternalBlogLink from "./ExternalBlogLink"
 import SmoothScroll from "./SmoothScroll"
 import NotificationTicker from "./NotificationTicker"
 import useMobileViewport from "./useMobileViewport"
+import useCardExperiment from "./useCardExperiment"
+import { trackCardEvent } from "@/lib/cardExperiment"
 import { galleryImages } from "@/lib/gallery"
 import { imageDelivery } from "@/lib/media"
 import type { CatalogueItem } from "@/lib/catalogue"
@@ -118,22 +120,28 @@ function ProjectCover({ project, active }: { project: CatalogueItem; active: boo
   )
 }
 
-const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: CatalogueItem; onOpen: (item: CatalogueItem) => void }) {
+const ProjectCard = memo(function ProjectCard({ project, onOpen, directNavigation, onInteract }: { project: CatalogueItem; onOpen: (item: CatalogueItem) => void; directNavigation: boolean; onInteract: (eligible: boolean) => void }) {
   const [active, setActive] = useState(false)
   const isComingSoon = project.ctaLabel.toLowerCase().includes("coming soon") || !project.caseStudyUrl
   const coverSource = project.coverImage || project.popupImage
+  const opensDirectly = directNavigation && !isComingSoon
+  const CardAction = opensDirectly ? "a" : "button"
 
   return (
-    <article className="home-project-card">
-      <button
-        type="button"
+    <article className="home-project-card" data-case-study={!isComingSoon && project.caseStudyUrl.startsWith("/catalogue/")}>
+      <CardAction
+        type={opensDirectly ? undefined : "button"}
+        href={opensDirectly ? project.caseStudyUrl : undefined}
         className="home-project-card-link"
-        onClick={() => onOpen(project)}
+        onClick={() => {
+          onInteract(!isComingSoon && project.caseStudyUrl.startsWith("/catalogue/"))
+          if (!opensDirectly) onOpen(project)
+        }}
         onMouseEnter={() => setActive(true)}
         onMouseLeave={() => setActive(false)}
         onFocus={() => setActive(true)}
         onBlur={() => setActive(false)}
-        aria-label={`Preview ${project.title}`}
+        aria-label={`${opensDirectly ? "Read" : "Preview"} ${project.title}`}
       >
         <div className={`home-project-image ${project.id === "b6a7f66e-bea3-41b3-b053-115ebfe9abbd" ? "home-project-image--algorand" : ""}`}>
           <ProjectCover project={project} active={active} />
@@ -147,11 +155,12 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: Ca
         <p className="home-project-type">{project.contentType}</p>
         <h3>{project.subtitle || project.title}</h3>
         <p>{[project.companyName, project.date].filter(Boolean).join(" | ")}</p>
-      </button>
+      </CardAction>
       {!isComingSoon && (
         <a
           className="home-project-read-link"
           href={project.caseStudyUrl}
+          onClick={() => onInteract(project.caseStudyUrl.startsWith("/catalogue/"))}
           aria-label={`${project.contentType.toLowerCase().includes("press release") ? "Read press release" : "Read case study"}: ${project.title}`}
         >
           {project.contentType.toLowerCase().includes("press release") ? "Read press release" : "Read case study"}
@@ -161,9 +170,10 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: Ca
   )
 })
 
-export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
+export default function HomeExperience({ catalogueItems, initialPreviewSlug, directNavigation = false }: {
   catalogueItems: CatalogueItem[]
   initialPreviewSlug?: string
+  directNavigation?: boolean
 }) {
   const initialPreview = catalogueItems.find(item => item.slug.toLowerCase() === initialPreviewSlug?.toLowerCase()) ?? null
   const orderedCatalogueItems = catalogueItems.filter(item => item.order > 0).sort((a, b) => a.order - b.order)
@@ -180,6 +190,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
   const topChromeRef = useRef<HTMLDivElement>(null)
   const gallerySectionRef = useRef<HTMLElement>(null)
   const projectSectionRef = useRef<HTMLElement>(null)
+  const cardExperiment = useCardExperiment(projectSectionRef, Boolean(initialPreviewSlug))
   const videoSectionRef = useRef<HTMLElement>(null)
   const galleryTrackRef = useRef<HTMLDivElement>(null)
   const smoothScrollRef = useRef<Lenis | null>(null)
@@ -511,6 +522,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
   }
 
   const openCatalogueItem = useCallback((item: CatalogueItem) => {
+    void trackCardEvent("preview_open", { slug: item.slug })
     clearTopChromeHideTimer()
     cataloguePreviewOpenRef.current = true
     setTopChromeVisible(false)
@@ -683,7 +695,9 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug }: {
             {orderedCatalogueItems.slice(0, 6).map((project, index) => {
               const visible = mobileCatalogue ? index < 5 || catalogueExpanded : index >= catalogueOffset && index < catalogueOffset + 5
               return <div className="home-project-slide" key={project.id} inert={!visible} aria-hidden={!visible}>
-                <ProjectCard project={project} onOpen={openCatalogueItem} />
+                <ProjectCard project={project} onOpen={openCatalogueItem}
+                  directNavigation={directNavigation || cardExperiment.variant === "direct"}
+                  onInteract={cardExperiment.interact} />
               </div>
             })}
           </div>

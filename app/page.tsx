@@ -19,10 +19,12 @@ export const metadata: Metadata = {
 }
 
 export default async function Home({ searchParams }: {
-  searchParams: Promise<{ preview?: string | string[] }>
+  searchParams: Promise<{ preview?: string | string[]; cardTest?: string | string[] }>
 }) {
   const catalogueItems = await getCatalogueItems()
-  const { preview } = await searchParams
+  const { preview, cardTest } = await searchParams
   const initialPreviewSlug = typeof preview === "string" ? preview : undefined
-  return <HomeExperience catalogueItems={catalogueItems} initialPreviewSlug={initialPreviewSlug} />
+  // Local review only. Production assignment needs a connected experiment first.
+  const directNavigation = process.env.NODE_ENV === "development" && cardTest === "direct"
+  return <HomeExperience catalogueItems={catalogueItems} initialPreviewSlug={initialPreviewSlug} directNavigation={directNavigation} />
 }
