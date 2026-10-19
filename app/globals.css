@@ -784,6 +784,29 @@ select {
 
 .home-project-card { min-width: 0; }
 
+.home-project-read-link {
+  display: block;
+  width: 241px;
+  max-width: 100%;
+  margin-top: 12px;
+  color: #cdbfe3;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.home-project-read-link:hover { color: #ff5a00; }
+.home-project-read-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .home-project-read-link { margin-inline: auto; }
+}
+
 .home-project-card-link {
   display: flex;
   flex-direction: column;

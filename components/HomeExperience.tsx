@@ -148,6 +148,15 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen }: { project: Ca
         <h3>{project.subtitle || project.title}</h3>
         <p>{[project.companyName, project.date].filter(Boolean).join(" | ")}</p>
       </button>
+      {!isComingSoon && (
+        <a
+          className="home-project-read-link"
+          href={project.caseStudyUrl}
+          aria-label={`${project.contentType.toLowerCase().includes("press release") ? "Read press release" : "Read case study"}: ${project.title}`}
+        >
+          {project.contentType.toLowerCase().includes("press release") ? "Read press release" : "Read case study"}
+        </a>
+      )}
     </article>
   )
 })
