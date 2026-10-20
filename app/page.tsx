@@ -3,7 +3,7 @@ import HomeExperience from "@/components/HomeExperience"
 import { getCatalogueItems } from "@/lib/catalogue"
 
 const socialTitle = "Isakii | Turn Interest into Trust"
-const socialDescription = "I’m Lisa, a bubbly marketing and sales consultant helping companies attract the right leads and turn them into customers and advocates through content and events."
+const socialDescription = "Attract the right leads and turn them into customers, advocates, partners—and more."
 
 export const metadata: Metadata = {
   openGraph: {
