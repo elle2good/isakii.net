@@ -2,17 +2,20 @@ import type { Metadata } from "next"
 import HomeExperience from "@/components/HomeExperience"
 import { getCatalogueItems } from "@/lib/catalogue"
 
-const socialTitle = "Lisa Kim provides 360° coverage across the non-technical side of tech—from strategy and marketing to community and data analytics"
+const socialTitle = "Isakii | Turn Interest into Trust"
+const socialDescription = "I’m Lisa, a bubbly marketing and sales consultant helping companies attract the right leads and turn them into customers and advocates through content and events."
 
 export const metadata: Metadata = {
   openGraph: {
     title: socialTitle,
+    description: socialDescription,
     siteName: "isakii",
     url: "https://isakii.net/",
     images: [{ url: "/isakii-preview-logo.png", width: 1080, height: 1080, alt: "isakii logo" }],
   },
   twitter: {
     title: socialTitle,
+    description: socialDescription,
     card: "summary",
     images: [{ url: "/isakii-preview-logo.png", alt: "isakii logo" }],
   },
