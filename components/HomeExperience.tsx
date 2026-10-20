@@ -182,6 +182,23 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
   const [catalogueShifted, setCatalogueShifted] = useState(false)
   const catalogueOffset = !mobileCatalogue && catalogueShifted && orderedCatalogueItems.length > 5 ? 1 : 0
   const [menuOpen, setMenuOpen] = useState(false)
+  const [ctaScrolling, setCtaScrolling] = useState(false)
+
+  useEffect(() => {
+    let idleTimer: ReturnType<typeof setTimeout>
+    const onScroll = () => {
+      if (!window.matchMedia("(max-width: 700px)").matches) return
+      setCtaScrolling(true)
+      clearTimeout(idleTimer)
+      idleTimer = setTimeout(() => setCtaScrolling(false), 350)
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      clearTimeout(idleTimer)
+    }
+  }, [])
+
   const [blogExpanded, setBlogExpanded] = useState(false)
   const [topChromeVisible, setTopChromeVisible] = useState(!initialPreview)
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
@@ -659,7 +676,14 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
           <h2>Attract the right leads and turn them into customers, advocates, partners and more!</h2>
           <a className="home-hero-cta" href="https://calendar.app.google/rq7PqiSkYUWpw1ADA" target="_blank" rel="noopener noreferrer"><span>Get Started</span></a>
         </div>
+        <div className="home-hero-mobile-ticker"><NotificationTicker /></div>
       </section>
+
+      <a
+        className={`home-hero-cta home-mobile-cta${ctaScrolling || menuOpen || activeCatalogueItem ? " is-hidden" : ""}`}
+        href="https://calendar.app.google/rq7PqiSkYUWpw1ADA"
+        target="_blank" rel="noopener noreferrer"
+      ><span>Get<br />Started</span></a>
 
       <section ref={gallerySectionRef} className="home-gallery" aria-label="Motion gallery">
         <div
