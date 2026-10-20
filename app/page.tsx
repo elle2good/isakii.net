@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import HomeExperience from "@/components/HomeExperience"
 import { getCatalogueItems } from "@/lib/catalogue"
 
-const socialTitle = "Isakii | Turn Interest into Trust"
+const socialTitle = "The Human Agent for Relationships"
 const socialDescription = "Attract the right leads and turn them into customers, advocates, partners—and more."
 
 export const metadata: Metadata = {
