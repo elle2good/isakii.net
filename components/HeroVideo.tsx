@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 
 type Props = { videoSrc?: string }
 
-export default function HeroVideo({ videoSrc = "/home/seoul-voxel-hero.mp4" }: Props) {
+export default function HeroVideo({ videoSrc = "/home/seoul-rooftop-red-desktop.mp4" }: Props) {
   const [isReady, setIsReady] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function HeroVideo({ videoSrc = "/home/seoul-voxel-hero.mp4" }: P
     // Video source media queries are not re-evaluated reliably after resizing.
     const selectSource = () => {
       const src = mobile.matches
-        ? "/home/seoul-rooftop-mobile.mp4"
+        ? "/home/seoul-rooftop-red-mobile.mp4"
         : cloudinaryHeroVideo(videoSrc, 1280)
       if (video.getAttribute("src") === src) return
       setIsReady(false)

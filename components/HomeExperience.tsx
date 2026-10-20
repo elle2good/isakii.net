@@ -654,6 +654,11 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
 
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />
+        <div className="home-hero-message">
+          <h1>The Human Agent for Relationships</h1>
+          <h2>Attract the right leads and turn them into customers, advocates, partners and more!</h2>
+          <a className="home-hero-cta" href="https://calendar.app.google/rq7PqiSkYUWpw1ADA" target="_blank" rel="noopener noreferrer"><span>Get Started</span></a>
+        </div>
       </section>
 
       <section ref={gallerySectionRef} className="home-gallery" aria-label="Motion gallery">
