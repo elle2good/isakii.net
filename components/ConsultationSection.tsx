@@ -31,8 +31,8 @@ export default function ConsultationSection() {
         <img className="consultation-free" src="/consultation/free-consultation.png" alt="Free consultation" />
         <label><span className="sr-only">Your Name</span><input name="name" autoComplete="name" placeholder="Your Name" required /></label>
         <label><span className="sr-only">Company Email address</span><input name="email" type="email" autoComplete="email" placeholder="Company Email address" required /></label>
-        <button type="submit" disabled={status === "sending" || status === "success"}>{status === "sending" ? "Sending…" : status === "success" ? "Signed Up" : "Sign Up"}</button>
-        {message && <p className="consultation-status" role="status">{message}</p>}
+        <button type="submit" className={status === "success" ? "is-success" : undefined} disabled={status === "sending" || status === "success"}>{status === "sending" ? "Sending…" : status === "success" ? "TTYL" : "Sign Up"}</button>
+        {message && <p className="consultation-status" role="status">{status === "success" ? <strong>{message}</strong> : message}</p>}
       </form>
       <ul className="consultation-prompts">
         <li><span>“I am launching a product from scratch.”</span></li>
