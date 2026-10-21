@@ -171,10 +171,11 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen, directNavigatio
   )
 })
 
-export default function HomeExperience({ catalogueItems, initialPreviewSlug, directNavigation = false }: {
+export default function HomeExperience({ catalogueItems, initialPreviewSlug, directNavigation = false, initialSection }: {
   catalogueItems: CatalogueItem[]
   initialPreviewSlug?: string
   directNavigation?: boolean
+  initialSection?: string
 }) {
   const initialPreview = catalogueItems.find(item => item.slug.toLowerCase() === initialPreviewSlug?.toLowerCase()) ?? null
   const orderedCatalogueItems = catalogueItems.filter(item => item.order > 0).sort((a, b) => a.order - b.order)
@@ -572,6 +573,26 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
   const handleSmoothScrollReady = useCallback((lenis: Lenis | null) => {
     smoothScrollRef.current = lenis
   }, [])
+
+  useEffect(() => {
+    if (!initialSection || window.location.hash) return
+    // Fonts can change the height of the catalogue above this section.
+    let cancelled = false
+    let frame = 0
+    void document.fonts.ready.then(() => {
+      if (cancelled) return
+      frame = requestAnimationFrame(() => {
+        const section = document.getElementById(initialSection)
+        const lenis = smoothScrollRef.current
+        if (!section || !lenis) return
+        const offset = window.matchMedia("(max-width: 700px)").matches
+          ? -(headerRef.current?.offsetHeight ?? 96) : 0
+        lenis.resize()
+        lenis.scrollTo(section, { immediate: true, force: true, offset })
+      })
+    })
+    return () => { cancelled = true; cancelAnimationFrame(frame) }
+  }, [initialSection])
 
   return (
     <main className="home-page">

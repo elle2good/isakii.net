@@ -24,7 +24,7 @@ export default function ConsultationSection() {
   }
 
   return (
-    <section className="home-consultation" aria-labelledby="consultation-heading">
+    <section id="grwm" className="home-consultation" aria-labelledby="consultation-heading">
       <div className="consultation-grid" aria-hidden="true"><img src="/consultation/grid.png" alt="" /></div>
       <h2 id="consultation-heading" className="consultation-heading"><img src="/consultation/headline.png" alt="Get Ready for 2027 with me" /></h2>
       <form className="consultation-form" onSubmit={submit}>
