@@ -4863,3 +4863,106 @@ a.home-project-card-link:focus-visible {
  .home-hero-message h2 { top:37.78%; left:7.8%; width:84.4%; text-align:center; }
  .home-hero-mobile-ticker { display:block; position:absolute; bottom:0; left:0; width:100%; z-index:3; }
 }
+
+/* Headline artwork from the desktop and mobile Figma frames. */
+.home-hero-message h1 { top:12.59%; left:37.64%; right:auto; width:63.24%; }
+.home-hero-message h1 picture,.home-hero-message h1 img { display:block; width:100%; height:auto; }
+.home-hero-message h2 { top:57.51%; }
+.home-hero-message .home-hero-cta { background:#bfb3d7; color:#fff; border-radius:5px; top:79.5%; }
+@media (max-width:700px) {
+ .home-hero-message h1 { top:7.68%; left:6.49%; width:93.13%; }
+ .home-hero-message h2 { top:39.91%; left:7.82%; width:84.35%; }
+ .home-top-chrome.is-hidden { transform:none; pointer-events:auto; }
+ .home-hero-mobile-ticker { position:sticky; top:96px; bottom:auto; margin-top:-37px; height:37px; z-index:999; }
+}
+
+.home-consultation { position:relative; isolation:isolate; width:100%; aspect-ratio:1746 / 1056; overflow:hidden; background:#061637; font-family:"DM Sans",sans-serif; color:#000; }
+.consultation-grid { position:absolute; inset:0; z-index:-1; overflow:hidden; }
+.consultation-grid img { position:absolute; width:61%; height:166%; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-90deg); object-fit:cover; }
+.consultation-heading { position:absolute; top:0; left:2.12%; width:40.9%; margin:0; }
+.consultation-heading img { display:block; width:100%; }
+.consultation-form { position:absolute; top:32.86%; left:45.53%; width:49.26%; display:grid; grid-template-columns:219fr 376fr 222fr; gap:2.5%; }
+.consultation-form label { min-width:0; }
+.consultation-form input { width:100%; height:clamp(48px,4.18vw,73px); border:2px solid #0c0319; border-radius:0; background:#fff; color:#0c0319; padding:0 16px; font:400 clamp(10px,.802vw,14px) "DM Sans",sans-serif; }
+.consultation-form input:focus-visible { outline:3px solid #ff5a00; outline-offset:3px; }
+.consultation-form button { border:0; background:#ff5a00; color:#fff; font:700 clamp(14px,1.375vw,24px) "DM Sans",sans-serif; }
+.consultation-form button:disabled { cursor:not-allowed; }
+.consultation-free { position:absolute; width:29.3%; right:-1.75%; bottom:100%; }
+.consultation-prompts { position:absolute; top:58.8%; left:5.4%; list-style:none; padding:0; margin:0; display:grid; gap:2.7vw; font-size:2.29vw; line-height:1.2; font-weight:700; }
+.consultation-prompts span { -webkit-text-stroke:6px #fff; paint-order:stroke fill; }
+.consultation-arrow { position:absolute; left:66.15%; top:39%; width:16.27%; transform:rotate(17.41deg); }
+.consultation-stamp { position:absolute; left:65.86%; top:58.8%; width:36.32%; height:33.08%; display:grid; place-items:center; }
+.consultation-stamp img { position:absolute; width:54.47%; height:181%; object-fit:fill; transform:rotate(90.35deg); z-index:-1; }
+.consultation-stamp span { font-size:5.5vw; font-weight:700; }
+@media(max-width:700px) {
+ .home-consultation { aspect-ratio:auto; padding:24px 24px 48px; display:flex; flex-direction:column; align-items:center; gap:28px; }
+ .consultation-grid { inset:0; }
+ .consultation-grid img { width:100%; height:100%; inset:0; transform:none; }
+ .consultation-heading { position:relative; width:min(100%,390px); left:auto; top:auto; margin:-40px 0 -70px; }
+ .consultation-form { position:relative; left:auto; top:auto; width:100%; display:grid; grid-template-columns:1fr; gap:12px; padding-top:85px; }
+ .consultation-free { width:150px; right:0; bottom:auto; top:-15px; }
+ .consultation-form input { height:54px; font-size:14px; }
+ .consultation-form button { height:54px; font-size:20px; }
+ .consultation-prompts { position:relative; left:auto; top:auto; width:100%; gap:22px; font-size:20px; line-height:1.35; }
+ .consultation-arrow { position:relative; left:auto; top:auto; align-self:flex-end; width:115px; margin:-10px 20px -40px 0; transform:rotate(17.41deg); }
+ .consultation-stamp { position:relative; left:auto; top:auto; align-self:flex-end; width:180px; height:130px; margin-right:10px; }
+ .consultation-stamp span { font-size:44px; }
+}
+
+.consultation-status { grid-column:1 / -1; margin:8px 0 0; background:#fff; padding:10px; font-size:14px; line-height:1.5; }
+.consultation-form button:not(:disabled) { cursor:pointer; }
+.consultation-form button:not(:disabled):hover { background:#ff5a00; opacity:1; }
+
+@font-face {
+ font-family:"DM Sans Consultation";
+ src:url("/fonts/dm-sans-variable.ttf") format("truetype");
+ font-style:normal;
+ font-weight:100 1000;
+ font-display:swap;
+}
+.consultation-prompts { font-family:"DM Sans Consultation","DM Sans",sans-serif; font-weight:700; }
+@media(max-width:700px) { .consultation-prompts span { -webkit-text-stroke-width:4px; } }
+
+.consultation-form button { position:relative; overflow:hidden; transition:none; }
+.consultation-form button::after { content:""; position:absolute; inset:-50% auto -50% -60%; width:40%; background:linear-gradient(90deg,transparent,#ffffffbb,transparent); transform:skewX(-20deg); pointer-events:none; animation:hero-cta-gleam 2s .8s infinite; }
+@media(prefers-reduced-motion:reduce) { .consultation-form button::after { display:none; } }
+
+.consultation-mobile-stamp { display:none; }
+@media(max-width:700px) {
+ .home-consultation { padding:0 10.88% 0; gap:0; }
+ .consultation-heading { order:0; width:133.25%; max-width:none; flex-shrink:0; margin:-13.55vw -16.63% -16vw; }
+ .consultation-prompts { order:1; font-size:7.634vw; line-height:1.4; gap:9.2vw; }
+ .consultation-prompts li:nth-child(1) { order:0; }
+ .consultation-prompts li:nth-child(2) { order:2; }
+ .consultation-prompts li:nth-child(3) { display:none; }
+ .consultation-prompts li:nth-child(4) { order:1; }
+ .consultation-prompts span { -webkit-text-stroke-width:5px; }
+ .consultation-arrow { position:absolute; width:46.1%; height:auto; left:53%; top:35%; margin:0; transform:rotate(58.57deg) scaleY(-1); pointer-events:none; }
+ .consultation-form { order:2; padding-top:0; margin-top:16vw; gap:5.34vw; }
+ .consultation-free { position:relative; width:97.8%; right:auto; top:auto; bottom:auto; justify-self:center; margin-bottom:-5.34vw; }
+ .consultation-form input,.consultation-form button { height:13.93vw; min-height:48px; }
+ .consultation-form input { font-size:14px; }
+ .consultation-form button { font-size:clamp(18px,4.58vw,24px); }
+ .consultation-stamp { display:none; }
+ .consultation-mobile-stamp { order:3; display:grid; place-items:center; position:relative; width:90.46%; aspect-ratio:1; align-self:center; margin-top:3.24vw; }
+ .consultation-mobile-stamp > img:first-child { width:100%; height:100%; position:absolute; }
+ .consultation-mobile-stamp > span { position:relative; font-family:"DM Sans Consultation",sans-serif; font-weight:700; font-size:12.21vw; }
+ .consultation-mobile-badge { position:absolute; width:43%; right:-12%; top:3.5%; }
+}
+@media(max-width:700px) {
+ .consultation-grid { background:url('/consultation/mobile-grid.png') center top / 150% auto repeat-y; }
+ .consultation-grid img { display:none; }
+}
+
+@media(min-width:701px) {
+ .consultation-stamp { left:74.46%; top:59.75%; width:21.19%; height:auto; aspect-ratio:1; }
+ .consultation-stamp > img:first-child { width:100%; height:100%; transform:none; object-fit:contain; }
+ .consultation-stamp > span { font-family:"DM Sans Consultation",sans-serif; font-size:5.5vw; line-height:.8125; font-weight:700; }
+ .consultation-stamp .consultation-desktop-badge { width:43%; height:auto; right:-8%; top:0; transform:rotate(-8.83deg); z-index:1; }
+}
+@media(max-width:700px) {
+ .consultation-form { margin-top:8.75vw; }
+ .consultation-mobile-stamp { margin-top:6.1vw; }
+ .home-hero-mobile-ticker { transition:opacity .18s,visibility .18s; }
+ .home-hero-mobile-ticker.is-suppressed { opacity:0; visibility:hidden; pointer-events:none; }
+}

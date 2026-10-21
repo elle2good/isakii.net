@@ -7,6 +7,7 @@ import { FocusEvent, memo, useCallback, useEffect, useRef, useState } from "reac
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
+import ConsultationSection from "./ConsultationSection"
 import CataloguePreview from "./CataloguePreview"
 import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
@@ -183,6 +184,17 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
   const catalogueOffset = !mobileCatalogue && catalogueShifted && orderedCatalogueItems.length > 5 ? 1 : 0
   const [menuOpen, setMenuOpen] = useState(false)
   const [ctaScrolling, setCtaScrolling] = useState(false)
+  const [consultationInView, setConsultationInView] = useState(false)
+
+  useEffect(() => {
+    const section = document.querySelector(".home-consultation")
+    if (!section) return
+    const observer = new IntersectionObserver(([entry]) => {
+      setConsultationInView(entry.isIntersecting)
+    }, { rootMargin: "-96px 0px 0px 0px", threshold: 0 })
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout>
@@ -672,15 +684,20 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
       <section id="hero-video-opening" className="home-hero">
         <HeroVideo />
         <div className="home-hero-message">
-          <h1>The Human Agent for Relationships</h1>
-          <h2>Attract the right leads and turn them into customers, advocates, partners and more!</h2>
+          <h1 aria-label="The Human Agent for Relationships">
+            <picture>
+              <source media="(max-width: 700px)" srcSet="/home/human-agent-mobile.png" />
+              <img src="/home/human-agent-desktop.png" alt="The Human Agent for Relationships" />
+            </picture>
+          </h1>
+          <h2>Attract the right leads and turn them into customers, advocates, partners and more.</h2>
           <a className="home-hero-cta" href="https://calendar.app.google/rq7PqiSkYUWpw1ADA" target="_blank" rel="noopener noreferrer"><span>Get Started</span></a>
         </div>
-        <div className="home-hero-mobile-ticker"><NotificationTicker /></div>
       </section>
+      <div className={`home-hero-mobile-ticker${consultationInView ? " is-suppressed" : ""}`}><NotificationTicker /></div>
 
       <a
-        className={`home-hero-cta home-mobile-cta${ctaScrolling || menuOpen || activeCatalogueItem ? " is-hidden" : ""}`}
+        className={`home-hero-cta home-mobile-cta${ctaScrolling || consultationInView || menuOpen || activeCatalogueItem ? " is-hidden" : ""}`}
         href="https://calendar.app.google/rq7PqiSkYUWpw1ADA"
         target="_blank" rel="noopener noreferrer"
       ><span>Get<br />Started</span></a>
@@ -718,7 +735,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
       </section>
 
       <section ref={projectSectionRef} id="projects" className="home-projects">
-        <h2>Catalogue</h2>
+        <h2>Previous work</h2>
         <div className="home-project-carousel">
           <div id="catalogue-project-grid" className={`home-project-grid home-project-track${catalogueOffset ? " is-shifted" : ""}`}>
             {orderedCatalogueItems.slice(0, 6).map((project, index) => {
@@ -740,10 +757,12 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
           aria-label={mobileCatalogue ? (catalogueExpanded ? "Show fewer catalogue items" : "Show sixth catalogue item") : catalogueOffset ? "Show catalogue items 1 to 5" : "Show catalogue items 2 to 6"}
           onClick={() => mobileCatalogue ? setCatalogueExpanded(expanded => !expanded) : setCatalogueShifted(shifted => !shifted)}
         >
-          <span className="home-catalogue-button-label">VIEW CATALOGUE</span>
+          <span className="home-catalogue-button-label">VIEW PREVIOUS WORK</span>
           <span className="home-catalogue-arrow" aria-hidden="true">→</span>
         </button>
       </section>
+
+      <ConsultationSection />
 
       <section ref={videoSectionRef} id="featured-video" className="home-video-feature" aria-labelledby="home-video-title">
         <div className="home-video-feature-inner">
