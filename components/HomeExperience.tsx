@@ -186,6 +186,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
   const [menuOpen, setMenuOpen] = useState(false)
   const [ctaScrolling, setCtaScrolling] = useState(false)
   const [consultationInView, setConsultationInView] = useState(false)
+  const [landingReady, setLandingReady] = useState(!initialSection)
 
   useEffect(() => {
     const section = document.querySelector(".home-consultation")
@@ -575,27 +576,33 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
   }, [])
 
   useEffect(() => {
-    if (!initialSection || window.location.hash) return
+    if (!initialSection) return
     // Fonts can change the height of the catalogue above this section.
     let cancelled = false
     let frame = 0
     void document.fonts.ready.then(() => {
       if (cancelled) return
       frame = requestAnimationFrame(() => {
-        const section = document.getElementById(initialSection)
+        const section = document.getElementById(window.location.hash.slice(1) || initialSection)
         const lenis = smoothScrollRef.current
-        if (!section || !lenis) return
-        const offset = window.matchMedia("(max-width: 700px)").matches
-          ? -(headerRef.current?.offsetHeight ?? 96) : 0
-        lenis.resize()
-        lenis.scrollTo(section, { immediate: true, force: true, offset })
+        if (section) {
+          if (lenis) {
+            lenis.resize()
+            lenis.scrollTo(section, { immediate: true, force: true })
+          } else {
+            section.scrollIntoView({ behavior: "instant", block: "start" })
+          }
+        }
+        // Reveal only once the browser has applied the landing position.
+        frame = requestAnimationFrame(() => setLandingReady(true))
       })
     })
     return () => { cancelled = true; cancelAnimationFrame(frame) }
   }, [initialSection])
 
   return (
-    <main className="home-page">
+    <main className={`home-page${initialSection ? " home-section-landing" : ""}${!landingReady ? " is-landing-pending" : ""}`}>
+      {initialSection && <noscript><style>{`.home-page.is-landing-pending > * { visibility:visible; } .home-page.is-landing-pending::after { display:none; }`}</style></noscript>}
       <SmoothScroll intensity={10} onReady={handleSmoothScrollReady} />
       <div
         ref={topChromeRef}

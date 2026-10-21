@@ -4968,3 +4968,11 @@ a.home-project-card-link:focus-visible {
 }
 
 .consultation-form button.is-success::after { animation:none; display:none; }
+
+/* Keep the hero offscreen while a shared section link is being positioned. */
+.home-page.is-landing-pending > * { visibility:hidden; }
+.home-page.is-landing-pending::after { content:""; position:fixed; inset:0; z-index:2000; background:#cbdde8 url('/consultation/mobile-grid.png') center top / cover; }
+.home-page.is-landing-pending .home-top-chrome { transition:none; }
+@media(max-width:700px) {
+ .home-section-landing .home-consultation { padding-top:96px; }
+}
