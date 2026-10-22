@@ -2,10 +2,22 @@
 
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { foregroundDelta, getExperimentClient, readExposure, recordEngagement, trackCardEvent } from "@/lib/cardExperiment"
+import { analyticsAllowed, foregroundDelta, getExperimentClient, readExposure, recordEngagement, trackCardEvent } from "@/lib/cardExperiment"
 
 export default function ExperimentAnalytics() {
   const pathname = usePathname()
+  useEffect(() => {
+    let cancelled = false
+    // Track initial loads and Next.js route changes once, independent of experiment enrollment.
+    // Automatic SDK pageviews stay disabled to avoid double-counting.
+    void getExperimentClient().then(sdk => {
+      if (!sdk || cancelled || !analyticsAllowed()) return
+      sdk.capture("$pageview", { environment: "production" })
+      if (pathname === "/grwm") sdk.capture("grwm_visit", { environment: "production", signup_page: pathname })
+    })
+    return () => { cancelled = true }
+  }, [pathname])
+
   useEffect(() => {
     if (!pathname.startsWith("/catalogue/")) return
     let cancelled = false

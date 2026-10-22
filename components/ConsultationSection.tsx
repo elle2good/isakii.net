@@ -1,14 +1,23 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useRef, useState, type FormEvent } from "react"
+import { trackConsultationEvent } from "@/lib/cardExperiment"
 
 export default function ConsultationSection() {
   const [status, setStatus] = useState("idle")
   const [message, setMessage] = useState("")
+  const formStarted = useRef(false)
+  function trackStart() {
+    if (formStarted.current) return
+    formStarted.current = true
+    void trackConsultationEvent("consultation_form_started", window.location.pathname)
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (status === "sending") return
+    if (status === "sending" || status === "success") return
     const data = new FormData(event.currentTarget)
+    // Also covers autofilled submissions that did not dispatch an input event.
+    trackStart()
     setStatus("sending")
     setMessage("")
     try {
@@ -16,6 +25,7 @@ export default function ConsultationSection() {
       const result = await response.json()
       if (!response.ok || !result.registered) throw new Error(result.error || "Please try again.")
       setStatus("success")
+      void trackConsultationEvent("consultation_signup_success", window.location.pathname)
       setMessage("You’re signed up! Check your email, including Promotions or Spam, for the next steps.")
     } catch(error) {
       setStatus("error")
@@ -27,7 +37,9 @@ export default function ConsultationSection() {
     <section id="grwm" className="home-consultation" aria-labelledby="consultation-heading">
       <div className="consultation-grid" aria-hidden="true"><img src="/consultation/grid.png" alt="" /></div>
       <h2 id="consultation-heading" className="consultation-heading"><img src="/consultation/headline.png" alt="Get Ready for 2027 with me" /></h2>
-      <form className="consultation-form" onSubmit={submit}>
+      <form className="consultation-form" onSubmit={submit} onChange={event => {
+        if (event.target instanceof HTMLInputElement && event.target.value.trim()) trackStart()
+      }}>
         <img className="consultation-free" src="/consultation/free-consultation.png" alt="Free consultation" />
         <label><span className="sr-only">Your Name</span><input name="name" autoComplete="name" placeholder="Your Name" required /></label>
         <label><span className="sr-only">Company Email address</span><input name="email" type="email" autoComplete="email" placeholder="Company Email address" required /></label>

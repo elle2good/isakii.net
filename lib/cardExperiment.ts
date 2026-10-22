@@ -55,14 +55,15 @@ export function getExperimentClient(): Promise<PostHog | null> {
       property_denylist: ["$referrer", "$initial_referrer", "$initial_current_url", "$initial_pathname"],
       before_send: event => {
         if (!event || !analyticsAllowed()) return null
-        if (!["catalogue_exposure", "preview_open", "case_study_arrival", "engaged_case_study", "contact_click", "external_press_click"].includes(event.event)) return null
-        // Limit this integration to the experiment's explicit measurements.
+        if (!["$pageview", "catalogue_exposure", "preview_open", "case_study_arrival", "engaged_case_study", "contact_click", "external_press_click", "grwm_visit", "consultation_form_started", "consultation_signup_success"].includes(event.event)) return null
+        // Only send explicit measurements; never send form names or email addresses.
         const allowed = new Set(["distinct_id", "token", "$lib", "$lib_version", "$device_type", "$browser",
           "$browser_version", "$os", "$os_version", "$session_id", "$window_id", "$process_person_profile",
           "$is_identified", "$geoip_disable", "experiment", "variant", "environment", "slug", "kind", "host",
-          "foreground_seconds", `$feature/${CARD_EXPERIMENT}`])
+          "foreground_seconds", "signup_page", `$feature/${CARD_EXPERIMENT}`])
         event.properties = Object.fromEntries(Object.entries(event.properties).filter(([key]) => allowed.has(key)))
         event.properties.$current_url = window.location.origin + window.location.pathname
+        event.properties.$pathname = window.location.pathname
         return event
       },
     })
@@ -118,6 +119,15 @@ export async function trackCardEvent(event: string, extra: Record<string, string
   if (!sdk) return
   const record = readExposure(sdk)
   if (record) send(sdk, event, record, extra)
+}
+
+// Consultation tracking is independent of catalogue experiment enrollment.
+export async function trackConsultationEvent(event: "grwm_visit" | "consultation_form_started" | "consultation_signup_success", page: string) {
+  try {
+    const sdk = await getExperimentClient()
+    if (!sdk || !analyticsAllowed()) return
+    sdk.capture(event, { environment: "production", signup_page: page })
+  } catch { /* Analytics must never interrupt a successful signup. */ }
 }
 
 export function recordEngagement(sdk: PostHog, slug: string) {
