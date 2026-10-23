@@ -1,10 +1,11 @@
+import { applyApprovedMetadata } from "@/lib/pageMetadata"
 import type { Metadata } from "next"
 import Link from "next/link"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = applyApprovedMetadata("/privacy", {
   title: "Privacy Policy | isakii",
   description: "The isakii.net privacy policy.",
-}
+})
 
 export default function PrivacyPage() {
   return (
