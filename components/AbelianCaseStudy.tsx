@@ -139,7 +139,6 @@ export default function AbelianCaseStudy() {
             <button type="button" className="home-menu-close" onClick={closeMenu} aria-label="Close menu">x</button>
             <nav aria-label="Explore">
               <Link className="home-menu-link" href="/about" onClick={closeMenu}>about</Link>
-              <Link className="home-menu-link" href="/work?language=en" onClick={closeMenu}>blog</Link>
               <Link className="home-menu-link" href="/#projects" onClick={closeMenu}>catalogue</Link>
               <Link className="home-menu-link" href="/" onClick={closeMenu}>home</Link>
             </nav>
@@ -164,7 +163,7 @@ export default function AbelianCaseStudy() {
           >
             <div className="abelian-hero-copy-motion">
               <AbelianMotion as="span" node="119:29" className="abelian-eyebrow">Case study</AbelianMotion>
-              <div id="abelian-title"><AbelianMotion as="h1" node="119:30">Bootstrapping<br />a Global Community from a Very Niche Technology</AbelianMotion></div>
+              <div id="abelian-title"><AbelianMotion as="h1" node="119:30">Global Community Growth Case Study</AbelianMotion></div>
             </div>
           </motion.div>
 

@@ -1,3 +1,4 @@
+import { applyApprovedMetadata } from "@/lib/pageMetadata"
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import AlgorandCaseStudy from "@/components/AlgorandCaseStudy"
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: CataloguePageProps, parent: R
   const title = `${item.companyName} case study | isakii`
   const description = item.shortSummary.replace(/\s+/g, " ").trim()
 
-  return {
+  return applyApprovedMetadata(`/catalogue/${slug}`, {
     title,
     description,
     openGraph: {
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: CataloguePageProps, parent: R
       description,
       images: previewImage ? [previewImage] : inherited.twitter?.images ?? [],
     },
-  }
+  })
 }
 
 export default async function CatalogueCaseStudyPage({ params }: CataloguePageProps) {

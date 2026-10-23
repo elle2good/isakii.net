@@ -408,7 +408,6 @@ export default function RaydiumCaseStudy() {
             <button type="button" className="home-menu-close" onClick={closeMenu} aria-label="Close menu">x</button>
             <nav aria-label="Explore">
               <Link className="home-menu-link" href="/about" onClick={closeMenu}>about</Link>
-              <Link className="home-menu-link" href="/work?language=en" onClick={closeMenu}>blog</Link>
               <Link className="home-menu-link" href="/#projects" onClick={closeMenu}>catalogue</Link>
               <Link className="home-menu-link" href="/" onClick={closeMenu}>home</Link>
             </nav>
@@ -425,7 +424,7 @@ export default function RaydiumCaseStudy() {
           <div className="raydium-hero-gradient" />
           <motion.div className="raydium-hero-copy" style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}>
             <motion.span initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.7, delay: 0.12, ease: "easeOut" }}>Case study</motion.span>
-            <motion.h1 id="raydium-title" initial={reduceMotion ? false : { opacity: 0, y: 42 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.78, delay: 0.28, ease: "easeOut" }}>One Event, Half the Cost,<br />Triple the Reach</motion.h1>
+            <motion.h1 id="raydium-title" initial={reduceMotion ? false : { opacity: 0, y: 42 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.78, delay: 0.28, ease: "easeOut" }}>Event Activation Case Study by Lisa Kim</motion.h1>
           </motion.div>
           <motion.dl className="raydium-hero-meta" style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}>
             <div><dt>Role</dt><dd>Ambassador</dd></div>

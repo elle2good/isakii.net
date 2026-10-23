@@ -30,7 +30,6 @@ export default function Navigation() {
             </div>
           )}
         </div>
-        <Link href="/work">Blog</Link>
         <a href="mailto:hello@isakii.net"><ContactButton /></a>
       </div>
     </nav>

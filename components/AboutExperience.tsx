@@ -163,7 +163,7 @@ export default function AboutExperience() {
         )}
 
         <motion.h1 id="about-title" className="about-handwritten-title" initial={reduceMotion ? "visible" : "hidden"} whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-          <span className="sr-only">hi, there.</span>
+          <span className="sr-only">About Me</span>
           <motion.span className="about-handwriting-word about-handwriting-hi" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.05, delay: reduceMotion ? 0 : 0.24, ease }} />
           <motion.span className="about-handwriting-word about-handwriting-there" aria-hidden="true" variants={handwritingReveal} transition={{ duration: reduceMotion ? 0 : 1.48, delay: reduceMotion ? 0 : 1.02, ease }} />
         </motion.h1>
