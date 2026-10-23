@@ -2,10 +2,12 @@ import type { Metadata } from "next"
 import HomeExperience from "@/components/HomeExperience"
 import { getCatalogueItems } from "@/lib/catalogue"
 
-const socialTitle = "The Human Agent for Relationships"
-const socialDescription = "Attract the right leads and turn them into customers, advocates, partners—and more."
+const socialTitle = "The Human Agent for Relationships | Lisa Kim"
+const socialDescription = "Helping brands find the right words, reach the right people, and build relationships that turn into measurable growth."
 
 export const metadata: Metadata = {
+  title: "Lisa Kim | Communications & Growth Consultant",
+  description: "Lisa Kim helps early-stage and midsize startups clarify their message and grow through communications, content, and events.",
   openGraph: {
     title: socialTitle,
     description: socialDescription,
