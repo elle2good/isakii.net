@@ -718,7 +718,7 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
               <img src="/home/human-agent-desktop.png" alt="The Human Agent for Relationships" />
             </picture>
           </h1>
-          <h2>Attract the right leads and turn them into customers, advocates, partners and more.</h2>
+          <h2>Communications and growth support for early-stage and midsize brands.</h2>
           <a className="home-hero-cta" href="https://calendar.app.google/rq7PqiSkYUWpw1ADA" target="_blank" rel="noopener noreferrer"><span>Get Started</span></a>
         </div>
       </section>
