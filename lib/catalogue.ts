@@ -44,7 +44,7 @@ const READY_ITEM: CatalogueItem = {
   shortSummary:
     "By bootstrapping a quantum-resistant blockchain community, this company turned early promise into real revenue.\n\nRead the full case study to see how.",
   tldr:
-    "The company needed to transform its niche, mining-focused community into broader awareness and adoption for its quantum-resistant blockchain ahead of its token launch. I developed accessible technical content, gamified engagement programs, streamlined community management, and led a multilingual ambassador network. This strategy grew seven community channels sixfold, converted approximately 25% of community members into users, supported a successful token launch and three product launches, and helped generate roughly 15,000 wallet addresses; contributing to Abelian’s transition from pre-revenue to revenue-generating.",
+    "The company needed to transform its niche, mining-focused community into broader awareness and adoption for its quantum-resistant blockchain ahead of its token launch. I developed accessible technical content, gamified engagement programs, streamlined community management, and led a multilingual ambassador network. This strategy supported 25× growth across seven community channels, converted approximately 25% of community members into users, and helped drive 40,000 app installations, contributing to Abelian’s transition from pre-revenue to revenue-generating.",
   ctaLabel: "Read the full case study",
   caseStudyUrl: "/catalogue/Abelian-community",
   downloadUrl: "",
@@ -157,7 +157,7 @@ const READY_ALGORAND_ITEM: CatalogueItem = {
   companyName: "Algorand Foundation",
   tags: ["Localization", "Community", "User Acquisition"],
   shortSummary: "Rising competition signals growing interest. Turn that attention into community growth with a targeted campaign.",
-  tldr: "I turned rising competition in Korea’s crypto market into a growth opportunity for Algorand, combining eight influencer partnerships with targeted content and community events. The campaign delivered 21.3% community growth and an estimated 88% retention 12 days after closing. Supporting activations generated 239 dApp conversions, and 405 AMA listeners across live and replay.",
+  tldr: "I turned rising competition in Korea’s crypto market into a growth opportunity for Algorand, combining eight influencer partnerships with targeted content and community events. The campaign delivered 21.3% community growth and an estimated 88% retention 12 days after closing. Supporting activations recorded 239 combined dApp event participations (not deduplicated), including 115 wallet installations at a 38.3% impression-to-install conversion rate, plus 405 AMA listeners across live and replay.",
   ctaLabel: "Read the full case study",
   caseStudyUrl: "/catalogue/Algorand-korea-community",
   downloadUrl: "",

@@ -175,7 +175,7 @@ export default function AbelianCaseStudy() {
           >
             <div><dt>Role</dt><dd>Social Media &amp; Community Manager</dd></div>
             <div><dt>Company</dt><dd>Abelian Foundation</dd></div>
-            <div><dt>Project date</dt><dd>2023.09–2024.09</dd></div>
+            <div><dt>Project date</dt><dd>2023.09–2024.08</dd></div>
           </motion.dl>
 
           <motion.div

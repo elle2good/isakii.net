@@ -427,7 +427,7 @@ export default function RaydiumCaseStudy() {
             <motion.h1 id="raydium-title" initial={reduceMotion ? false : { opacity: 0, y: 42 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.78, delay: 0.28, ease: "easeOut" }}>Event Activation Case Study by Lisa Kim</motion.h1>
           </motion.div>
           <motion.dl className="raydium-hero-meta" style={reduceMotion ? undefined : { opacity: heroCopyOpacity, y: heroCopyY }}>
-            <div><dt>Role</dt><dd>Ambassador</dd></div>
+            <div><dt>Role</dt><dd>Consultant</dd></div>
             <div><dt>Company</dt><dd>Raydium</dd></div>
             <div><dt>Project date</dt><dd>2025.09.01–2025.09.24</dd></div>
           </motion.dl>
