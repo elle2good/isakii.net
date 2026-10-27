@@ -1,0 +1,68 @@
+SERVICE SIGN-UP BACKEND — PREPARED, NOT DEPLOYED
+
+Destination: https://docs.google.com/spreadsheets/d/17sTvuegHDMt0dYPTnJUeJg999R71lqK-4Dw5O_0bysc/edit
+Submission tab: Sheet1 (sheet ID 0)
+Allowed services/add-ons: Service options, columns A:B (hidden tab)
+
+A customer UUID | B name | C company email | D linked company name
+E service card | F selected add-ons, separated by line breaks
+
+Each selected card creates one row. Multiple rows for the same normalized email
+reuse one UUID. A new submission ID means a new request; retrying the same ID
+and payload does not duplicate rows. Different payloads require a new ID.
+UUID lookup and writes use a script lock: all automatic writes must use this
+same Apps Script project. Manually changing/deleting UUIDs affects identity.
+
+FRONTEND FLOW (to implement with the forthcoming responsive module)
+1. Save service ID and selected add-ons in browser state. Do not write orphan
+   spreadsheet rows before a visitor provides their contact details.
+2. Add to Cart opens the name/company-email form and preserves the selections.
+3. Generate a submissionId with crypto.randomUUID() once per submission.
+4. Submit name, email, and cards to a same-origin website server endpoint.
+5. The website server validates the request, applies rate limiting and spam
+   protection, then forwards it to this receiver with the server-only secret.
+6. Show the Success state only for an explicit JSON response with ok: true.
+   Apps Script may return HTTP 200 for application errors; inspect JSON.
+7. Preserve the submission ID for retry after a network error. Clear it after
+   success or when the user changes the request.
+
+ACTIVATION REQUIRED
+The Google Drive chat connection is not a runtime credential for your website.
+Deploy Code.gs in an owner-authorized Apps Script project, with appsscript.json.
+Set SERVICE_SIGNUP_SECRET as a long random Script Property, and keep the same
+value in the website's server environment. Never include it in client JS.
+Authorize the spreadsheet and external-request scopes, enable the Google Sheets
+API in the script's associated Cloud project if required, and deploy a web app
+executing as the owner. Server-to-server calls need a reachable deployment URL.
+If using an Anyone-accessible web app, keep its secret authentication mandatory;
+confirm the access setting explicitly during deployment. Do not publish the sheet.
+Store the resulting deployment URL in the website server environment.
+No deployment, permissions grant, or website environment change has been made.
+
+EXAMPLE SERVER-TO-SERVER PAYLOAD
+{
+  "secret": "SERVER_ENV_VALUE",
+  "submissionId": "d2b104d8-0503-46c7-92ca-c3acd31528d9",
+  "name": "Example Contact",
+  "email": "contact@example.com",
+  "cards": [
+    {"serviceId": "content-calendar", "addons": ["Channel set-up", "Graphic design"]},
+    {"serviceId": "events", "addons": ["Event collateral design"]}
+  ]
+}
+
+DOMAIN LABELS
+Company labels are estimates from the domain, not verified company names.
+Known personal-email providers leave company blank. Common compound suffixes
+(e.g. co.kr and co.uk) are recognized; uncommon public suffixes may need review.
+The company cell is a rich-text hyperlink, not an email-derived formula.
+
+SHEET VALIDATION
+The receiver validates add-ons against the live Service options catalogue.
+It clears single-select validation only on newly written F cells, preserving
+manual-entry dropdowns elsewhere. Existing sample/draft rows are not overwritten.
+
+TESTING
+Local mocked tests verify identity reuse, per-card rows, domain links, atomic
+request shape, input validation, and retry handling. End-to-end Google write
+verification is still required after owner authorization and deployment.
