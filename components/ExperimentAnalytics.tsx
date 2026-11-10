@@ -13,7 +13,6 @@ export default function ExperimentAnalytics() {
     void getExperimentClient().then(sdk => {
       if (!sdk || cancelled || !analyticsAllowed()) return
       sdk.capture("$pageview", { environment: "production" })
-      if (pathname === "/grwm") sdk.capture("grwm_visit", { environment: "production", signup_page: pathname })
     })
     return () => { cancelled = true }
   }, [pathname])

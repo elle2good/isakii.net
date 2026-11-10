@@ -7,7 +7,6 @@ import { FocusEvent, memo, useCallback, useEffect, useRef, useState } from "reac
 import HeroVideo from "./HeroVideo"
 import HomeHeader from "./HomeHeader"
 import HomeFooter from "./HomeFooter"
-import ConsultationSection from "./ConsultationSection"
 import CataloguePreview from "./CataloguePreview"
 import MenuContactActions from "./MenuContactActions"
 import ExternalBlogLink from "./ExternalBlogLink"
@@ -171,11 +170,10 @@ const ProjectCard = memo(function ProjectCard({ project, onOpen, directNavigatio
   )
 })
 
-export default function HomeExperience({ catalogueItems, initialPreviewSlug, directNavigation = false, initialSection }: {
+export default function HomeExperience({ catalogueItems, initialPreviewSlug, directNavigation = false }: {
   catalogueItems: CatalogueItem[]
   initialPreviewSlug?: string
   directNavigation?: boolean
-  initialSection?: string
 }) {
   const initialPreview = catalogueItems.find(item => item.slug.toLowerCase() === initialPreviewSlug?.toLowerCase()) ?? null
   const orderedCatalogueItems = catalogueItems.filter(item => item.order > 0).sort((a, b) => a.order - b.order)
@@ -185,19 +183,6 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
   const catalogueOffset = !mobileCatalogue && catalogueShifted && orderedCatalogueItems.length > 5 ? 1 : 0
   const [menuOpen, setMenuOpen] = useState(false)
   const [ctaScrolling, setCtaScrolling] = useState(false)
-  const [consultationInView, setConsultationInView] = useState(false)
-  const [landingReady, setLandingReady] = useState(!initialSection)
-
-  useEffect(() => {
-    const section = document.querySelector(".home-consultation")
-    if (!section) return
-    const observer = new IntersectionObserver(([entry]) => {
-      setConsultationInView(entry.isIntersecting)
-    }, { rootMargin: "-96px 0px 0px 0px", threshold: 0 })
-    observer.observe(section)
-    return () => observer.disconnect()
-  }, [])
-
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout>
     const onScroll = () => {
@@ -575,34 +560,8 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
     smoothScrollRef.current = lenis
   }, [])
 
-  useEffect(() => {
-    if (!initialSection) return
-    // Fonts can change the height of the catalogue above this section.
-    let cancelled = false
-    let frame = 0
-    void document.fonts.ready.then(() => {
-      if (cancelled) return
-      frame = requestAnimationFrame(() => {
-        const section = document.getElementById(window.location.hash.slice(1) || initialSection)
-        const lenis = smoothScrollRef.current
-        if (section) {
-          if (lenis) {
-            lenis.resize()
-            lenis.scrollTo(section, { immediate: true, force: true })
-          } else {
-            section.scrollIntoView({ behavior: "instant", block: "start" })
-          }
-        }
-        // Reveal only once the browser has applied the landing position.
-        frame = requestAnimationFrame(() => setLandingReady(true))
-      })
-    })
-    return () => { cancelled = true; cancelAnimationFrame(frame) }
-  }, [initialSection])
-
   return (
-    <main className={`home-page${initialSection ? " home-section-landing" : ""}${!landingReady ? " is-landing-pending" : ""}`}>
-      {initialSection && <noscript><style>{`.home-page.is-landing-pending > * { visibility:visible; } .home-page.is-landing-pending::after { display:none; }`}</style></noscript>}
+    <main className="home-page">
       <SmoothScroll intensity={10} onReady={handleSmoothScrollReady} />
       <div
         ref={topChromeRef}
@@ -722,10 +681,10 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
           <a className="home-hero-cta" href="https://calendar.app.google/rq7PqiSkYUWpw1ADA" target="_blank" rel="noopener noreferrer"><span>Get Started</span></a>
         </div>
       </section>
-      <div className={`home-hero-mobile-ticker${consultationInView ? " is-suppressed" : ""}`}><NotificationTicker /></div>
+      <div className="home-hero-mobile-ticker"><NotificationTicker /></div>
 
       <a
-        className={`home-hero-cta home-mobile-cta${ctaScrolling || consultationInView || menuOpen || activeCatalogueItem ? " is-hidden" : ""}`}
+        className={`home-hero-cta home-mobile-cta${ctaScrolling || menuOpen || activeCatalogueItem ? " is-hidden" : ""}`}
         href="https://calendar.app.google/rq7PqiSkYUWpw1ADA"
         target="_blank" rel="noopener noreferrer"
       ><span>Get<br />Started</span></a>
@@ -789,8 +748,6 @@ export default function HomeExperience({ catalogueItems, initialPreviewSlug, dir
           <span className="home-catalogue-arrow" aria-hidden="true">→</span>
         </button>
       </section>
-
-      <ConsultationSection />
 
       <section ref={videoSectionRef} id="featured-video" className="home-video-feature" aria-labelledby="home-video-title">
         <div className="home-video-feature-inner">

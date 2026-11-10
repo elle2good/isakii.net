@@ -21,25 +21,6 @@ const approved: Record<string, Metadata> = {
       ]
     }
   },
-  "/grwm": {
-    "title": "Take your relationships to the next level in 2027.",
-    "description": "Sign up for a free consultation session with growth and communications consultant, Lisa Kim.",
-    "openGraph": {
-      "title": "Take your relationships to the next level in 2027 with me!",
-      "description": "Sign up for a free consultation session with growth and communications consultant, Lisa Kim.",
-      "images": [
-        "https://isakii.net/consultation/grwm-preview.png"
-      ],
-      "url": "https://isakii.net/grwm"
-    },
-    "twitter": {
-      "title": "Take your relationships to the next level in 2027 with me!",
-      "description": "Sign up for a free consultation session with growth and communications consultant, Lisa Kim.",
-      "images": [
-        "https://isakii.net/consultation/grwm-preview.png"
-      ]
-    }
-  },
   "/about": {
     "title": "About Lisa Kim",
     "description": "I began my career in consumer AI in 2019. As a natural people pleaser and analytical thinker, I enjoy the process of complex ideas transforming into clear, compelling experiences.",
