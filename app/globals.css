@@ -4876,12 +4876,17 @@ a.home-project-card-link:focus-visible {
  .home-hero-mobile-ticker { position:sticky; top:96px; bottom:auto; margin-top:-37px; height:37px; z-index:999; }
 }
 
-.grwm-announcement { min-height:100svh; display:grid; place-items:center; padding:clamp(24px,6vw,80px); background:var(--midnight-navy); color:#fff; font-family:"42dot Sans",sans-serif; }
+.grwm-announcement { min-height:calc(100svh - 117px); display:grid; place-items:center; padding:clamp(24px,6vw,80px); background:var(--midnight-navy); color:#fff; font-family:"42dot Sans",sans-serif; }
 .grwm-announcement article { width:100%; max-width:700px; }
 .grwm-announcement-brand { font-size:20px; font-weight:700; margin:0 0 48px; }
 .grwm-announcement h1 { font-weight:500; font-size:clamp(32px,6vw,56px); line-height:1.1; margin:0 0 28px; }
-.grwm-announcement article > p:last-child { font-size:clamp(20px,3vw,26px); line-height:1.6; margin:0; }
+.grwm-announcement article > p { font-size:clamp(20px,3vw,26px); line-height:1.6; margin:0; }
 
 .grwm-announcement a { color:#bfb3d7; text-decoration:underline; text-underline-offset:.18em; }
 .grwm-announcement a:hover { color:var(--menu-hover); }
 .grwm-announcement a:focus-visible { outline:2px solid currentColor; outline-offset:4px; }
+
+.grwm-page { background:var(--midnight-navy); }
+.grwm-page .home-top-chrome { background:var(--midnight-navy); }
+.grwm-home-link { display:inline-block; margin-top:36px; font-size:18px; }
+@media (max-width:700px) { .grwm-announcement { min-height:calc(100svh - 96px); } }
