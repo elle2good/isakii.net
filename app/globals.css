@@ -4890,3 +4890,5 @@ a.home-project-card-link:focus-visible {
 .grwm-page .home-top-chrome { background:var(--midnight-navy); }
 .grwm-home-link { display:inline-block; margin-top:36px; font-size:18px; }
 @media (max-width:700px) { .grwm-announcement { min-height:calc(100svh - 96px); } }
+.grwm-announcement .grwm-home-link { color:var(--menu-hover); }
+.grwm-announcement .grwm-home-link:hover { color:var(--menu-contact); }
