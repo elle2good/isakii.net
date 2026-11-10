@@ -17,7 +17,7 @@ export default function GrwmPage() {
       <article>
         <p className="grwm-announcement-brand">isakii</p>
         <h1>An update from Lisa</h1>
-        <p>{message}</p>
+        <p>I'm now committed full-time to help grow data centers in a sustainable and friendly manner with <a href="https://w.media">w.media</a>. Hopefully, we can work together next time!</p>
       </article>
     </main>
   )
